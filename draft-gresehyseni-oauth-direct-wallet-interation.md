@@ -19,11 +19,11 @@
 # Change the file extension to match the format (.xml for XML, etc...)
 #
 ###
-title: "TODO - Your title"
-abbrev: "TODO - Abbreviation"
+title: "OAuth 2.0 direct wallet interaction"
+abbrev: "OAuth direct wallet interaction"
 category: info
 
-docname: draft-todo-yourname-protocol-latest
+docname: draft-gresehyseni-oauth-direct-wallet-interation-latest
 submissiontype: IETF  # also: "independent", "editorial", "IAB", or "IRTF"
 number:
 date:
