@@ -8,8 +8,8 @@ Intended status: Informational                               5 June 2026
 Expires: 7 December 2026
 
 
-                           TODO - Your title
-                  draft-todo-yourname-protocol-latest
+                  OAuth 2.0 direct wallet interaction
+        draft-gresehyseni-oauth-direct-wallet-interation-latest
 
 Abstract
 
@@ -21,8 +21,8 @@ About This Document
 
    The latest revision of this draft can be found at
    https://example.com/LATEST.  Status information for this document may
-   be found at https://datatracker.ietf.org/doc/draft-todo-yourname-
-   protocol/.
+   be found at https://datatracker.ietf.org/doc/draft-gresehyseni-oauth-
+   direct-wallet-interation/.
 
    Discussion of this document takes place on the WG Working Group
    mailing list (mailto:WG@example.com), which is archived at
