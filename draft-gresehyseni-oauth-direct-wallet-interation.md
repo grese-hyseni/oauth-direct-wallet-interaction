@@ -44,6 +44,15 @@ normative:
     - ins: K. Yasuda
     - ins: D. Fett
     - ins: J. Heenan
+  OpenID4VCI:
+  title: OpenID for Verifiable Credential Issuance 1.0
+  target: https://openid.net/specs/openid-4-verifiable-credential-issuance-1_0.html
+  date: 16 September 2025
+  author:
+    - ins: T. Lodderstedt
+    - ins: K. Yasuda
+    - ins: T. Looker
+    - ins: P. Bastian
  IANA.oauth-parameters:
  USASCII:
   title: "Coded Character Set -- 7-bit American Standard Code for Information Interchange, ANSI X3.4"
