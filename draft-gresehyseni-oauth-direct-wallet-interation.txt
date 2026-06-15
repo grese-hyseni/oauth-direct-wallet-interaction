@@ -2,10 +2,10 @@
 
 
 
-WG Working Group                                              Y. N. Here
+Web Authorization Protocol                                  grese-hyseni
 Internet-Draft                                    Your Organization Here
-Intended status: Informational                               5 June 2026
-Expires: 7 December 2026
+Intended status: Informational                              15 June 2026
+Expires: 17 December 2026
 
 
                   OAuth 2.0 direct wallet interaction
@@ -13,23 +13,27 @@ Expires: 7 December 2026
 
 Abstract
 
-   TODO Abstract
+   This document defines a protocol for Authorization Servers to request
+   Verifiable Presentations as part of authentication and authorization
+   processes.
 
 About This Document
 
    This note is to be removed before publishing as an RFC.
 
-   The latest revision of this draft can be found at
-   https://example.com/LATEST.  Status information for this document may
-   be found at https://datatracker.ietf.org/doc/draft-gresehyseni-oauth-
-   direct-wallet-interation/.
+   The latest revision of this draft can be found at https://grese-
+   hyseni.github.io/oauth-direct-wallet-interaction/draft-gresehyseni-
+   oauth-direct-wallet-interation.html.  Status information for this
+   document may be found at https://datatracker.ietf.org/doc/draft-
+   gresehyseni-oauth-direct-wallet-interation/.
 
-   Discussion of this document takes place on the WG Working Group
-   mailing list (mailto:WG@example.com), which is archived at
-   https://example.com/WG.
+   Discussion of this document takes place on the Web Authorization
+   Protocol Working Group mailing list (mailto:oauth@ietf.org), which is
+   archived at https://mailarchive.ietf.org/arch/browse/oauth/.
+   Subscribe at https://www.ietf.org/mailman/listinfo/oauth/.
 
    Source for this draft and an issue tracker can be found at
-   https://github.com/USER/REPO.
+   https://github.com/grese-hyseni/oauth-direct-wallet-interaction.
 
 Status of This Memo
 
@@ -46,7 +50,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 7 December 2026.
+   This Internet-Draft will expire on 17 December 2026.
 
 Copyright Notice
 
@@ -68,13 +72,45 @@ Table of Contents
    2.  Conventions and Definitions
    3.  Security Considerations
    4.  IANA Considerations
-   5.  Normative References
+   5.  References
+     5.1.  Normative References
+     5.2.  Informative References
    Acknowledgments
    Author's Address
 
 1.  Introduction
 
-   TODO Introduction
+   This specification provides a mechanism on top of First-Party Apps
+   (FiPA) [I-D.ietf-oauth-first-party-apps] that enables Authorization
+   Servers to request Verifiable Presentations as part of the
+   authentication and authorization proccess.
+
+   OAuth for First-Party Apps (FiPA) is used as a base protocol as it
+   extends the OAuth 2.0 Authorization Framework [RFC6749] with a new
+   endpoint to support applications that want to control the process of
+   obtaining authorization from the user using a native experience,
+   which serves a smooth user experience when using digital credentials
+   from a wallet app.
+
+   The scope of this document is not limited to First-Party Apps but
+   extends to Third-Party Apps as well while keeping the rest of the
+   base model as defined in First-Party Apps (FiPA)
+   [I-D.ietf-oauth-first-party-apps].
+
+   This specification is intended to support use cases including login,
+   transaction approval, and presentation during issuance credential
+   based on [OpenID4VP] and [OpenID4VCI].
+
+   The integration of OpenID4VP Verifier functionality within an
+   Authorization Server, as well as the internal communication between
+   an Authorization Server and a Verifier, are outside the scope of this
+   specification.
+
+   The browser-based wallet interactions are not the focus of this
+   document since such flows are expected to work well in web
+   environments without any additional extension to the existing
+   authorization models such as the Authorization Code Flow defined in
+   the section 4.1. of [RFC6749].
 
 2.  Conventions and Definitions
 
@@ -92,16 +128,68 @@ Table of Contents
 
    This document has no IANA actions.
 
-5.  Normative References
+5.  References
+
+5.1.  Normative References
+
+   [I-D.ietf-oauth-first-party-apps]
+              Parecki, A., Fletcher, G., and P. Kasselman, "OAuth 2.0
+              for First-Party Applications", Work in Progress, Internet-
+              Draft, draft-ietf-oauth-first-party-apps-03, 27 February
+              2026, <https://datatracker.ietf.org/doc/html/draft-ietf-
+              oauth-first-party-apps-03>.
+
+   [IANA.oauth-parameters]
+              IANA, "OAuth Parameters",
+              <https://www.iana.org/assignments/oauth-parameters>.
+
+   [OpenID4VCI]
+              Lodderstedt, T., Yasuda, K., Looker, T., and P. Bastian,
+              "OpenID for Verifiable Credential Issuance 1.0", September
+              2025, <https://openid.net/specs/openid-4-verifiable-
+              credential-issuance-1_0.html>.
+
+   [OpenID4VP]
+              Terbu, O., Lodderstedt, T., Yasuda, K., Fett, D., and J.
+              Heenan, "OpenID for Verifiable Presentations 1.0", July
+              2025, <https://openid.net/specs/openid-4-verifiable-
+              presentations-1_0.html>.
 
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
               Requirement Levels", BCP 14, RFC 2119,
               DOI 10.17487/RFC2119, March 1997,
               <https://www.rfc-editor.org/rfc/rfc2119>.
 
+   [RFC6749]  Hardt, D., Ed., "The OAuth 2.0 Authorization Framework",
+              RFC 6749, DOI 10.17487/RFC6749, October 2012,
+              <https://www.rfc-editor.org/rfc/rfc6749>.
+
    [RFC8174]  Leiba, B., "Ambiguity of Uppercase vs Lowercase in RFC
               2119 Key Words", BCP 14, RFC 8174, DOI 10.17487/RFC8174,
               May 2017, <https://www.rfc-editor.org/rfc/rfc8174>.
+
+   [RFC8414]  Jones, M., Sakimura, N., and J. Bradley, "OAuth 2.0
+              Authorization Server Metadata", RFC 8414,
+              DOI 10.17487/RFC8414, June 2018,
+              <https://www.rfc-editor.org/rfc/rfc8414>.
+
+   [RFC9396]  Lodderstedt, T., Richer, J., and B. Campbell, "OAuth 2.0
+              Rich Authorization Requests", RFC 9396,
+              DOI 10.17487/RFC9396, May 2023,
+              <https://www.rfc-editor.org/rfc/rfc9396>.
+
+   [USASCII]  "Coded Character Set -- 7-bit American Standard Code for
+              Information Interchange, ANSI X3.4", 1986.
+
+5.2.  Informative References
+
+   [DC.Android]
+              "Android DigitalCredential SDK", n.d.,
+              <https://developer.android.com/reference/kotlin/androidx/
+              credentials/DigitalCredential>.
+
+   [DC.API]   "Digital Credentials, W3C Editor's Draft", July 2025,
+              <https://w3c-fedid.github.io/digital-credentials/>.
 
 Acknowledgments
 
@@ -109,6 +197,6 @@ Acknowledgments
 
 Author's Address
 
-   Your Name Here
+   grese-hyseni
    Your Organization Here
-   Email: your.email@example.com
+   Email: grese.hyseni@rbinternational.com
