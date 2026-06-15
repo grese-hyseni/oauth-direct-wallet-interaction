@@ -109,7 +109,7 @@ The mechanisms defined in this document support:
 The Verifier is a separate logical component, as it has it's own endpoints and functionality, as defined in OpenID4VP {{OpenID4VP}}.
 
 
-## Same Device Flow {#same_device}
+## Same Device Flow {#same-device-flow}
 
 The following figure illustrates the High Level use case in which the Authorization Server (AS) requests a Verifiable Presentation from the Wallet as part of the authorization process and the wallet is on the same device as the client app. This does not represent the OID4VP over DC API, see section {{#oid4vp-over-dc-api}}.
 
@@ -159,7 +159,7 @@ The following figure illustrates the High Level use case in which the Authorizat
 
 (A) The Client sends an Authorization Challenge Request to the Authorization Server’s Authorization Challenge Endpoint. The client MUST provide `type` and `redirect_uri` to indicate that it is requesting an OID4VP Authorization Request for a same-device flow. The Client MAY provide these parameters in the initial or in a subsequent Authorization Challenge Request. See Section {#authorization-challenge-request} for details.
 
-(B) The Authorization Server responds with an authorization error containing the required/supported authentication methods, where at least one is of type "verifiable_presentation". The Client may be asked to send further Authorization Requests to provide sufficient data for the Authorization Server to issue an OID4VP Authorization Request (Presentation Request) as part of this Authorization Error Response. The Presentation Response SHOULD contain `response_mode=fragment` as defined in section 3.1. of {{OID4VP}}. See Section {#authorization-error-response} for details.
+(B) The Authorization Server responds with an authorization error containing the required/supported authentication methods, where at least one is of type "verifiable_presentation". The Client may be asked to send further Authorization Requests to provide sufficient data for the Authorization Server to issue an OID4VP Authorization Request (Presentation Request) as part of this Authorization Error Response. The Presentation Response SHOULD contain `response_mode=fragment` as defined in section 3.1. of {{OpenID4VP}}. See Section {#authorization-error-response} for details.
 
 (C) The Client invokes the wallet on the user’s device with the OID4VP Authorization Request, where user is expected to authenticate/authorize and consent to sharing the credentials with the verifier.
 
@@ -174,7 +174,7 @@ The following figure illustrates the High Level use case in which the Authorizat
 (H) The Authorization Server validates the Token Request and responds with an Access Token and optionally additional OAuth 2.0 or OpenID Connect tokens.
 
 
-## Cross Device Flow {#same_device}
+## Cross Device Flow {#cross-device-flow}
 
 The following figure illustrates the High Level use cases in which the Authorization Server (AS) requests a Verifiable Presentation from the Wallet as part of the authorization process and the wallet is on a different device from the client app. This does not represent the OID4VP over DC API, see section {{#oid4vp-over-dc-api}}.
 
@@ -225,7 +225,7 @@ The following figure illustrates the High Level use cases in which the Authoriza
 
 (A) (A) The Client sends an Authorization Challenge Request to the Authorization Server’s Authorization Challenge Endpoint. The client MUST provide `type` and ommit the `redirect_uri` to indicate that it is requesting an OID4VP Authorization Request for a cross-device flow. The Client MAY provide these parameters in the initial or in a subsequent Authorization Challenge Request. See Section {#authorization-challenge-request} for details.
 
-(B) The Authorization Server responds with an authorization error containing the required authentication methods, where at least one is of type "verifiable_presentation". The Client may be asked to send further Authorization Requests to provide sufficient data for the Authorization Server to issue an OID4VP Authorization Request (Presentation Request) as part of this Authorization Error Response. The Presentation Response SHOULD contain `response_mode=direct_post` as defined in section 3.2. of {{OID4VP}}. See Section {#authorization-error-response} for details.
+(B) The Authorization Server responds with an authorization error containing the required authentication methods, where at least one is of type "verifiable_presentation". The Client may be asked to send further Authorization Requests to provide sufficient data for the Authorization Server to issue an OID4VP Authorization Request (Presentation Request) as part of this Authorization Error Response. The Presentation Response SHOULD contain `response_mode=direct_post` as defined in section 3.2. of {{OpenID4VP}}. See Section {#authorization-error-response} for details.
 
 (C) The Client generated the QR Code for the user to invoke the wallet on another device wich contains the OID4VP Authorization Request.
 
