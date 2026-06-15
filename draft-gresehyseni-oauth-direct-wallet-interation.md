@@ -38,7 +38,12 @@ normative:
  title: OpenID for Verifiable Presentations 1.0
  target: https://openid.net/specs/openid-4-verifiable-presentations-1_0.html
  date: July 9, 2025
- author: - ins: O. Terbu - ins: T. Lodderstedt - ins: K. Yasuda - ins: D. Fett - ins: J. Heenan
+ author: 
+ - ins: O. Terbu 
+ - ins: T. Lodderstedt 
+ - ins: K. Yasuda 
+ - ins: D. Fett 
+ - ins: J. Heenan
  IANA.oauth-parameters:
  USASCII:
  title: "Coded Character Set -- 7-bit American Standard Code for Information Interchange, ANSI X3.4"
