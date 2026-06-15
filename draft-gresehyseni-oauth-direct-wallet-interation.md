@@ -34,10 +34,10 @@ normative:
  RFC6749:
  RFC9396:
  I-D.ietf-oauth-first-party-apps:
- OpenID4VP:
- title: OpenID for Verifiable Presentations 1.0
- target: https://openid.net/specs/openid-4-verifiable-presentations-1_0.html
- date: July 9, 2025
+  OpenID4VP:
+  title: OpenID for Verifiable Presentations 1.0
+  target: https://openid.net/specs/openid-4-verifiable-presentations-1_0.html
+  date: July 9, 2025
  author:
  - ins: O. Terbu
  - ins: T. Lodderstedt
@@ -46,18 +46,18 @@ normative:
  - ins: J. Heenan
  IANA.oauth-parameters:
  USASCII:
- title: "Coded Character Set -- 7-bit American Standard Code for Information Interchange, ANSI X3.4"
- author:
- name: "American National Standards Institute"
- date: 1986
+  title: "Coded Character Set -- 7-bit American Standard Code for Information Interchange, ANSI X3.4"
+  author:
+  name: "American National Standards Institute"
+  date: 1986
 informative:
  DC.API:
- title: Digital Credentials, W3C Editor's Draft
- target: https://w3c-fedid.github.io/digital-credentials/
- date: 03 July 2025
+  title: Digital Credentials, W3C Editor's Draft
+  target: https://w3c-fedid.github.io/digital-credentials/
+  date: 03 July 2025
  DC.Android:
- title: Android DigitalCredential SDK
- target: https://developer.android.com/reference/kotlin/androidx/credentials/DigitalCredential
+  title: Android DigitalCredential SDK
+  target: https://developer.android.com/reference/kotlin/androidx/credentials/DigitalCredential
 
 ...
 
