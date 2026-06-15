@@ -113,7 +113,7 @@ The Verifier is a separate logical component, as it has it's own endpoints and f
 
 The following figure illustrates the High Level use case in which the Authorization Server (AS) requests a Verifiable Presentation from the Wallet as part of the authorization process and the wallet is on the same device as the client app. This does not represent the OID4VP over DC API, see section {{oid4vp-over-dc-api}}.
 
-```text
+`~~~ ascii-art
 +----------+                 +----------+                       +-------------------+                      +------------+ 
 |  Wallet  |                 |  Third   |                       |   Authorization   |                      |  Verifier  |
 |          |                 |  Party-  |                       |      Server       |                      |            |
@@ -153,7 +153,7 @@ The following figure illustrates the High Level use case in which the Authorizat
 |          |                 |          | (H) Access Token      |+-----------------+|                      |            |
 |          |                 |          |                       |                   |                      |            |
 +----------+                 +----------+                       +-------------------+                      +------------+
-```
+~~~
 
 
 (A) The Client sends an Authorization Challenge Request to the Authorization Server’s Authorization Challenge Endpoint. The client MUST provide `type` and `redirect_uri` to indicate that it is requesting an OID4VP Authorization Request for a same-device flow. The Client MAY provide these parameters in the initial or in a subsequent Authorization Challenge Request. See Section {{authorization-challenge-request}} for details.
@@ -177,7 +177,7 @@ The following figure illustrates the High Level use case in which the Authorizat
 
 The following figure illustrates the High Level use cases in which the Authorization Server (AS) requests a Verifiable Presentation from the Wallet as part of the authorization process and the wallet is on a different device from the client app. This does not represent the OID4VP over DC API, see section {{oid4vp-over-dc-api}}.
 
-```text
+~~~ ascii-art
 +----------+                   +----------+                        +-------------------+                   +------------+ 
 |  Wallet  |                   |  Third   |                       |   Authorization   |                    |  Verifier  |
 |          |                   |  Party-  |                       |      Server       |                    |            |
@@ -218,7 +218,7 @@ The following figure illustrates the High Level use cases in which the Authoriza
 |          |                   |          | (H) Access Token      |+-----------------+|                    |            |
 |          |                   |          |                       |                   |                    |            |
 +----------+                   +----------+                       +-------------------+                    +------------+
-```
+~~~
 
 
 (A) (A) The Client sends an Authorization Challenge Request to the Authorization Server’s Authorization Challenge Endpoint. The client MUST provide `type` and ommit the `redirect_uri` to indicate that it is requesting an OID4VP Authorization Request for a cross-device flow. The Client MAY provide these parameters in the initial or in a subsequent Authorization Challenge Request. See Section {{authorization-challenge-request}} for details.
