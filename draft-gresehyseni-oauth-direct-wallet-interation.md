@@ -38,11 +38,11 @@ normative:
  title: OpenID for Verifiable Presentations 1.0
  target: https://openid.net/specs/openid-4-verifiable-presentations-1_0.html
  date: July 9, 2025
- author: 
- - ins: O. Terbu 
- - ins: T. Lodderstedt 
- - ins: K. Yasuda 
- - ins: D. Fett 
+ author:
+ - ins: O. Terbu
+ - ins: T. Lodderstedt
+ - ins: K. Yasuda
+ - ins: D. Fett
  - ins: J. Heenan
  IANA.oauth-parameters:
  USASCII:
