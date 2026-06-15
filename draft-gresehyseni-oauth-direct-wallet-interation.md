@@ -113,47 +113,46 @@ The Verifier is a separate logical component, as it has it's own endpoints and f
 
 The following figure illustrates the High Level use case in which the Authorization Server (AS) requests a Verifiable Presentation from the Wallet as part of the authorization process and the wallet is on the same device as the client app. This does not represent the OID4VP over DC API, see section {{oid4vp-over-dc-api}}.
 
-
 ```text
-                                                                +-------------------+                +------------+ 
-                                                                |   Authorization   |                |  Verifier  |
-                                                                |      Server       |                +------------+
-+----------+                 +----------+  (A) Authorization    |+-----------------+|                      |
-|  Wallet  |                 |  Third   |  Challenge Request    |+-----------------+| (A) Create           |
-|          |                 |  Party-  |---------------------->||  Authorization  ||     Presentation     |
-|          |                 |  Client  |          :            ||   Challenge     ||     Request          |
-|          |                 |          |                       ||    Endpoint     ||--------------------->|
-|          |                 |          |                       ||                 ||                      |
-|          |                 |          |                       ||                 ||<---------------------|
-|          |                 |          |                       ||                 || (B) Presentation     |
-|          |                 |          |<----------------------||                 ||     Request          |
-|          |                 |          | (B)Authorization      ||                 ||                      |
-|          |                 |          | Error Response        ||                 ||                      |
-|          |                 |          | (Presentation Req.)   ||                 ||                      |
-|          |<----------------|          |                       ||                 ||                      |
-|          |(C) Presentation |          |          :            ||                 ||                      |
-|          |    Request      |          |          :            ||                 ||                      |
-|          | (response_mode) |          |                       ||                 ||                      |
-|          |                 |          |                       ||                 ||                      |
-|          |---------------->|          | (E) Authorization     ||                 ||                      |
-|          |(D) Presentation |          | Challenge Request     ||                 || (E) Validate         |
-|          |    Response     |          | (Presentation Res.)   ||                 ||     Presentation     |
-|          | (reponse_code/  |          |---------------------->||                 ||     Response         |
-|          |  vp_token)      |          |                       ||                 ||--------------------->|
-|          |                 |          |                       ||                 ||                      |
-|          |                 |          |                       ||                 ||<---------------------|
-|          |                 |          |<----------------------||                 || (F) Presentation     |
-|          |                 |          | (F) Authorization     |+-----------------+|     Data             |
-|          |                 |          |     Code Response     |                   |                      |
-|          |                 |          |                       |                   |                      |
-|          |                 |          | (G) Token             |                   |                      |
-|          |                 |          |     Request           |+-----------------+|                      |
-|          |                 |          |---------------------->||      Token      ||                      |
-|          |                 |          |                       ||     Endpoint    ||                      |
-|          |                 |          |<----------------------||                 ||                      |
-|          |                 |          | (H) Access Token      |+-----------------+|                      |
-|          |                 |          |                       |                   |                      |
-+----------+                 +----------+                       +-------------------+                      |
++----------+                 +----------+                       +-------------------+                      +------------+ 
+|  Wallet  |                 |  Third   |                       |   Authorization   |                      |  Verifier  |
+|          |                 |  Party-  |                       |      Server       |                      |            |
+|          |                 |  Client  |  (A) Authorization    |+-----------------+|                      |            |
+|          |                 |          |  Challenge Request    |+-----------------+| (A) Create           |            |
+|          |                 |          |---------------------->||  Authorization  ||     Presentation     |            |
+|          |                 |          |                       ||   Challenge     ||     Request          |            |
+|          |                 |          |          :            ||    Endpoint     ||--------------------->|            |
+|          |                 |          |                       ||                 ||                      |            |
+|          |                 |          |                       ||                 ||<---------------------|            |
+|          |                 |          |                       ||                 || (B) Presentation     |            |
+|          |                 |          |<----------------------||                 ||     Request          |            |
+|          |                 |          | (B)Authorization      ||                 ||                      |            |
+|          |                 |          | Error Response        ||                 ||                      |            |
+|          |                 |          | (Presentation Req.)   ||                 ||                      |            |
+|          |<----------------|          |                       ||                 ||                      |            |
+|          |(C) Presentation |          |          :            ||                 ||                      |            |
+|          |    Request      |          |                       ||                 ||                      |            |
+|          | (response_mode) |          |                       ||                 ||                      |            |
+|          |                 |          |                       ||                 ||                      |            |
+|          |---------------->|          | (E) Authorization     ||                 ||                      |            |
+|          |(D) Presentation |          | Challenge Request     ||                 || (E) Validate         |            |
+|          |    Response     |          | (Presentation Res.)   ||                 ||     Presentation     |            |
+|          | (reponse_code/  |          |---------------------->||                 ||     Response         |            |
+|          |  vp_token)      |          |                       ||                 ||--------------------->|            |
+|          |                 |          |                       ||                 ||                      |            |
+|          |                 |          |                       ||                 ||<---------------------|            |
+|          |                 |          |<----------------------||                 || (F) Presentation     |            |
+|          |                 |          | (F) Authorization     |+-----------------+|     Data             |            |
+|          |                 |          |     Code Response     |                   |                      |            |
+|          |                 |          |                       |                   |                      |            |
+|          |                 |          | (G) Token             |                   |                      |            |
+|          |                 |          |     Request           |+-----------------+|                      |            |
+|          |                 |          |---------------------->||      Token      ||                      |            |
+|          |                 |          |                       ||     Endpoint    ||                      |            |
+|          |                 |          |<----------------------||                 ||                      |            |
+|          |                 |          | (H) Access Token      |+-----------------+|                      |            |
+|          |                 |          |                       |                   |                      |            |
++----------+                 +----------+                       +-------------------+                      +------------+
 ```
 
 
@@ -178,48 +177,47 @@ The following figure illustrates the High Level use case in which the Authorizat
 
 The following figure illustrates the High Level use cases in which the Authorization Server (AS) requests a Verifiable Presentation from the Wallet as part of the authorization process and the wallet is on a different device from the client app. This does not represent the OID4VP over DC API, see section {{oid4vp-over-dc-api}}.
 
-
 ```text
-                                                                  +-------------------+                +------------+ 
-                                                                  |   Authorization   |                |  Verifier  |
-                                                                  |      Server       |                +------------+
-+----------+                   +----------+ (A) Authorization     |+-----------------+|                    |
-|  Wallet  |                   |  Third   |     Challenge Request |+-----------------+| (A) Create         |
-|          |                   |  Party-  |---------------------->||  Authorization  ||     Presentation   |
-|          |                   |  Client  |          :            ||   Challenge     ||     Request        |
-|          |                   |          |                       ||    Endpoint     ||------------------> |
-|          |                   |          |                       ||                 ||                    |
-|          |                   |          |                       ||                 ||<------------------ |
-|          |                   |          |                       ||                 || (B) Presentation   |
-|          |                   |          |<----------------------||                 ||     Request        |
-|          |                   |          | (B) Authorization     ||                 ||                    |
-|          |                   |          |     Error Respons     ||                 ||                    |
-|          |                   |          |    (Presentation Req.)||                 ||                    |
-|          |<------------------|          |                       ||                 ||                    |
-|          |(C) Presentation   |          |          :            ||                 ||                    |
-|          |    Request        |          |          :            ||                 ||                    |
-|          |                   |          |                       ||                 ||                    |
-|          |(D) Presentation   |          |                       ||                 ||                    |
-|          |    Response       |          |                       ||                 ||                    |
-|          |---------------------------------------------------------------------------------------------->|
-|          |                   |          |                       ||                 ||                    |
-|          |                   |          |                       ||                 ||(D) Get Presentation|
-|          |                   |          |                       ||                 ||    Data            |
-|          |                   |          |                       ||                 ||------------------->|
-|          |                   |          |                       ||                 ||                    |
-|          |                   |          |                       ||                 ||<-------------------|
-|          |                   |          |<----------------------||                 ||(D) Presentation    |
-|          |                   |          | (F) Authorization     |+-----------------+|     Data           |
-|          |                   |          |     Code Response     |                   |                    |
-|          |                   |          |                       |                   |                    |
-|          |                   |          | (G) Token             |                   |                    |
-|          |                   |          |     Request           |+-----------------+|                    |
-|          |                   |          |---------------------->||      Token      ||                    |
-|          |                   |          |                       ||     Endpoint    ||                    |
-|          |                   |          |<----------------------||                 ||                    |
-|          |                   |          | (H) Access Token      |+-----------------+|                    |
-|          |                   |          |                       |                   |                    |
-+----------+                   +----------+                       +-------------------+                    |
++----------+                   +----------+                        +-------------------+                   +------------+ 
+|  Wallet  |                   |  Third   |                       |   Authorization   |                    |  Verifier  |
+|          |                   |  Party-  |                       |      Server       |                    |            |
+|          |                   |  Client  | (A) Authorization     |+-----------------+|                    |            |
+|          |                   |          |     Challenge Request |+-----------------+| (A) Create         |            |
+|          |                   |          |---------------------->||  Authorization  ||     Presentation   |            |
+|          |                   |          |                       ||   Challenge     ||     Request        |            |
+|          |                   |          |          :            ||    Endpoint     ||------------------> |            |
+|          |                   |          |                       ||                 ||                    |            |
+|          |                   |          |                       ||                 ||<------------------ |            |
+|          |                   |          |                       ||                 || (B) Presentation   |            |
+|          |                   |          |<----------------------||                 ||     Request        |            |
+|          |                   |          | (B) Authorization     ||                 ||                    |            |
+|          |                   |          |     Error Respons     ||                 ||                    |            |
+|          |                   |          |    (Presentation Req.)||                 ||                    |            |
+|          |<------------------|          |                       ||                 ||                    |            |
+|          |(C) Presentation   |          |          :            ||                 ||                    |            |
+|          |    Request        |          |                       ||                 ||                    |            |
+|          |                   |          |                       ||                 ||                    |            |
+|          |(D) Presentation   |          |                       ||                 ||                    |            |
+|          |    Response       |          |                       ||                 ||                    |            |
+|          |---------------------------------------------------------------------------------------------->|            |
+|          |                   |          |                       ||                 ||                    |            |
+|          |                   |          |                       ||                 ||(D) Get Presentation|            |
+|          |                   |          |                       ||                 ||    Data            |            |
+|          |                   |          |                       ||                 ||------------------->|            |
+|          |                   |          |                       ||                 ||                    |            |
+|          |                   |          |                       ||                 ||<-------------------|            |
+|          |                   |          |<----------------------||                 ||(D) Presentation    |            |
+|          |                   |          | (F) Authorization     |+-----------------+|     Data           |            |
+|          |                   |          |     Code Response     |                   |                    |            |
+|          |                   |          |                       |                   |                    |            |
+|          |                   |          | (G) Token             |                   |                    |            |
+|          |                   |          |     Request           |+-----------------+|                    |            |
+|          |                   |          |---------------------->||      Token      ||                    |            |
+|          |                   |          |                       ||     Endpoint    ||                    |            |
+|          |                   |          |<----------------------||                 ||                    |            |
+|          |                   |          | (H) Access Token      |+-----------------+|                    |            |
+|          |                   |          |                       |                   |                    |            |
++----------+                   +----------+                       +-------------------+                    +------------+
 ```
 
 
