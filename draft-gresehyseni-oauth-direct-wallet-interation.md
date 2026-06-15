@@ -29,7 +29,7 @@ author:
     organization: Your Organization Here
     email: "grese.hyseni@rbinternational.com"
 
-normative: 
+normative:
  RFC8414:
  RFC6749:
  RFC9396:
@@ -50,8 +50,7 @@ normative:
  author:
  name: "American National Standards Institute"
  date: 1986
-
-informative: 
+informative:
  DC.API:
  title: Digital Credentials, W3C Editor's Draft
  target: https://w3c-fedid.github.io/digital-credentials/
