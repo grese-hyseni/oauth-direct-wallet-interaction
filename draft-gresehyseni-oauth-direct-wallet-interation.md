@@ -34,7 +34,7 @@ normative:
  RFC6749:
  RFC9396:
  I-D.ietf-oauth-first-party-apps:
-  OpenID4VP:
+ OpenID4VP:
   title: OpenID for Verifiable Presentations 1.0
   target: https://openid.net/specs/openid-4-verifiable-presentations-1_0.html
   date: July 9, 2025
@@ -44,7 +44,7 @@ normative:
     - ins: K. Yasuda
     - ins: D. Fett
     - ins: J. Heenan
-  OpenID4VCI:
+ OpenID4VCI:
   title: OpenID for Verifiable Credential Issuance 1.0
   target: https://openid.net/specs/openid-4-verifiable-credential-issuance-1_0.html
   date: 16 September 2025
