@@ -503,4 +503,4 @@ Internet-Draft         OAuth for First-Party Apps          February 2026
 # Acknowledgments
 {:numbered="false"}
 
-TODO acknowledge.
+The authors would like to thank all colleagues and contributors who provided valuable feedback and support during the development of this document. Special thanks to Henrik Kroll and Yaron Zehavi for their insightful contributions.
