@@ -285,7 +285,7 @@ The Client MAY send an Authorization Challenge Request using one of the followin
 
 This section provides non-normative examples illustrating how this specification supports specific deployment models.
 
-## OpenID4VP Same-Device Flow
+## OpenID4VP Same-Device Flow {#oid4vp-same-device}
 
 In a same-device flow with `response_mode=fragment`, the Wallet returns the `vp_token` directly to the Client. The Client then includes the `vp_token` in an Authorization Challenge Request sent to the Authorization Server.
 
@@ -385,11 +385,11 @@ Example: Successful Authorization Challenge Response returning the authorization
 
 ```
 
-## OpenID4VP Same-Device Flow using `direct_post`
+## OpenID4VP Same-Device Flow using `direct_post` {#oid4vp-same-device-direct-post}
 
-In a same-device flow where `response_mode` is set to `direct_post`, the Wallet submits the `vp_token` directly to the Authorization Server `response_uri`, which acts as the Verifier Response Endpoint as depicted on section 8.2 of {{OID4VP}}. This is the recommended flow for our scenario where the Client isn't the Verifier, and it might be a third-party app, and this flow avoids having to send a vp_token via the client when the client isn't actually the audience for it.
+In a same-device flow where `response_mode` is set to `direct_post`, the Wallet submits the `vp_token` directly to the Authorization Server `response_uri`, which acts as the Verifier Response Endpoint as depicted on section 8.2 of {{OpenID4VP}}. This is the recommended flow for our scenario where the Client isn't the Verifier, and it might be a third-party app, and this flow avoids having to send a vp_token via the client when the client isn't actually the audience for it.
 
-In a same-device flow with `response_mode=direct_post`, the Wallet submits the vp_token directly to the Authorization Server provided `response_uri`, which serves as the Verifier Response Endpoint as described in Section 8.2 of {{OID4VP}}. This flow is recommended when the Client is not the Verifier, such as when it is a third-party app, because it avoids sending the `vp_token` through the Client, which is not the intended audience for the token.
+In a same-device flow with `response_mode=direct_post`, the Wallet submits the vp_token directly to the Authorization Server provided `response_uri`, which serves as the Verifier Response Endpoint as described in Section 8.2 of {{OpenID4VP}}. This flow is recommended when the Client is not the Verifier, such as when it is a third-party app, because it avoids sending the `vp_token` through the Client, which is not the intended audience for the token.
 
 In this deployment model, the Authorization Server MUST recognize that the flow is same-device, as the Verifier Response Endpoint is expected to return a `redirect_uri` containing a `response_code` only for same-device flows. This `response_code` enables the Client to resume and complete the authorization flow.
 
@@ -405,7 +405,7 @@ The Client then sends a subsequent Authorization Challenge Request including the
 
 ```
 
-## OpenID4VP over DC API
+## OpenID4VP over DC API {#oid4vp-over-dc-api}
 
 When the Client supports the DC API, it indicates this capability to the Authorization Server in the Authorization Challenge Request via the appropriate parameter (e.g., authentication_method=oid4vp_dc_api). The Authorization Server responds with a Presentation Request formatted for OpenID4VP over DC API processing.
 
