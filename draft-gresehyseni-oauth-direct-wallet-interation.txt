@@ -162,9 +162,9 @@ Table of Contents
    same device as the client app.  This does not represent the OID4VP
    over DC API, see section Section 6.3.
 
-   ascii-art +----------+ +----------+ +-------------------+
-   +------------+ | Wallet | | Third | | Authorization | |
-   Verifier | | | | Party- | | Server | | | | | | Client | (A)
+   text +----------+ +----------+ +-------------------+ +------------+ |
+   Wallet | | Third | | Authorization | | Verifier | | | | Party- | |
+   Server | | | | | | Client | (A)
    Authorization |+-----------------+| | | | | | | Challenge
    Request |+-----------------+| (A)
    Create | | | | | |---------------------->|| Authorization ||
@@ -240,9 +240,9 @@ Table of Contents
    a different device from the client app.  This does not represent the
    OID4VP over DC API, see section Section 6.3.
 
-   ascii-art +----------+ +----------+ +-------------------+
-   +------------+ | Wallet | | Third | | Authorization | |
-   Verifier | | | | Party- | | Server | | | | | | Client | (A)
+   text +----------+ +----------+ +-------------------+ +------------+ |
+   Wallet | | Third | | Authorization | | Verifier | | | | Party- | |
+   Server | | | | | | Client | (A)
    Authorization |+-----------------+| | | | | | | Challenge
    Request |+-----------------+| (A)
    Create | | | | | |---------------------->|| Authorization ||
