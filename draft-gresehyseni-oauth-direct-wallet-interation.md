@@ -263,7 +263,7 @@ The Authorization Server MAY respond with an Authorization Error Response contai
 This document extends FiPA's {{I-D.ietf-oauth-first-party-apps}} Authorization Error Response by adding the following attributes, used when the error code "insufficient_authorization" is returned:
 
 "authentication_methods_supported":
-:    OPTIONAL. A JSON array of strings identifying the authentication methods supported by the Authorization Server. support for OID4VP and OID4VP over DC API, respectively.  This document defines the value "oid4vp" and "oid4vp_dc_api". Parties using any other values must mutually agree on the values meanings, which may be context-specific.
+:    OPTIONAL. A JSON array of strings identifying the authentication methods supported by the Authorization Server. support for OID4VP and OID4VP over DC API, respectively.  This document defines the value 'oid4vp' and 'oid4vp_dc_api'. Parties using any other values must mutually agree on the values meanings, which may be context-specific.
 
 "authentication_method":
 :    OPTIONAL.  A string indicating the authentication method requested by the Authorization Server. The value MUST be one of those listed in `authentication_methods_supported`. This parameter MUST be present when the Authorization Server lacks sufficient data to return the actual `oid4vp_authorization_request`.
@@ -310,7 +310,7 @@ Example: Authorization Error Response indicating supported authentication method
    {
      "error": "insufficient_authorization",
      "auth_session": "uY29tL2F1dGhlbnRpY",
-      authentication_methods_supported=["oid4vp","oid4vp_dc_api"]
+      authentication_methods_supported=['oid4vp','oid4vp_dc_api']
    }
 ```
 
@@ -337,7 +337,7 @@ Example: Authorization Error Response containing OID4VP Authorization Request
   {
     "error": "insufficient_authorization",
     "auth_session": "uY29tL2F1dGhlbnRpY",
-    "authentication_method": ["oid4vp"],
+    "authentication_method": ['oid4vp'],
     "oid4vp_authorization_request": "https://wallet.example.org/universal-link?
       response_type=vp_token
       &client_id=redirect_uri%3Ahttps%3A%2F%2Fclient.example.org%2Fcb
