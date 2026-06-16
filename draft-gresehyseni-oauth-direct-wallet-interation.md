@@ -246,10 +246,14 @@ This document extends the FiPA {{I-D.ietf-oauth-first-party-apps}} Authorization
 "oid4vp_response_code":
 :    OPTIONAL.  A value of the `response_code`, as defined in section 13.3. of {{OpenID4VP}}, returned from the wallet as part of the Presentation Response (for non-DC API, same-device, response_mode=direct_post flows).
 
-Additionally, this document uses the following existing OAuth 2.0 Authorization Request parameters:
+Additionally, the client MAY add to the request URI the following parameters to the query component of the authorization challenge endpoint URI using the "application/x-www-form-urlencoded" format:
 
 "redirect_uri":
-:    OPTIONAL.  The URI to which the wallet redirects the user back to the client in {{OpenID4VP}} same-device flows. This parameter MUST be included in same-device flows along with `authentication_method`. If the Authorization Server receives type without `redirect_uri`, it SHOULD treat the request as a cross-device flow and MAY return the Presentation Request. This parameter SHOULD NOT be sent when `authentication_method=oid4vp_dc_api`. If it is sent, the Authorization Server MUST ignore it.
+:    OPTIONAL.  The OAuth redirect_uri defined in {{RFC6749}}. This parameter MUST be included in same-device flows along with `authentication_method` and represents the client URI to which the wallet redirects the user for the same-device flows. If the Authorization Server receives `authentication_method` without `redirect_uri`, it SHOULD treat the request as a request for cross-device flow. This parameter SHOULD NOT be sent when `authentication_method=oid4vp_dc_api`. If it is sent, the Authorization Server MUST ignore it.
+
+"authorization_details":
+:    OPTIONAL. A JSON object as defined in {{RFC9396}}, representing OAuth authorization details. See {{oid4vp-with-rar}} to understand its usage.
+
 
 ## Initial Authorization Challenge Request {#init-authorization-challenge-request}
 The initial Authorization Challenge Request includes only the information available at that time. For example, if the client has no prior information on preferred user login methods, it can send a Authorization Challenge Request without specifying the `authentication_method` or any additional data relevant for it. See {#example-flows}. Similarly, in another time, if/when the client knows pre-flow such information, it can already send everything in the first authrization challenge request.
@@ -396,6 +400,30 @@ When the Client supports the DC API, it indicates this capability to the Authori
 In this deployment model, the `vp_token` is returned always returned to the Client via the DC API. The Client then forwards the received `vp_token` to the Authorization Server in a subsequent Authorization Challenge Request to complete the authorization process.
 
 
+## OpenID4VP with RAR {#oid4vp-with-rar}
+
+A useful use case is when the user is already authenticated but needs to provide explicit approval using their wallet.
+
+In such a case, the Client MUST include the `authorization_details` parameter as defined in {{RFC9396}} within the Authorization Challenge Request. This allows the Authorization Server to convey the specific authorization requirements to the wallet, enabling the user to approve the requested action.
+
+An non-normative example Authorization Challenge Request is shown below:
+
+~~~  http-message
+POST /authorize-challenge HTTP/1.1
+Host: server.example.com
+Content-Type: application/x-www-form-urlencoded
+
+auth_session="bXlzZXNzaW9uMTIzNDU2"
+&oid4vp_response_code="091535f699ea575c7937fa5f0f454aee"
+&authorization_details='{
+  "type": "openid_credential",
+  "actions": ["approve"],
+  "locations": ["https://example.com/resource/123"]
+}'
+~~~
+
+Upon receiving this request, the Authorization Server MAY use the contents of authorization_details to populate the transaction_data in the OID4VP Authorization Request. This enables the wallet to present the user with the relevant information and prompt for explicit consent for the specified action(s), as defined in {{OpenID4VP}}.
+
 # Security Considerations
 
 Implementations of this specification SHOULD consider the security and privacy considerations defined by {{OpenID4VP}}, in particular those described in the OpenID for Verifiable Presentations Security Considerations section.
@@ -471,21 +499,6 @@ IANA has (TBD) registered the following values in the IANA "OAuth Parameters" re
    *Parameter usage location*: authorization request, authorization response
 
    *Change Controller*: IETF
-
-   *Specification Document*: Section {#authorization-challenge-request} of this specification
-
-
-OAuth Server Metadata Registration
-
-   IANA has (TBD) registered the following values in the IANA "OAuth
-   Authorization Server Metadata" registry of [IANA.oauth-parameters]
-   established by [RFC8414].
-
-   *Metadata Name*: authentication_methods_supported
-
-   *Metadata Description*: A JSON array of strings identifying the authentication methods supported by the authorization server.
-
-   *Change Controller*: IESG
 
    *Specification Document*: Section {#authorization-challenge-request} of this specification
 
