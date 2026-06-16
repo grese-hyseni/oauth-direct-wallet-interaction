@@ -114,7 +114,7 @@ The Verifier is a separate logical component, as it has it's own endpoints and f
 The following figure illustrates the High Level use case in which the Authorization Server (AS) requests a Verifiable Presentation from the Wallet as part of the authorization process and the wallet is on the same device as the client app. This does not represent the OID4VP over DC API, see section {{oid4vp-over-dc-api}}.
 
 ```ascii-art
-+----------+                 +----------+                       +-------------------+                      +------------+ 
++----------+                 +----------+                       +-------------------+                      +------------+
 |  Wallet  |                 |  Third   |                       |   Authorization   |                      |  Verifier  |
 |          |                 |  Party-  |                       |      Server       |                      |            |
 |          |                 |  Client  |  (A) Authorization    |+-----------------+|                      |            |
@@ -177,7 +177,7 @@ The following figure illustrates the High Level use case in which the Authorizat
 The following figure illustrates the High Level use cases in which the Authorization Server (AS) requests a Verifiable Presentation from the Wallet as part of the authorization process and the wallet is on a different device from the client app. This does not represent the OID4VP over DC API, see section {{oid4vp-over-dc-api}}.
 
 ```ascii-art
-+----------+                   +----------+                        +-------------------+                   +------------+ 
++----------+                   +----------+                        +-------------------+                   +------------+
 |  Wallet  |                   |  Third   |                       |   Authorization   |                    |  Verifier  |
 |          |                   |  Party-  |                       |      Server       |                    |            |
 |          |                   |  Client  | (A) Authorization     |+-----------------+|                    |            |
