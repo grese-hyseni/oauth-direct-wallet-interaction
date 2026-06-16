@@ -1278,7 +1278,8 @@ appear in all capitals, as shown here.<a href="#section-2-1" class="pilcrow">¶<
 <a href="#section-3.1" class="section-number selfRef">3.1. </a><a href="#name-same-device-flow" class="section-name selfRef">Same Device Flow</a>
         </h3>
 <p id="section-3.1-1">The following figure illustrates the High Level use case in which the Authorization Server (AS) requests a Verifiable Presentation from the Wallet as part of the authorization process and the wallet is on the same device as the client app. This does not represent the OID4VP over DC API, see section <a href="#oid4vp-over-dc-api" class="auto internal xref">Section 6.3</a>.<a href="#section-3.1-1" class="pilcrow">¶</a></p>
-<p id="section-3.1-2"><code>
+<div class="alignLeft art-ascii-art art-text artwork" id="section-3.1-2">
+<pre>
 +----------+                 +----------+                       +-------------------+                      +------------+
 |  Wallet  |                 |  Third   |                       |   Authorization   |                      |  Verifier  |
 |          |                 |  Party-  |                       |      Server       |                      |            |
@@ -1318,7 +1319,8 @@ appear in all capitals, as shown here.<a href="#section-2-1" class="pilcrow">¶<
 |          |                 |          | (H) Access Token      |+-----------------+|                      |            |
 |          |                 |          |                       |                   |                      |            |
 +----------+                 +----------+                       +-------------------+                      +------------+
-</code><a href="#section-3.1-2" class="pilcrow">¶</a></p>
+</pre><a href="#section-3.1-2" class="pilcrow">¶</a>
+</div>
 <p id="section-3.1-3">(A) The Client sends an Authorization Challenge Request to the Authorization Server’s Authorization Challenge Endpoint. The client <span class="bcp14">MUST</span> provide <code>type</code> and <code>redirect_uri</code> to indicate that it is requesting an OID4VP Authorization Request for a same-device flow. The Client <span class="bcp14">MAY</span> provide these parameters in the initial or in a subsequent Authorization Challenge Request. See Section <a href="#authorization-challenge-request" class="auto internal xref">Section 4</a> for details.<a href="#section-3.1-3" class="pilcrow">¶</a></p>
 <p id="section-3.1-4">(B) The Authorization Server responds with an authorization error containing the required/supported authentication methods, where at least one is of type "verifiable_presentation". The Client may be asked to send further Authorization Requests to provide sufficient data for the Authorization Server to issue an OID4VP Authorization Request (Presentation Request) as part of this Authorization Error Response. The Presentation Response <span class="bcp14">SHOULD</span> contain <code>response_mode=fragment</code> as defined in section 3.1. of <span>[<a href="#OpenID4VP" class="cite xref">OpenID4VP</a>]</span>. See Section <a href="#authorization-error-response" class="auto internal xref">Section 5</a> for details.<a href="#section-3.1-4" class="pilcrow">¶</a></p>
 <p id="section-3.1-5">(C) The Client invokes the wallet on the user’s device with the OID4VP Authorization Request, where user is expected to authenticate/authorize and consent to sharing the credentials with the verifier.<a href="#section-3.1-5" class="pilcrow">¶</a></p>
@@ -1335,7 +1337,8 @@ appear in all capitals, as shown here.<a href="#section-2-1" class="pilcrow">¶<
 <a href="#section-3.2" class="section-number selfRef">3.2. </a><a href="#name-cross-device-flow" class="section-name selfRef">Cross Device Flow</a>
         </h3>
 <p id="section-3.2-1">The following figure illustrates the High Level use cases in which the Authorization Server (AS) requests a Verifiable Presentation from the Wallet as part of the authorization process and the wallet is on a different device from the client app. This does not represent the OID4VP over DC API, see section <a href="#oid4vp-over-dc-api" class="auto internal xref">Section 6.3</a>.<a href="#section-3.2-1" class="pilcrow">¶</a></p>
-<p id="section-3.2-2"><code>
+<div class="alignLeft art-ascii-art art-text artwork" id="section-3.2-2">
+<pre>
 +----------+                   +----------+                        +-------------------+                   +------------+
 |  Wallet  |                   |  Third   |                       |   Authorization   |                    |  Verifier  |
 |          |                   |  Party-  |                       |      Server       |                    |            |
@@ -1376,7 +1379,8 @@ appear in all capitals, as shown here.<a href="#section-2-1" class="pilcrow">¶<
 |          |                   |          | (H) Access Token      |+-----------------+|                    |            |
 |          |                   |          |                       |                   |                    |            |
 +----------+                   +----------+                       +-------------------+                    +------------+
-</code><a href="#section-3.2-2" class="pilcrow">¶</a></p>
+</pre><a href="#section-3.2-2" class="pilcrow">¶</a>
+</div>
 <p id="section-3.2-3">(A) (A) The Client sends an Authorization Challenge Request to the Authorization Server’s Authorization Challenge Endpoint. The client <span class="bcp14">MUST</span> provide <code>type</code> and ommit the <code>redirect_uri</code> to indicate that it is requesting an OID4VP Authorization Request for a cross-device flow. The Client <span class="bcp14">MAY</span> provide these parameters in the initial or in a subsequent Authorization Challenge Request. See Section <a href="#authorization-challenge-request" class="auto internal xref">Section 4</a> for details.<a href="#section-3.2-3" class="pilcrow">¶</a></p>
 <p id="section-3.2-4">(B) The Authorization Server responds with an authorization error containing the required authentication methods, where at least one is of type "verifiable_presentation". The Client may be asked to send further Authorization Requests to provide sufficient data for the Authorization Server to issue an OID4VP Authorization Request (Presentation Request) as part of this Authorization Error Response. The Presentation Response <span class="bcp14">SHOULD</span> contain <code>response_mode=direct_post</code> as defined in section 3.2. of <span>[<a href="#OpenID4VP" class="cite xref">OpenID4VP</a>]</span>. See Section <a href="#authorization-error-response" class="auto internal xref">Section 5</a> for details.<a href="#section-3.2-4" class="pilcrow">¶</a></p>
 <p id="section-3.2-5">(C) The Client generated the QR Code for the user to invoke the wallet on another device wich contains the OID4VP Authorization Request.<a href="#section-3.2-5" class="pilcrow">¶</a></p>
@@ -1495,40 +1499,51 @@ appear in all capitals, as shown here.<a href="#section-2-1" class="pilcrow">¶<
         </h3>
 <p id="section-6.1-1">In a same-device flow with <code>response_mode=fragment</code>, the Wallet returns the <code>vp_token</code> directly to the Client. The Client then includes the <code>vp_token</code> in an Authorization Challenge Request sent to the Authorization Server.<a href="#section-6.1-1" class="pilcrow">¶</a></p>
 <p id="section-6.1-2">Example: Initial Authorization Challenge Request (no preferred authentication):<a href="#section-6.1-2" class="pilcrow">¶</a></p>
-<p id="section-6.1-3">```http
+<div class="lang-http-message sourcecode" id="section-6.1-3">
+<pre>
    POST /authorize-challenge HTTP/1.1
    Host: server.example.com
-   Content-Type: application/x-www-form-urlencoded<a href="#section-6.1-3" class="pilcrow">¶</a></p>
-<p id="section-6.1-4">scope=openid
+   Content-Type: application/x-www-form-urlencoded
+
+   scope=openid
    &amp;client_id=bb16c14c73415
-```<a href="#section-6.1-4" class="pilcrow">¶</a></p>
-<p id="section-6.1-5">Example: Authorization Error Response indicating supported authentication methods<a href="#section-6.1-5" class="pilcrow">¶</a></p>
-<p id="section-6.1-6">```http
+</pre><a href="#section-6.1-3" class="pilcrow">¶</a>
+</div>
+<p id="section-6.1-4">Example: Authorization Error Response indicating supported authentication methods<a href="#section-6.1-4" class="pilcrow">¶</a></p>
+<div class="lang-http-message sourcecode" id="section-6.1-5">
+<pre>
 HTTP/1.1 401 Unauthorized
 Content-Type: application/json
-Cache-Control: no-store<a href="#section-6.1-6" class="pilcrow">¶</a></p>
-<p id="section-6.1-7">{
+Cache-Control: no-store
+
+{
    "error": "insufficient_authorization",
    "auth_session": "uY29tL2F1dGhlbnRpY",
    "authentication_methods_supported": ['oid4vp','oid4vp_dc_api']
 }
-```<a href="#section-6.1-7" class="pilcrow">¶</a></p>
-<p id="section-6.1-8">Example: Subsequent Authorization Challenge Request requesting OID4VP Authorization Request (non-DC API same-device flow)<a href="#section-6.1-8" class="pilcrow">¶</a></p>
-<p id="section-6.1-9">```http
+</pre><a href="#section-6.1-5" class="pilcrow">¶</a>
+</div>
+<p id="section-6.1-6">Example: Subsequent Authorization Challenge Request requesting OID4VP Authorization Request (non-DC API same-device flow)<a href="#section-6.1-6" class="pilcrow">¶</a></p>
+<div class="lang-http-message sourcecode" id="section-6.1-7">
+<pre>
 POST /authorize-challenge HTTP/1.1
 Host: server.example.com
-Content-Type: application/x-www-form-urlencoded<a href="#section-6.1-9" class="pilcrow">¶</a></p>
-<p id="section-6.1-10">auth_session=uY29tL2F1dGhlbnRpY
+Content-Type: application/x-www-form-urlencoded
+
+auth_session=uY29tL2F1dGhlbnRpY
 &amp;authentication_method=oid4vp
 &amp;redirect_uri=https%3A%2F%2Fclient.example.org%2Fcb
-```<a href="#section-6.1-10" class="pilcrow">¶</a></p>
-<p id="section-6.1-11">Example: Authorization Error Response containing OID4VP Authorization Request
-(Whitespace and line breaks added for readability only)<a href="#section-6.1-11" class="pilcrow">¶</a></p>
-<p id="section-6.1-12">```http
+</pre><a href="#section-6.1-7" class="pilcrow">¶</a>
+</div>
+<p id="section-6.1-8">Example: Authorization Error Response containing OID4VP Authorization Request
+(Whitespace and line breaks added for readability only)<a href="#section-6.1-8" class="pilcrow">¶</a></p>
+<div class="lang-http-message sourcecode" id="section-6.1-9">
+<pre>
 HTTP/1.1 401 Unauthorized
 Content-Type: application/json
-Cache-Control: no-store<a href="#section-6.1-12" class="pilcrow">¶</a></p>
-<p id="section-6.1-13">{
+Cache-Control: no-store
+
+{
    "error": "insufficient_authorization",
    "auth_session": "uY29tL2F1dGhlbnRpY",
    "authentication_method": ['oid4vp'],
@@ -1540,24 +1555,31 @@ Cache-Control: no-store<a href="#section-6.1-12" class="pilcrow">¶</a></p>
    &amp;nonce=n-0S6_WzA2Mj
    &amp;client_metadata=%7B%22vp_formats_supported%22%3A%7B%22dc%2Bsd-jwt%22%3A%7B%22sd-jwt_alg_values%22%3A%20%5B%22ES256%22%5D%2C%22kb-jwt_alg_values%22%3A%20%5B%22ES256%22%5D%7D%7D%7D"
 }
-```<a href="#section-6.1-13" class="pilcrow">¶</a></p>
-<p id="section-6.1-14">Example: Subsequent Authorization Challenge Request forwarding the Presentation Response:<a href="#section-6.1-14" class="pilcrow">¶</a></p>
-<p id="section-6.1-15">```http
+</pre><a href="#section-6.1-9" class="pilcrow">¶</a>
+</div>
+<p id="section-6.1-10">Example: Subsequent Authorization Challenge Request forwarding the Presentation Response:<a href="#section-6.1-10" class="pilcrow">¶</a></p>
+<div class="lang-http-message sourcecode" id="section-6.1-11">
+<pre>
 POST /authorize-challenge HTTP/1.1
 Host: server.example.com
-Content-Type: application/x-www-form-urlencoded<a href="#section-6.1-15" class="pilcrow">¶</a></p>
-<p id="section-6.1-16">auth_session=uY29tL2F1dGhlbnRpY
+Content-Type: application/x-www-form-urlencoded
+
+auth_session=uY29tL2F1dGhlbnRpY
 &amp;vp_token=eyJhbGciOiJFUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ1c2VyMTIzIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNjI3MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c
-```<a href="#section-6.1-16" class="pilcrow">¶</a></p>
-<p id="section-6.1-17">Example: Successful Authorization Challenge Response returning the authorization code<a href="#section-6.1-17" class="pilcrow">¶</a></p>
-<p id="section-6.1-18">```http
+</pre><a href="#section-6.1-11" class="pilcrow">¶</a>
+</div>
+<p id="section-6.1-12">Example: Successful Authorization Challenge Response returning the authorization code<a href="#section-6.1-12" class="pilcrow">¶</a></p>
+<div class="lang-http-message sourcecode" id="section-6.1-13">
+<pre>
 HTTP/1.1 200 OK
 Content-Type: application/json
-Cache-Control: no-store<a href="#section-6.1-18" class="pilcrow">¶</a></p>
-<p id="section-6.1-19">{
+Cache-Control: no-store
+
+{
    "authorization_code": "c2VjdXJlL2F1dGgvY29kZQ=="
 }
-```<a href="#section-6.1-19" class="pilcrow">¶</a></p>
+</pre><a href="#section-6.1-13" class="pilcrow">¶</a>
+</div>
 </section>
 </div>
 <div id="oid4vp-same-device-direct-post">
@@ -1569,13 +1591,16 @@ Cache-Control: no-store<a href="#section-6.1-18" class="pilcrow">¶</a></p>
 <p id="section-6.2-2">In a same-device flow with <code>response_mode=direct_post</code>, the Wallet submits the vp_token directly to the Authorization Server provided <code>response_uri</code>, which serves as the Verifier Response Endpoint as described in Section 8.2 of <span>[<a href="#OpenID4VP" class="cite xref">OpenID4VP</a>]</span>. This flow is recommended when the Client is not the Verifier, such as when it is a third-party app, because it avoids sending the <code>vp_token</code> through the Client, which is not the intended audience for the token.<a href="#section-6.2-2" class="pilcrow">¶</a></p>
 <p id="section-6.2-3">In this deployment model, the Authorization Server <span class="bcp14">MUST</span> recognize that the flow is same-device, as the Verifier Response Endpoint is expected to return a <code>redirect_uri</code> containing a <code>response_code</code> only for same-device flows. This <code>response_code</code> enables the Client to resume and complete the authorization flow.<a href="#section-6.2-3" class="pilcrow">¶</a></p>
 <p id="section-6.2-4">The Client then sends a subsequent Authorization Challenge Request including the response_code to finalize the authorization process, as illustrated in the example below:<a href="#section-6.2-4" class="pilcrow">¶</a></p>
-<p id="section-6.2-5">```
+<div class="lang-http-message sourcecode" id="section-6.2-5">
+<pre>
    POST /authorize-challenge HTTP/1.1
    Host: server.example.com
-   Content-Type: application/x-www-form-urlencoded<a href="#section-6.2-5" class="pilcrow">¶</a></p>
-<p id="section-6.2-6">auth_session="bXlzZXNzaW9uMTIzNDU2"
+   Content-Type: application/x-www-form-urlencoded
+
+   auth_session="bXlzZXNzaW9uMTIzNDU2"
    &amp;response_code="091535f699ea575c7937fa5f0f454aee"
-```<a href="#section-6.2-6" class="pilcrow">¶</a></p>
+</pre><a href="#section-6.2-5" class="pilcrow">¶</a>
+</div>
 </section>
 </div>
 <div id="oid4vp-over-dc-api">
