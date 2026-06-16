@@ -113,7 +113,7 @@ The Verifier is a separate logical component, as it has it's own endpoints and f
 
 The following figure illustrates the High Level use case in which the Authorization Server (AS) requests a Verifiable Presentation from the Wallet as part of the authorization process and the wallet is on the same device as the client app. This does not represent the OID4VP over DC API, see section {{oid4vp-over-dc-api}}.
 
-```
+~~~ ascii-art
 +----------+                 +----------+                       +-------------------+                      +------------+
 |  Wallet  |                 |  Third   |                       |   Authorization   |                      |  Verifier  |
 |          |                 |  Party-  |                       |      Server       |                      |            |
@@ -153,7 +153,7 @@ The following figure illustrates the High Level use case in which the Authorizat
 |          |                 |          | (H) Access Token      |+-----------------+|                      |            |
 |          |                 |          |                       |                   |                      |            |
 +----------+                 +----------+                       +-------------------+                      +------------+
-```
+~~~
 
 (A) The Client sends an Authorization Challenge Request to the Authorization Server’s Authorization Challenge Endpoint. The client MUST provide `type` and `redirect_uri` to indicate that it is requesting an OID4VP Authorization Request for a same-device flow. The Client MAY provide these parameters in the initial or in a subsequent Authorization Challenge Request. See Section {{authorization-challenge-request}} for details.
 
@@ -176,7 +176,7 @@ The following figure illustrates the High Level use case in which the Authorizat
 
 The following figure illustrates the High Level use cases in which the Authorization Server (AS) requests a Verifiable Presentation from the Wallet as part of the authorization process and the wallet is on a different device from the client app. This does not represent the OID4VP over DC API, see section {{oid4vp-over-dc-api}}.
 
-```
+~~~ ascii-art
 +----------+                   +----------+                        +-------------------+                   +------------+
 |  Wallet  |                   |  Third   |                       |   Authorization   |                    |  Verifier  |
 |          |                   |  Party-  |                       |      Server       |                    |            |
@@ -217,7 +217,7 @@ The following figure illustrates the High Level use cases in which the Authoriza
 |          |                   |          | (H) Access Token      |+-----------------+|                    |            |
 |          |                   |          |                       |                   |                    |            |
 +----------+                   +----------+                       +-------------------+                    +------------+
-```
+~~~
 
 
 (A) (A) The Client sends an Authorization Challenge Request to the Authorization Server’s Authorization Challenge Endpoint. The client MUST provide `type` and ommit the `redirect_uri` to indicate that it is requesting an OID4VP Authorization Request for a cross-device flow. The Client MAY provide these parameters in the initial or in a subsequent Authorization Challenge Request. See Section {{authorization-challenge-request}} for details.
@@ -291,18 +291,18 @@ In a same-device flow with `response_mode=fragment`, the Wallet returns the `vp_
 
 Example: Initial Authorization Challenge Request (no preferred authentication):
 
-```http
+~~~ http-message
    POST /authorize-challenge HTTP/1.1
    Host: server.example.com
    Content-Type: application/x-www-form-urlencoded
 
    scope=openid
    &client_id=bb16c14c73415
-```
+~~~
 
 Example: Authorization Error Response indicating supported authentication methods
 
-```http
+~~~ http-message
 HTTP/1.1 401 Unauthorized
 Content-Type: application/json
 Cache-Control: no-store
@@ -312,11 +312,11 @@ Cache-Control: no-store
    "auth_session": "uY29tL2F1dGhlbnRpY",
    "authentication_methods_supported": ['oid4vp','oid4vp_dc_api']
 }
-```
+~~~
 
 Example: Subsequent Authorization Challenge Request requesting OID4VP Authorization Request (non-DC API same-device flow)
 
-```http
+~~~ http-message
 POST /authorize-challenge HTTP/1.1
 Host: server.example.com
 Content-Type: application/x-www-form-urlencoded
@@ -324,12 +324,12 @@ Content-Type: application/x-www-form-urlencoded
 auth_session=uY29tL2F1dGhlbnRpY
 &authentication_method=oid4vp
 &redirect_uri=https%3A%2F%2Fclient.example.org%2Fcb
-```
+~~~ 
 
 Example: Authorization Error Response containing OID4VP Authorization Request
 (Whitespace and line breaks added for readability only)
 
-```http
+~~~ http-message
 HTTP/1.1 401 Unauthorized
 Content-Type: application/json
 Cache-Control: no-store
@@ -346,22 +346,22 @@ Cache-Control: no-store
    &nonce=n-0S6_WzA2Mj
    &client_metadata=%7B%22vp_formats_supported%22%3A%7B%22dc%2Bsd-jwt%22%3A%7B%22sd-jwt_alg_values%22%3A%20%5B%22ES256%22%5D%2C%22kb-jwt_alg_values%22%3A%20%5B%22ES256%22%5D%7D%7D%7D"
 }
-```
+~~~ 
 
 Example: Subsequent Authorization Challenge Request forwarding the Presentation Response:
 
-```http
+~~~ http-message
 POST /authorize-challenge HTTP/1.1
 Host: server.example.com
 Content-Type: application/x-www-form-urlencoded
 
 auth_session=uY29tL2F1dGhlbnRpY
 &vp_token=eyJhbGciOiJFUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ1c2VyMTIzIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNjI3MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c
-```
+~~~ 
 
 Example: Successful Authorization Challenge Response returning the authorization code
 
-```http
+~~~ http-message
 HTTP/1.1 200 OK
 Content-Type: application/json
 Cache-Control: no-store
@@ -369,7 +369,7 @@ Cache-Control: no-store
 {
    "authorization_code": "c2VjdXJlL2F1dGgvY29kZQ=="
 }
-```
+~~~ 
 
 ## OpenID4VP Same-Device Flow using `direct_post` {#oid4vp-same-device-direct-post}
 
@@ -381,14 +381,14 @@ In this deployment model, the Authorization Server MUST recognize that the flow 
 
 The Client then sends a subsequent Authorization Challenge Request including the response_code to finalize the authorization process, as illustrated in the example below:
 
-```
+~~~ http-message
    POST /authorize-challenge HTTP/1.1
    Host: server.example.com
    Content-Type: application/x-www-form-urlencoded
 
    auth_session="bXlzZXNzaW9uMTIzNDU2"
    &response_code="091535f699ea575c7937fa5f0f454aee"
-```
+~~~ 
 
 ## OpenID4VP over DC API {#oid4vp-over-dc-api}
 
