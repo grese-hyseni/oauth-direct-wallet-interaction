@@ -25,8 +25,8 @@ venue:
 
 author:
  -
-    fullname: "grese-hyseni"
-    organization: Your Organization Here
+    fullname: "Gresë Hyseni"
+    organization: Raiffeisen Bank International
     email: "grese.hyseni@rbinternational.com"
 
 normative:
