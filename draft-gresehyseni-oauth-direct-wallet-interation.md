@@ -225,7 +225,7 @@ The following figure illustrates the High Level use cases in which the Authoriza
 
 (C) The Client generated the QR Code for the user to invoke the wallet on another device which contains the OID4VP Authorization Request.
 
-(D) The wallet sends the Presentation Response which contains the VP Token directly to the Verifier's Response Endpoint. 
+(D) The wallet sends the Presentation Response which contains the VP Token directly to the Verifier's Response Endpoint.
 
 (F) Upon successful validation of the Presentation Response by the verifier and completion of authorization checks, the Authorization Server issues an Authorization Code.
 
