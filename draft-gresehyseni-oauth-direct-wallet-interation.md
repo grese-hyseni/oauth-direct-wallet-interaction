@@ -242,10 +242,10 @@ This document extends the FiPA {{I-D.ietf-oauth-first-party-apps}} Authorization
 :    OPTIONAL.  A string indicating the authentication method requested by the Client, e.g., a user-preselected method on the client side. This document uses the value "oid4vp" and "oid4vp_dc_api". Values used in the `authentication_method` parameter SHOULD be from those registered in the IANA Authentication Method Values registry [IANA.AMS] established by this specification. Parties using unregistered values must mutually agree on their meanings, which may be context-specific.
 
 "vp_token":
-:    OPTIONAL.  A value the VP Token returned from the wallet as part of the Presentation Response (e.g., in DC API or `response_mode=fragment` flows) or a `response_code` (for non-DC API, same-device, response_mode=direct_post flows). 
+:    OPTIONAL.  A value the VP Token returned from the wallet as part of the Presentation Response (e.g., in DC API or `response_mode=fragment` flows) or a `response_code` (for non-DC API, same-device, response_mode=direct_post flows).
 
 "response_code":
-:    OPTIONAL.  A value containing the `response_code`  returned from the wallet as part of the Presentation Response (for non-DC API, same-device, response_mode=direct_post flows). 
+:    OPTIONAL.  A value containing the `response_code`  returned from the wallet as part of the Presentation Response (for non-DC API, same-device, response_mode=direct_post flows).
 
 Additionally, this document uses the following existing OAuth 2.0 Authorization Request parameters:
 
@@ -411,7 +411,7 @@ When the Client supports the DC API, it indicates this capability to the Authori
 
 In this deployment model, the `vp_token` is returned always returned to the Client via the DC API. The Client then forwards the received `vp_token` to the Authorization Server in a subsequent Authorization Challenge Request to complete the authorization process.
 
-             
+
 # Security Considerations
 
 Implementations of this specification SHOULD consider the security and privacy considerations defined by {{OpenID4VP}}, in particular those described in the OpenID for Verifiable Presentations Security Considerations section.
@@ -445,7 +445,7 @@ IANA has (TBD) registered the following values in the IANA "OAuth Parameters" re
 
    *Specification Document*: Section {#authorization-challenge-request} of [[ this specification ]]
 
-   
+
    *Parameter name*: vp_token
 
    *Parameter usage location*: authorization request
@@ -454,7 +454,7 @@ IANA has (TBD) registered the following values in the IANA "OAuth Parameters" re
 
    *Specification Document*: Section {#authorization-challenge-request} of [[ this specification ]]
 
-      
+
    *Parameter name*: vp_response_code
 
    *Parameter usage location*: authorization request
@@ -481,7 +481,7 @@ IANA has (TBD) registered the following values in the IANA "OAuth Parameters" re
 
    *Specification Document*: Section {#authorization-challenge-request} of [[ this specification ]]
 
-   
+
    *Parameter name*: authentication_method
 
    *Parameter usage location*: authorization request, authorization response
