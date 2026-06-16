@@ -298,7 +298,6 @@ Example: Initial Authorization Challenge Request (no preferred authentication):
 
    scope=openid
    &client_id=bb16c14c73415
-
 ```
 
 Example: Authorization Error Response indicating supported authentication methods
@@ -313,8 +312,6 @@ Example: Authorization Error Response indicating supported authentication method
      "auth_session": "uY29tL2F1dGhlbnRpY",
       authentication_methods_supported=["oid4vp","oid4vp_dc_api"]
    }
-
-
 ```
 
 Example: Subsequent Authorization Challenge Request requesting OID4VP Authorization Request (non-DC API same-device flow)
@@ -327,8 +324,6 @@ Example: Subsequent Authorization Challenge Request requesting OID4VP Authorizat
    auth_session= "uY29tL2F1dGhlbnRpY"
    authentication_method = "oid4vp"
    &redirect_uri= [insert a deep link here]
-
-
 ```
 
 Example: Authorization Error Response containing OID4VP Authorization Request
@@ -351,9 +346,6 @@ Example: Authorization Error Response containing OID4VP Authorization Request
       &nonce=n-0S6_WzA2Mj
       &client_metadata=%7B%22vp_formats_supported%22%3A%7B%22dc%2Bsd-jwt%22%3A%7B%22sd-jwt_alg_values%22%3A%20%5B%22ES256%22%5D%2C%22kb-jwt_alg_values%22%3A%20%5B%22ES256%22%5D%7D%7D%7D"
   }
-
-
-
 ```
 
 Example: Subsequent Authorization Challenge Request forwarding the Presentation Response:
@@ -365,7 +357,6 @@ Example: Subsequent Authorization Challenge Request forwarding the Presentation 
 
   auth_session=uY29tL2F1dGhlbnRpY
   &vp_token=[vp_token_value]
-
 ```
 
 Example: Successful Authorization Challenge Response returning the authorization code
@@ -380,9 +371,8 @@ Example: Successful Authorization Challenge Response returning the authorization
    Cache-Control: no-store
 
    {
-     "authorization_code": "uY29tL2F1dGhlbnRpY"
+     "authorization_code": "c2VjdXJlL2F1dGgvY29kZQ=="
    }
-
 ```
 
 ## OpenID4VP Same-Device Flow using `direct_post` {#oid4vp-same-device-direct-post}
@@ -400,9 +390,8 @@ The Client then sends a subsequent Authorization Challenge Request including the
    Host: server.example.com
    Content-Type: application/x-www-form-urlencoded
 
-   auth_session="uY29tL2F1dGhlbnRpY"
-   &response_code=
-
+   auth_session="bXlzZXNzaW9uMTIzNDU2"
+   &response_code="091535f699ea575c7937fa5f0f454aee"
 ```
 
 ## OpenID4VP over DC API {#oid4vp-over-dc-api}
