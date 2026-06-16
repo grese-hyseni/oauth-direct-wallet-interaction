@@ -74,14 +74,16 @@ Table of Contents
      3.1.  Same Device Flow
      3.2.  Cross Device Flow
    4.  Authorization Challenge Request
-     4.1.  Initial authorization request
-     4.2.  Subsequest authorization challenge request
+     4.1.  Initial Authorization Challenge Request
+     4.2.  Subsequest uthorization Challenge Requests
    5.  Authorization Error Response
    6.  Example flows
      6.1.  OpenID4VP Same-Device Flow
      6.2.  OpenID4VP Same-Device Flow using direct_post
      6.3.  OpenID4VP over DC API
    7.  Security Considerations
+     7.1.  Signed Authorization Requests
+     7.2.  Signed and Encrypted Presentation Responses
    8.  IANA Considerations
    9.  References
      9.1.  Normative References
@@ -307,27 +309,357 @@ Table of Contents
 
 4.  Authorization Challenge Request
 
-4.1.  Initial authorization request
+   This document extends the FiPA [I-D.ietf-oauth-first-party-apps]
+   Authorization Challenge Request by adding the following parameters:
 
-4.2.  Subsequest authorization challenge request
+   "authentication_method":  OPTIONAL.  A string indicating the
+      authentication method requested by the Client, e.g., a user-
+      preselected method on the client side.  This document uses the
+      value "oid4vp" and "oid4vp_dc_api".  Values used in the
+      authentication_method parameter SHOULD be from those registered in
+      the IANA Authentication Method Values registry [IANA.AMS]
+      established by this specification.  Parties using unregistered
+      values must mutually agree on their meanings, which may be
+      context-specific.
+
+   "vp_token":  OPTIONAL.  A value the VP Token returned from the wallet
+      as part of the Presentation Response (e.g., in DC API or
+      response_mode=fragment flows) or a response_code (for non-DC API,
+      same-device, response_mode=direct_post flows).
+
+   "response_code":  OPTIONAL.  A value containing the response_code
+      returned from the wallet as part of the Presentation Response (for
+      non-DC API, same-device, response_mode=direct_post flows).
+
+   Additionally, this document uses the following existing OAuth 2.0
+   Authorization Request parameters:
+
+   "redirect_uri":  OPTIONAL.  The URI to which the wallet redirects the
+      user back to the client in [OpenID4VP] same-device flows.  This
+      parameter MUST be included in same-device flows along with type.
+      If the Authorization Server receives type without redirect_uri, it
+      SHOULD treat the request as a cross-device flow and MAY return the
+      Presentation Request.  This parameter SHOULD NOT be sent when
+      authentication_method=oid4vp_dc_api.  If it is sent, the
+      Authorization Server MUST ignore it.
+
+4.1.  Initial Authorization Challenge Request
+
+   The initial Authorization Challenge Request includes only the
+   information available at that time.  For example, if the client has
+   no prior information on preferred user login methods, it can send a
+   Authorization Challenge Request without specifying the
+   authentication_method or any additional data relevant for it.  See
+   {#example-flows}. Similarly, in another time, if/when the client
+   knows pre-flow such information, it can already send everything in
+   the first authrization challenge request.
+
+4.2.  Subsequest uthorization Challenge Requests
+
+   The Authorization Server MAY respond with an Authorization Error
+   Response containing oid4vp or/and oid4vp_dc_api as one of the
+   authentication_methods_supported.  In such case, the Client should
+   provide in a subsequent Authorization Challenge Request additional
+   parameters such as authenticaion_method and/or redirect_uri.  See
+   {#example-flows}.
 
 5.  Authorization Error Response
 
+   This document extends FiPA's [I-D.ietf-oauth-first-party-apps]
+   Authorization Error Response by adding the following attributes, used
+   when the error code "insufficient_authorization" is returned:
+
+   "authentication_methods_supported":  OPTIONAL.  A JSON array of
+      strings identifying the authentication methods supported by the
+      Authorization Server. support for OID4VP and OID4VP over DC API,
+      respectively.  Values SHOULD be from the IANA Authentication
+      Method References Values registry [IANA.AMS].  Unregistered values
+      require mutual agreement between parties.
+
+   "authentication_method":  OPTIONAL.  A string indicating the
+      authentication method requested by the Authorization Server.  The
+      value MUST be one of those listed in
+      authentication_methods_supported.  This parameter MUST be present
+      when the Authorization Server lacks sufficient data to return the
+      actual oid4vp_authorization_request.
+
+   "oid4vp_authorization_request":  OPTIONAL.  An OpenID4VP [OpenID4VP]
+      request URL.
+
+   "status":  OPTIONAL.  Indicates the status of the ongoing operation.
+      This document uses the value "pending".
+
 6.  Example flows
+
+   The Client MAY send an Authorization Challenge Request using one of
+   the following mechanisms:
+
+   *  Including a redirect_uri + response_mode = fragment parameter to
+      indicate a same-device flow.
+
+   *  Omitting the redirect_uri + response_mode = direct_post parameter
+      to indicate a cross-device flow.
+
+   *  Including a redirect_uri + response_mode = direct_post parameter
+      to indicate a same-device flow.
+
+   *  Including type=dc_api to indicate that the Presentation Request
+      SHOULD be conformant with OpenID4VP over DC API.
+
+   This section provides non-normative examples illustrating how this
+   specification supports specific deployment models.
 
 6.1.  OpenID4VP Same-Device Flow
 
+   In a same-device flow with response_mode=fragment, the Wallet returns
+   the vp_token directly to the Client.  The Client then includes the
+   vp_token in an Authorization Challenge Request sent to the
+   Authorization Server.
+
+   Example: Initial Authorization Challenge Request (no preferred
+   authentication):
+
+   ``` POST /authorize-challenge HTTP/1.1 Host: server.example.com
+   Content-Type: application/x-www-form-urlencoded
+
+   scope=openid &client_id=bb16c14c73415
+
+   ```
+
+   Example: Authorization Error Response indicating supported
+   authentication methods
+
+   ``` HTTP/1.1 401 Unauthorized Content-Type: application/json Cache-
+   Control: no-store
+
+   { "error": "insufficient_authorization", "auth_session":
+   "uY29tL2F1dGhlbnRpY",
+   authentication_methods_supported=["oid4vp","oid4vp_dc_api"] }
+
+   ```
+
+   Example: Subsequent Authorization Challenge Request requesting OID4VP
+   Authorization Request (non-DC API same-device flow)
+
+   ``` POST /authorize-challenge HTTP/1.1 Host: server.example.com
+   Content-Type: application/x-www-form-urlencoded
+
+   auth_session= "uY29tL2F1dGhlbnRpY" authentication_method = "oid4vp"
+   &redirect_uri= [insert a deep link here]
+
+   ```
+
+   Example: Authorization Error Response containing OID4VP Authorization
+   Request (Whitespace and line breaks added for readability only)
+
+   ``` HTTP/1.1 401 Unauthorized Content-Type: application/json Cache-
+   Control: no-store
+
+   { "error": "insufficient_authorization", "auth_session":
+   "uY29tL2F1dGhlbnRpY", "authentication_method": ["oid4vp"],
+   "oid4vp_authorization_request": "https://wallet.example.org/
+   universal-link?  response_type=vp_token
+   &client_id=redirect_uri%3Ahttps%3A%2F%2Fclient.example.org%2Fcb
+   &redirect_uri=https%3A%2F%2Fclient.example.org%2Fcb &dcql_query=...
+   &nonce=n-0S6_WzA2Mj
+   &client_metadata=%7B%22vp_formats_supported%22%3A%7B%22dc%2Bsd-
+   jwt%22%3A%7B%22sd-jwt_alg_values%22%3A%20%5B%22ES256%22%5D%2C%22kb-
+   jwt_alg_values%22%3A%20%5B%22ES256%22%5D%7D%7D%7D" }
+
+   ```
+
+   Example: Subsequent Authorization Challenge Request forwarding the
+   Presentation Response:
+
+   ``` POST /authorize-challenge HTTP/1.1 Host: server.example.com
+   Content-Type: application/x-www-form-urlencoded
+
+   auth_session=uY29tL2F1dGhlbnRpY &vp_token=[vp_token_value]
+
+   ```
+
+   Example: Successful Authorization Challenge Response returning the
+   authorization code
+
+   ``` The Authorization Server validates the auth_session to find the
+   expected user, then validates the OTP for that user, and responds
+   with an authorization code.
+
+   HTTP/1.1 200 OK Content-Type: application/json Cache-Control: no-
+   store
+
+   { "authorization_code": "uY29tL2F1dGhlbnRpY" }
+
+   ```
+
 6.2.  OpenID4VP Same-Device Flow using direct_post
+
+   In a same-device flow where response_mode is set to direct_post, the
+   Wallet submits the vp_token directly to the Authorization Server
+   response_uri, which acts as the Verifier Response Endpoint as
+   depicted on section 8.2 of [OpenID4VP].  This is the recommended flow
+   for our scenario where the Client isn't the Verifier, and it might be
+   a third-party app, and this flow avoids having to send a vp_token via
+   the client when the client isn't actually the audience for it.
+
+   In a same-device flow with response_mode=direct_post, the Wallet
+   submits the vp_token directly to the Authorization Server provided
+   response_uri, which serves as the Verifier Response Endpoint as
+   described in Section 8.2 of [OpenID4VP].  This flow is recommended
+   when the Client is not the Verifier, such as when it is a third-party
+   app, because it avoids sending the vp_token through the Client, which
+   is not the intended audience for the token.
+
+   In this deployment model, the Authorization Server MUST recognize
+   that the flow is same-device, as the Verifier Response Endpoint is
+   expected to return a redirect_uri containing a response_code only for
+   same-device flows.  This response_code enables the Client to resume
+   and complete the authorization flow.
+
+   The Client then sends a subsequent Authorization Challenge Request
+   including the response_code to finalize the authorization process, as
+   illustrated in the example below:
+
+   ``` POST /authorize-challenge HTTP/1.1 Host: server.example.com
+   Content-Type: application/x-www-form-urlencoded
+
+   auth_session="uY29tL2F1dGhlbnRpY" &response_code=
+
+   ```
 
 6.3.  OpenID4VP over DC API
 
+   When the Client supports the DC API, it indicates this capability to
+   the Authorization Server in the Authorization Challenge Request via
+   the appropriate parameter (e.g.,
+   authentication_method=oid4vp_dc_api).  The Authorization Server
+   responds with a Presentation Request formatted for OpenID4VP over DC
+   API processing.
+
+   In this deployment model, the vp_token is returned always returned to
+   the Client via the DC API.  The Client then forwards the received
+   vp_token to the Authorization Server in a subsequent Authorization
+   Challenge Request to complete the authorization process.
+
 7.  Security Considerations
 
-   TODO Security
+   Implementations of this specification SHOULD consider the security
+   and privacy considerations defined by [OpenID4VP], in particular
+   those described in the OpenID for Verifiable Presentations Security
+   Considerations section.
+
+   Implementations SHOULD additionally follow OAuth 2.0 and OpenID
+   Connect security best current practices, including recommendations
+   related to authorization server validation, redirect URI validation,
+   token protection, replay prevention, transaction binding, and secure
+   handling of authorization artifacts.
+
+   In deployment models where Authorization Requests and Presentation
+   Responses transit through a third-party application or intermediary
+   component, additional integrity, confidentiality, and privacy risks
+   may arise due to potential exposure of sensitive request parameters,
+   credential data, or presentation artifacts.
+
+7.1.  Signed Authorization Requests
+
+   To mitigate tampering and unauthorized disclosure risks, it is
+   RECOMMENDED that the Authorization Server, acting as the OpenID4VP
+   Verifier, signs Authorization Requests to ensure authenticity and
+   integrity.
+
+7.2.  Signed and Encrypted Presentation Responses
+
+   To protect the integrity, confidentiality, and privacy of
+   Presentation Responses, it is RECOMMENDED that the Authorization
+   Server require signed Presentation Responses and support encrypted
+   responses intended for the Authorization Server.
+
+   In particular, this is relevant for deployment models such as
+   OpenID4VP over DC API, where Presentation Responses may transit
+   through a third-party application before reaching the Authorization
+   Server.
 
 8.  IANA Considerations
 
-   This document has no IANA actions.
+   OAuth Parameters Registration
+
+   IANA has (TBD) registered the following values in the IANA "OAuth
+   Parameters" registry of [IANA.oauth-parameters] established by
+   [RFC6749].
+
+   _Parameter name_: authentication_method
+
+   _Parameter usage location_: authorization request
+
+   _Change Controller_: IETF
+
+   _Specification Document_: Section {#authorization-challenge-request}
+   of [[ this specification ]]
+
+   _Parameter name_: vp_token
+
+   _Parameter usage location_: authorization request
+
+   _Change Controller_: IETF
+
+   _Specification Document_: Section {#authorization-challenge-request}
+   of [[ this specification ]]
+
+   _Parameter name_: vp_response_code
+
+   _Parameter usage location_: authorization request
+
+   _Change Controller_: IETF
+
+   _Specification Document_: Section {#authorization-challenge-request}
+   of [[ this specification ]]
+
+   _Parameter name_: oid4vp_authorization_request
+
+   _Parameter usage location_: authorization response
+
+   _Change Controller_: IETF
+
+   _Specification Document_: Section {#authorization-challenge-request}
+   of [[ this specification ]]
+
+   _Parameter name_: authentication_methods_supported
+
+   _Parameter usage location_: authorization response
+
+   _Change Controller_: IETF
+
+   _Specification Document_: Section {#authorization-challenge-request}
+   of [[ this specification ]]
+
+   _Parameter name_: authentication_method
+
+   _Parameter usage location_: authorization request, authorization
+   response
+
+   _Change Controller_: IETF
+
+   _Specification Document_: Section {#authorization-challenge-request}
+   of [[ this specification ]]
+
+   OAuth Server Metadata Registration
+
+   IANA has (TBD) registered the following values in the IANA "OAuth
+   Authorization Server Metadata" registry of [IANA.oauth-parameters]
+   established by [RFC8414].
+
+   Parecki, et al.  Expires 1 September 2026 [Page 23] Internet-Draft
+   OAuth for First-Party Apps February 2026
+
+   _Metadata Name_: authentication_methods_supported
+
+   _Metadata Description_: A JSON array of strings identifying the
+   authentication methods supported by the authorization server.
+
+   _Change Controller_: IESG
+
+   _Specification Document_: Section {#authorization-challenge-request}
+   of [[ this specification ]]
 
 9.  References
 

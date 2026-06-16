@@ -1167,10 +1167,10 @@ svg {
             <p id="section-toc.1-1.4.1"><a href="#section-4" class="auto internal xref">4</a>.  <a href="#name-authorization-challenge-req" class="internal xref">Authorization Challenge Request</a></p>
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.1">
-                <p id="section-toc.1-1.4.2.1.1"><a href="#section-4.1" class="auto internal xref">4.1</a>.  <a href="#name-initial-authorization-reque" class="internal xref">Initial authorization request</a></p>
+                <p id="section-toc.1-1.4.2.1.1"><a href="#section-4.1" class="auto internal xref">4.1</a>.  <a href="#name-initial-authorization-chall" class="internal xref">Initial Authorization Challenge Request</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.2">
-                <p id="section-toc.1-1.4.2.2.1"><a href="#section-4.2" class="auto internal xref">4.2</a>.  <a href="#name-subsequest-authorization-ch" class="internal xref">Subsequest authorization challenge request</a></p>
+                <p id="section-toc.1-1.4.2.2.1"><a href="#section-4.2" class="auto internal xref">4.2</a>.  <a href="#name-subsequest-uthorization-cha" class="internal xref">Subsequest uthorization Challenge Requests</a></p>
 </li>
             </ul>
 </li>
@@ -1193,6 +1193,14 @@ svg {
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7">
             <p id="section-toc.1-1.7.1"><a href="#section-7" class="auto internal xref">7</a>.  <a href="#name-security-considerations" class="internal xref">Security Considerations</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.1">
+                <p id="section-toc.1-1.7.2.1.1"><a href="#section-7.1" class="auto internal xref">7.1</a>.  <a href="#name-signed-authorization-reques" class="internal xref">Signed Authorization Requests</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.2">
+                <p id="section-toc.1-1.7.2.2.1"><a href="#section-7.2" class="auto internal xref">7.2</a>.  <a href="#name-signed-and-encrypted-presen" class="internal xref">Signed and Encrypted Presentation Responses</a></p>
+</li>
+            </ul>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8">
             <p id="section-toc.1-1.8.1"><a href="#section-8" class="auto internal xref">8</a>.  <a href="#name-iana-considerations" class="internal xref">IANA Considerations</a></p>
@@ -1385,18 +1393,46 @@ appear in all capitals, as shown here.<a href="#section-2-1" class="pilcrow">¶<
       <h2 id="name-authorization-challenge-req">
 <a href="#section-4" class="section-number selfRef">4. </a><a href="#name-authorization-challenge-req" class="section-name selfRef">Authorization Challenge Request</a>
       </h2>
+<p id="section-4-1">This document extends the FiPA <span>[<a href="#I-D.ietf-oauth-first-party-apps" class="cite xref">I-D.ietf-oauth-first-party-apps</a>]</span> Authorization Challenge Request by adding the following parameters:<a href="#section-4-1" class="pilcrow">¶</a></p>
+<span class="break"></span><dl class="dlParallel" id="section-4-2">
+        <dt id="section-4-2.1">"authentication_method":</dt>
+        <dd style="margin-left: 1.5em" id="section-4-2.2">
+          <p id="section-4-2.2.1"><span class="bcp14">OPTIONAL</span>.  A string indicating the authentication method requested by the Client, e.g., a user-preselected method on the client side. This document uses the value "oid4vp" and "oid4vp_dc_api". Values used in the <code>authentication_method</code> parameter <span class="bcp14">SHOULD</span> be from those registered in the IANA Authentication Method Values registry [IANA.AMS] established by this specification. Parties using unregistered values must mutually agree on their meanings, which may be context-specific.<a href="#section-4-2.2.1" class="pilcrow">¶</a></p>
+</dd>
+        <dd class="break"></dd>
+<dt id="section-4-2.3">"vp_token":</dt>
+        <dd style="margin-left: 1.5em" id="section-4-2.4">
+          <p id="section-4-2.4.1"><span class="bcp14">OPTIONAL</span>.  A value the VP Token returned from the wallet as part of the Presentation Response (e.g., in DC API or <code>response_mode=fragment</code> flows) or a <code>response_code</code> (for non-DC API, same-device, response_mode=direct_post flows).<a href="#section-4-2.4.1" class="pilcrow">¶</a></p>
+</dd>
+        <dd class="break"></dd>
+<dt id="section-4-2.5">"response_code":</dt>
+        <dd style="margin-left: 1.5em" id="section-4-2.6">
+          <p id="section-4-2.6.1"><span class="bcp14">OPTIONAL</span>.  A value containing the <code>response_code</code>  returned from the wallet as part of the Presentation Response (for non-DC API, same-device, response_mode=direct_post flows).<a href="#section-4-2.6.1" class="pilcrow">¶</a></p>
+</dd>
+      <dd class="break"></dd>
+</dl>
+<p id="section-4-3">Additionally, this document uses the following existing OAuth 2.0 Authorization Request parameters:<a href="#section-4-3" class="pilcrow">¶</a></p>
+<span class="break"></span><dl class="dlParallel" id="section-4-4">
+        <dt id="section-4-4.1">"redirect_uri":</dt>
+        <dd style="margin-left: 1.5em" id="section-4-4.2">
+          <p id="section-4-4.2.1"><span class="bcp14">OPTIONAL</span>.  The URI to which the wallet redirects the user back to the client in <span>[<a href="#OpenID4VP" class="cite xref">OpenID4VP</a>]</span> same-device flows. This parameter <span class="bcp14">MUST</span> be included in same-device flows along with <code>type</code>. If the Authorization Server receives type without <code>redirect_uri</code>, it <span class="bcp14">SHOULD</span> treat the request as a cross-device flow and <span class="bcp14">MAY</span> return the Presentation Request. This parameter <span class="bcp14">SHOULD NOT</span> be sent when <code>authentication_method=oid4vp_dc_api</code>. If it is sent, the Authorization Server <span class="bcp14">MUST</span> ignore it.<a href="#section-4-4.2.1" class="pilcrow">¶</a></p>
+</dd>
+      <dd class="break"></dd>
+</dl>
 <div id="init-authorization-challenge-request">
 <section id="section-4.1">
-        <h3 id="name-initial-authorization-reque">
-<a href="#section-4.1" class="section-number selfRef">4.1. </a><a href="#name-initial-authorization-reque" class="section-name selfRef">Initial authorization request</a>
-      </h3>
+        <h3 id="name-initial-authorization-chall">
+<a href="#section-4.1" class="section-number selfRef">4.1. </a><a href="#name-initial-authorization-chall" class="section-name selfRef">Initial Authorization Challenge Request</a>
+        </h3>
+<p id="section-4.1-1">The initial Authorization Challenge Request includes only the information available at that time. For example, if the client has no prior information on preferred user login methods, it can send a Authorization Challenge Request without specifying the <code>authentication_method</code> or any additional data relevant for it. See {#example-flows}. Similarly, in another time, if/when the client knows pre-flow such information, it can already send everything in the first authrization challenge request.<a href="#section-4.1-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="subs-authorization-challenge-request">
 <section id="section-4.2">
-        <h3 id="name-subsequest-authorization-ch">
-<a href="#section-4.2" class="section-number selfRef">4.2. </a><a href="#name-subsequest-authorization-ch" class="section-name selfRef">Subsequest authorization challenge request</a>
-      </h3>
+        <h3 id="name-subsequest-uthorization-cha">
+<a href="#section-4.2" class="section-number selfRef">4.2. </a><a href="#name-subsequest-uthorization-cha" class="section-name selfRef">Subsequest uthorization Challenge Requests</a>
+        </h3>
+<p id="section-4.2-1">The Authorization Server <span class="bcp14">MAY</span> respond with an Authorization Error Response containing <code>oid4vp</code> or/and <code>oid4vp_dc_api</code> as one of the <code>authentication_methods_supported</code>. In such case, the Client should provide in a subsequent Authorization Challenge Request additional parameters such as <code>authenticaion_method</code> and/or <code>redirect_uri</code>. See {#example-flows}.<a href="#section-4.2-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -1405,7 +1441,30 @@ appear in all capitals, as shown here.<a href="#section-2-1" class="pilcrow">¶<
 <section id="section-5">
       <h2 id="name-authorization-error-respons">
 <a href="#section-5" class="section-number selfRef">5. </a><a href="#name-authorization-error-respons" class="section-name selfRef">Authorization Error Response</a>
-    </h2>
+      </h2>
+<p id="section-5-1">This document extends FiPA's <span>[<a href="#I-D.ietf-oauth-first-party-apps" class="cite xref">I-D.ietf-oauth-first-party-apps</a>]</span> Authorization Error Response by adding the following attributes, used when the error code "insufficient_authorization" is returned:<a href="#section-5-1" class="pilcrow">¶</a></p>
+<span class="break"></span><dl class="dlParallel" id="section-5-2">
+        <dt id="section-5-2.1">"authentication_methods_supported":</dt>
+        <dd style="margin-left: 1.5em" id="section-5-2.2">
+          <p id="section-5-2.2.1"><span class="bcp14">OPTIONAL</span>. A JSON array of strings identifying the authentication methods supported by the Authorization Server. support for OID4VP and OID4VP over DC API, respectively. Values <span class="bcp14">SHOULD</span> be from the IANA Authentication Method References Values registry [IANA.AMS]. Unregistered values require mutual agreement between parties.<a href="#section-5-2.2.1" class="pilcrow">¶</a></p>
+</dd>
+        <dd class="break"></dd>
+<dt id="section-5-2.3">"authentication_method":</dt>
+        <dd style="margin-left: 1.5em" id="section-5-2.4">
+          <p id="section-5-2.4.1"><span class="bcp14">OPTIONAL</span>.  A string indicating the authentication method requested by the Authorization Server. The value <span class="bcp14">MUST</span> be one of those listed in <code>authentication_methods_supported</code>. This parameter <span class="bcp14">MUST</span> be present when the Authorization Server lacks sufficient data to return the actual <code>oid4vp_authorization_request</code>.<a href="#section-5-2.4.1" class="pilcrow">¶</a></p>
+</dd>
+        <dd class="break"></dd>
+<dt id="section-5-2.5">"oid4vp_authorization_request":</dt>
+        <dd style="margin-left: 1.5em" id="section-5-2.6">
+          <p id="section-5-2.6.1"><span class="bcp14">OPTIONAL</span>. An OpenID4VP <span>[<a href="#OpenID4VP" class="cite xref">OpenID4VP</a>]</span> request URL.<a href="#section-5-2.6.1" class="pilcrow">¶</a></p>
+</dd>
+        <dd class="break"></dd>
+<dt id="section-5-2.7">"status":</dt>
+        <dd style="margin-left: 1.5em" id="section-5-2.8">
+          <p id="section-5-2.8.1"><span class="bcp14">OPTIONAL</span>.  Indicates the status of the ongoing operation. This document uses the value "pending".<a href="#section-5-2.8.1" class="pilcrow">¶</a></p>
+</dd>
+      <dd class="break"></dd>
+</dl>
 </section>
 </div>
 <div id="example-flows">
@@ -1413,25 +1472,122 @@ appear in all capitals, as shown here.<a href="#section-2-1" class="pilcrow">¶<
       <h2 id="name-example-flows">
 <a href="#section-6" class="section-number selfRef">6. </a><a href="#name-example-flows" class="section-name selfRef">Example flows</a>
       </h2>
-<div id="oid4vp-same-device-example">
+<p id="section-6-1">The Client <span class="bcp14">MAY</span> send an Authorization Challenge Request using one of the following mechanisms:<a href="#section-6-1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-6-2.1">
+          <p id="section-6-2.1.1">Including a <code>redirect_uri</code> + <code>response_mode = fragment</code> parameter to indicate a same-device flow.<a href="#section-6-2.1.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="section-6-2.2">
+          <p id="section-6-2.2.1">Omitting the <code>redirect_uri</code> + <code>response_mode = direct_post</code> parameter to indicate a cross-device flow.<a href="#section-6-2.2.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="section-6-2.3">
+          <p id="section-6-2.3.1">Including a <code>redirect_uri</code> + <code>response_mode = direct_post</code> parameter to indicate a same-device flow.<a href="#section-6-2.3.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="section-6-2.4">
+          <p id="section-6-2.4.1">Including <code>type=dc_api</code> to indicate that the Presentation Request <span class="bcp14">SHOULD</span> be conformant with OpenID4VP over DC API.<a href="#section-6-2.4.1" class="pilcrow">¶</a></p>
+</li>
+      </ul>
+<p id="section-6-3">This section provides non-normative examples illustrating how this specification supports specific deployment models.<a href="#section-6-3" class="pilcrow">¶</a></p>
+<div id="oid4vp-same-device">
 <section id="section-6.1">
         <h3 id="name-openid4vp-same-device-flow">
 <a href="#section-6.1" class="section-number selfRef">6.1. </a><a href="#name-openid4vp-same-device-flow" class="section-name selfRef">OpenID4VP Same-Device Flow</a>
-      </h3>
+        </h3>
+<p id="section-6.1-1">In a same-device flow with <code>response_mode=fragment</code>, the Wallet returns the <code>vp_token</code> directly to the Client. The Client then includes the <code>vp_token</code> in an Authorization Challenge Request sent to the Authorization Server.<a href="#section-6.1-1" class="pilcrow">¶</a></p>
+<p id="section-6.1-2">Example: Initial Authorization Challenge Request (no preferred authentication):<a href="#section-6.1-2" class="pilcrow">¶</a></p>
+<p id="section-6.1-3">```
+   POST /authorize-challenge HTTP/1.1
+   Host: server.example.com
+   Content-Type: application/x-www-form-urlencoded<a href="#section-6.1-3" class="pilcrow">¶</a></p>
+<p id="section-6.1-4">scope=openid
+   &amp;client_id=bb16c14c73415<a href="#section-6.1-4" class="pilcrow">¶</a></p>
+<p id="section-6.1-5">```<a href="#section-6.1-5" class="pilcrow">¶</a></p>
+<p id="section-6.1-6">Example: Authorization Error Response indicating supported authentication methods<a href="#section-6.1-6" class="pilcrow">¶</a></p>
+<p id="section-6.1-7">```
+   HTTP/1.1 401 Unauthorized
+   Content-Type: application/json
+   Cache-Control: no-store<a href="#section-6.1-7" class="pilcrow">¶</a></p>
+<p id="section-6.1-8">{
+     "error": "insufficient_authorization",
+     "auth_session": "uY29tL2F1dGhlbnRpY",
+      authentication_methods_supported=["oid4vp","oid4vp_dc_api"]
+   }<a href="#section-6.1-8" class="pilcrow">¶</a></p>
+<p id="section-6.1-9">```<a href="#section-6.1-9" class="pilcrow">¶</a></p>
+<p id="section-6.1-10">Example: Subsequent Authorization Challenge Request requesting OID4VP Authorization Request (non-DC API same-device flow)<a href="#section-6.1-10" class="pilcrow">¶</a></p>
+<p id="section-6.1-11">```
+   POST /authorize-challenge HTTP/1.1
+   Host: server.example.com
+   Content-Type: application/x-www-form-urlencoded<a href="#section-6.1-11" class="pilcrow">¶</a></p>
+<p id="section-6.1-12">auth_session= "uY29tL2F1dGhlbnRpY"
+   authentication_method = "oid4vp"
+   &amp;redirect_uri= [insert a deep link here]<a href="#section-6.1-12" class="pilcrow">¶</a></p>
+<p id="section-6.1-13">```<a href="#section-6.1-13" class="pilcrow">¶</a></p>
+<p id="section-6.1-14">Example: Authorization Error Response containing OID4VP Authorization Request
+(Whitespace and line breaks added for readability only)<a href="#section-6.1-14" class="pilcrow">¶</a></p>
+<p id="section-6.1-15">```
+  HTTP/1.1 401 Unauthorized
+  Content-Type: application/json
+  Cache-Control: no-store<a href="#section-6.1-15" class="pilcrow">¶</a></p>
+<p id="section-6.1-16">{
+    "error": "insufficient_authorization",
+    "auth_session": "uY29tL2F1dGhlbnRpY",
+    "authentication_method": ["oid4vp"],
+    "oid4vp_authorization_request": "https://wallet.example.org/universal-link?
+      response_type=vp_token
+      &amp;client_id=redirect_uri%3Ahttps%3A%2F%2Fclient.example.org%2Fcb
+      &amp;redirect_uri=https%3A%2F%2Fclient.example.org%2Fcb
+      &amp;dcql_query=...
+      &amp;nonce=n-0S6_WzA2Mj
+      &amp;client_metadata=%7B%22vp_formats_supported%22%3A%7B%22dc%2Bsd-jwt%22%3A%7B%22sd-jwt_alg_values%22%3A%20%5B%22ES256%22%5D%2C%22kb-jwt_alg_values%22%3A%20%5B%22ES256%22%5D%7D%7D%7D"
+  }<a href="#section-6.1-16" class="pilcrow">¶</a></p>
+<p id="section-6.1-17">```<a href="#section-6.1-17" class="pilcrow">¶</a></p>
+<p id="section-6.1-18">Example: Subsequent Authorization Challenge Request forwarding the Presentation Response:<a href="#section-6.1-18" class="pilcrow">¶</a></p>
+<p id="section-6.1-19">```
+  POST /authorize-challenge HTTP/1.1
+  Host: server.example.com
+  Content-Type: application/x-www-form-urlencoded<a href="#section-6.1-19" class="pilcrow">¶</a></p>
+<p id="section-6.1-20">auth_session=uY29tL2F1dGhlbnRpY
+  &amp;vp_token=[vp_token_value]<a href="#section-6.1-20" class="pilcrow">¶</a></p>
+<p id="section-6.1-21">```<a href="#section-6.1-21" class="pilcrow">¶</a></p>
+<p id="section-6.1-22">Example: Successful Authorization Challenge Response returning the authorization code<a href="#section-6.1-22" class="pilcrow">¶</a></p>
+<p id="section-6.1-23">```
+   The Authorization Server validates the auth_session to find the
+   expected user, then validates the OTP for that user, and responds
+   with an authorization code.<a href="#section-6.1-23" class="pilcrow">¶</a></p>
+<p id="section-6.1-24">HTTP/1.1 200 OK
+   Content-Type: application/json
+   Cache-Control: no-store<a href="#section-6.1-24" class="pilcrow">¶</a></p>
+<p id="section-6.1-25">{
+     "authorization_code": "uY29tL2F1dGhlbnRpY"
+   }<a href="#section-6.1-25" class="pilcrow">¶</a></p>
+<p id="section-6.1-26">```<a href="#section-6.1-26" class="pilcrow">¶</a></p>
 </section>
 </div>
-<div id="oid4vp-same-device-direct-post-example">
+<div id="oid4vp-same-device-direct-post">
 <section id="section-6.2">
         <h3 id="name-openid4vp-same-device-flow-">
 <a href="#section-6.2" class="section-number selfRef">6.2. </a><a href="#name-openid4vp-same-device-flow-" class="section-name selfRef">OpenID4VP Same-Device Flow using <code>direct_post</code></a>
-      </h3>
+        </h3>
+<p id="section-6.2-1">In a same-device flow where <code>response_mode</code> is set to <code>direct_post</code>, the Wallet submits the <code>vp_token</code> directly to the Authorization Server <code>response_uri</code>, which acts as the Verifier Response Endpoint as depicted on section 8.2 of <span>[<a href="#OpenID4VP" class="cite xref">OpenID4VP</a>]</span>. This is the recommended flow for our scenario where the Client isn't the Verifier, and it might be a third-party app, and this flow avoids having to send a vp_token via the client when the client isn't actually the audience for it.<a href="#section-6.2-1" class="pilcrow">¶</a></p>
+<p id="section-6.2-2">In a same-device flow with <code>response_mode=direct_post</code>, the Wallet submits the vp_token directly to the Authorization Server provided <code>response_uri</code>, which serves as the Verifier Response Endpoint as described in Section 8.2 of <span>[<a href="#OpenID4VP" class="cite xref">OpenID4VP</a>]</span>. This flow is recommended when the Client is not the Verifier, such as when it is a third-party app, because it avoids sending the <code>vp_token</code> through the Client, which is not the intended audience for the token.<a href="#section-6.2-2" class="pilcrow">¶</a></p>
+<p id="section-6.2-3">In this deployment model, the Authorization Server <span class="bcp14">MUST</span> recognize that the flow is same-device, as the Verifier Response Endpoint is expected to return a <code>redirect_uri</code> containing a <code>response_code</code> only for same-device flows. This <code>response_code</code> enables the Client to resume and complete the authorization flow.<a href="#section-6.2-3" class="pilcrow">¶</a></p>
+<p id="section-6.2-4">The Client then sends a subsequent Authorization Challenge Request including the response_code to finalize the authorization process, as illustrated in the example below:<a href="#section-6.2-4" class="pilcrow">¶</a></p>
+<p id="section-6.2-5">```
+   POST /authorize-challenge HTTP/1.1
+   Host: server.example.com
+   Content-Type: application/x-www-form-urlencoded<a href="#section-6.2-5" class="pilcrow">¶</a></p>
+<p id="section-6.2-6">auth_session="uY29tL2F1dGhlbnRpY"
+   &amp;response_code=<a href="#section-6.2-6" class="pilcrow">¶</a></p>
+<p id="section-6.2-7">```<a href="#section-6.2-7" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="oid4vp-over-dc-api">
 <section id="section-6.3">
         <h3 id="name-openid4vp-over-dc-api">
 <a href="#section-6.3" class="section-number selfRef">6.3. </a><a href="#name-openid4vp-over-dc-api" class="section-name selfRef">OpenID4VP over DC API</a>
-      </h3>
+        </h3>
+<p id="section-6.3-1">When the Client supports the DC API, it indicates this capability to the Authorization Server in the Authorization Challenge Request via the appropriate parameter (e.g., authentication_method=oid4vp_dc_api). The Authorization Server responds with a Presentation Request formatted for OpenID4VP over DC API processing.<a href="#section-6.3-1" class="pilcrow">¶</a></p>
+<p id="section-6.3-2">In this deployment model, the <code>vp_token</code> is returned always returned to the Client via the DC API. The Client then forwards the received <code>vp_token</code> to the Authorization Server in a subsequent Authorization Challenge Request to complete the authorization process.<a href="#section-6.3-2" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -1441,7 +1597,26 @@ appear in all capitals, as shown here.<a href="#section-2-1" class="pilcrow">¶<
       <h2 id="name-security-considerations">
 <a href="#section-7" class="section-number selfRef">7. </a><a href="#name-security-considerations" class="section-name selfRef">Security Considerations</a>
       </h2>
-<p id="section-7-1">TODO Security<a href="#section-7-1" class="pilcrow">¶</a></p>
+<p id="section-7-1">Implementations of this specification <span class="bcp14">SHOULD</span> consider the security and privacy considerations defined by <span>[<a href="#OpenID4VP" class="cite xref">OpenID4VP</a>]</span>, in particular those described in the OpenID for Verifiable Presentations Security Considerations section.<a href="#section-7-1" class="pilcrow">¶</a></p>
+<p id="section-7-2">Implementations <span class="bcp14">SHOULD</span> additionally follow OAuth 2.0 and OpenID Connect security best current practices, including recommendations related to authorization server validation, redirect URI validation, token protection, replay prevention, transaction binding, and secure handling of authorization artifacts.<a href="#section-7-2" class="pilcrow">¶</a></p>
+<p id="section-7-3">In deployment models where Authorization Requests and Presentation Responses transit through a third-party application or intermediary component, additional integrity, confidentiality, and privacy risks may arise due to potential exposure of sensitive request parameters, credential data, or presentation artifacts.<a href="#section-7-3" class="pilcrow">¶</a></p>
+<div id="signed-authorization-requests">
+<section id="section-7.1">
+        <h3 id="name-signed-authorization-reques">
+<a href="#section-7.1" class="section-number selfRef">7.1. </a><a href="#name-signed-authorization-reques" class="section-name selfRef">Signed Authorization Requests</a>
+        </h3>
+<p id="section-7.1-1">To mitigate tampering and unauthorized disclosure risks, it is <span class="bcp14">RECOMMENDED</span> that the Authorization Server, acting as the OpenID4VP Verifier, signs Authorization Requests to ensure authenticity and integrity.<a href="#section-7.1-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="signed-and-encrypted-presentation-responses">
+<section id="section-7.2">
+        <h3 id="name-signed-and-encrypted-presen">
+<a href="#section-7.2" class="section-number selfRef">7.2. </a><a href="#name-signed-and-encrypted-presen" class="section-name selfRef">Signed and Encrypted Presentation Responses</a>
+        </h3>
+<p id="section-7.2-1">To protect the integrity, confidentiality, and privacy of Presentation Responses, it is <span class="bcp14">RECOMMENDED</span> that the Authorization Server require signed Presentation Responses and support encrypted responses intended for the Authorization Server.<a href="#section-7.2-1" class="pilcrow">¶</a></p>
+<p id="section-7.2-2">In particular, this is relevant for deployment models such as OpenID4VP over DC API, where Presentation Responses may transit through a third-party application before reaching the Authorization Server.<a href="#section-7.2-2" class="pilcrow">¶</a></p>
+</section>
+</div>
 </section>
 </div>
 <div id="iana-considerations">
@@ -1449,7 +1624,42 @@ appear in all capitals, as shown here.<a href="#section-2-1" class="pilcrow">¶<
       <h2 id="name-iana-considerations">
 <a href="#section-8" class="section-number selfRef">8. </a><a href="#name-iana-considerations" class="section-name selfRef">IANA Considerations</a>
       </h2>
-<p id="section-8-1">This document has no IANA actions.<a href="#section-8-1" class="pilcrow">¶</a></p>
+<p id="section-8-1">OAuth Parameters Registration<a href="#section-8-1" class="pilcrow">¶</a></p>
+<p id="section-8-2">IANA has (TBD) registered the following values in the IANA "OAuth Parameters" registry of <span>[<a href="#IANA.oauth-parameters" class="cite xref">IANA.oauth-parameters</a>]</span> established by <span>[<a href="#RFC6749" class="cite xref">RFC6749</a>]</span>.<a href="#section-8-2" class="pilcrow">¶</a></p>
+<p id="section-8-3"><em>Parameter name</em>: authentication_method<a href="#section-8-3" class="pilcrow">¶</a></p>
+<p id="section-8-4"><em>Parameter usage location</em>: authorization request<a href="#section-8-4" class="pilcrow">¶</a></p>
+<p id="section-8-5"><em>Change Controller</em>: IETF<a href="#section-8-5" class="pilcrow">¶</a></p>
+<p id="section-8-6"><em>Specification Document</em>: Section {#authorization-challenge-request} of [[ this specification ]]<a href="#section-8-6" class="pilcrow">¶</a></p>
+<p id="section-8-7"><em>Parameter name</em>: vp_token<a href="#section-8-7" class="pilcrow">¶</a></p>
+<p id="section-8-8"><em>Parameter usage location</em>: authorization request<a href="#section-8-8" class="pilcrow">¶</a></p>
+<p id="section-8-9"><em>Change Controller</em>: IETF<a href="#section-8-9" class="pilcrow">¶</a></p>
+<p id="section-8-10"><em>Specification Document</em>: Section {#authorization-challenge-request} of [[ this specification ]]<a href="#section-8-10" class="pilcrow">¶</a></p>
+<p id="section-8-11"><em>Parameter name</em>: vp_response_code<a href="#section-8-11" class="pilcrow">¶</a></p>
+<p id="section-8-12"><em>Parameter usage location</em>: authorization request<a href="#section-8-12" class="pilcrow">¶</a></p>
+<p id="section-8-13"><em>Change Controller</em>: IETF<a href="#section-8-13" class="pilcrow">¶</a></p>
+<p id="section-8-14"><em>Specification Document</em>: Section {#authorization-challenge-request} of [[ this specification ]]<a href="#section-8-14" class="pilcrow">¶</a></p>
+<p id="section-8-15"><em>Parameter name</em>: oid4vp_authorization_request<a href="#section-8-15" class="pilcrow">¶</a></p>
+<p id="section-8-16"><em>Parameter usage location</em>: authorization response<a href="#section-8-16" class="pilcrow">¶</a></p>
+<p id="section-8-17"><em>Change Controller</em>: IETF<a href="#section-8-17" class="pilcrow">¶</a></p>
+<p id="section-8-18"><em>Specification Document</em>: Section {#authorization-challenge-request} of [[ this specification ]]<a href="#section-8-18" class="pilcrow">¶</a></p>
+<p id="section-8-19"><em>Parameter name</em>: authentication_methods_supported<a href="#section-8-19" class="pilcrow">¶</a></p>
+<p id="section-8-20"><em>Parameter usage location</em>: authorization response<a href="#section-8-20" class="pilcrow">¶</a></p>
+<p id="section-8-21"><em>Change Controller</em>: IETF<a href="#section-8-21" class="pilcrow">¶</a></p>
+<p id="section-8-22"><em>Specification Document</em>: Section {#authorization-challenge-request} of [[ this specification ]]<a href="#section-8-22" class="pilcrow">¶</a></p>
+<p id="section-8-23"><em>Parameter name</em>: authentication_method<a href="#section-8-23" class="pilcrow">¶</a></p>
+<p id="section-8-24"><em>Parameter usage location</em>: authorization request, authorization response<a href="#section-8-24" class="pilcrow">¶</a></p>
+<p id="section-8-25"><em>Change Controller</em>: IETF<a href="#section-8-25" class="pilcrow">¶</a></p>
+<p id="section-8-26"><em>Specification Document</em>: Section {#authorization-challenge-request} of [[ this specification ]]<a href="#section-8-26" class="pilcrow">¶</a></p>
+<p id="section-8-27">OAuth Server Metadata Registration<a href="#section-8-27" class="pilcrow">¶</a></p>
+<p id="section-8-28">IANA has (TBD) registered the following values in the IANA "OAuth
+   Authorization Server Metadata" registry of <span>[<a href="#IANA.oauth-parameters" class="cite xref">IANA.oauth-parameters</a>]</span>
+   established by <span>[<a href="#RFC8414" class="cite xref">RFC8414</a>]</span>.<a href="#section-8-28" class="pilcrow">¶</a></p>
+<p id="section-8-29">Parecki, et al.         Expires 1 September 2026               [Page 23]
+Internet-Draft         OAuth for First-Party Apps          February 2026<a href="#section-8-29" class="pilcrow">¶</a></p>
+<p id="section-8-30"><em>Metadata Name</em>: authentication_methods_supported<a href="#section-8-30" class="pilcrow">¶</a></p>
+<p id="section-8-31"><em>Metadata Description</em>: A JSON array of strings identifying the authentication methods supported by the authorization server.<a href="#section-8-31" class="pilcrow">¶</a></p>
+<p id="section-8-32"><em>Change Controller</em>: IESG<a href="#section-8-32" class="pilcrow">¶</a></p>
+<p id="section-8-33"><em>Specification Document</em>: Section {#authorization-challenge-request} of [[ this specification ]]<a href="#section-8-33" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="sec-combined-references">
