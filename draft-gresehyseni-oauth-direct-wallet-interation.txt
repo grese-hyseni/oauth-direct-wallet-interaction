@@ -81,6 +81,7 @@ Table of Contents
      6.1.  OpenID4VP Same-Device Flow
      6.2.  OpenID4VP Same-Device Flow using direct_post
      6.3.  OpenID4VP over DC API
+     6.4.  OpenID4VP with RAR
    7.  Security Considerations
      7.1.  Signed Authorization Requests
      7.2.  Signed and Encrypted Presentation Responses
@@ -343,18 +344,23 @@ Table of Contents
       as part of the Presentation Response (for non-DC API, same-device,
       response_mode=direct_post flows).
 
-   Additionally, this document uses the following existing OAuth 2.0
-   Authorization Request parameters:
+   Additionally, the client MAY add to the request URI the following
+   parameters to the query component of the authorization challenge
+   endpoint URI using the "application/x-www-form-urlencoded" format:
 
-   "redirect_uri":  OPTIONAL.  The URI to which the wallet redirects the
-      user back to the client in [OpenID4VP] same-device flows.  This
-      parameter MUST be included in same-device flows along with
-      authentication_method.  If the Authorization Server receives type
-      without redirect_uri, it SHOULD treat the request as a cross-
-      device flow and MAY return the Presentation Request.  This
-      parameter SHOULD NOT be sent when
+   "redirect_uri":  OPTIONAL.  The OAuth redirect_uri defined in
+      [RFC6749].  This parameter MUST be included in same-device flows
+      along with authentication_method and represents the client URI to
+      which the wallet redirects the user for the same-device flows.  If
+      the Authorization Server receives authentication_method without
+      redirect_uri, it SHOULD treat the request as a request for cross-
+      device flow.  This parameter SHOULD NOT be sent when
       authentication_method=oid4vp_dc_api.  If it is sent, the
       Authorization Server MUST ignore it.
+
+   "authorization_details":  OPTIONAL.  A JSON object as defined in
+      [RFC9396], representing OAuth authorization details.  See
+      Section 6.4 to understand its usage.
 
 4.1.  Initial Authorization Challenge Request
 
@@ -553,6 +559,38 @@ Table of Contents
    vp_token to the Authorization Server in a subsequent Authorization
    Challenge Request to complete the authorization process.
 
+6.4.  OpenID4VP with RAR
+
+   A useful use case is when the user is already authenticated but needs
+   to provide explicit approval using their wallet.
+
+   In such a case, the Client MUST include the authorization_details
+   parameter as defined in [RFC9396] within the Authorization Challenge
+   Request.  This allows the Authorization Server to convey the specific
+   authorization requirements to the wallet, enabling the user to
+   approve the requested action.
+
+   An non-normative example Authorization Challenge Request is shown
+   below:
+
+   POST /authorize-challenge HTTP/1.1
+   Host: server.example.com
+   Content-Type: application/x-www-form-urlencoded
+
+   auth_session="bXlzZXNzaW9uMTIzNDU2"
+   &oid4vp_response_code="091535f699ea575c7937fa5f0f454aee"
+   &authorization_details='{
+     "type": "openid_credential",
+     "actions": ["approve"],
+     "locations": ["https://example.com/resource/123"]
+   }'
+
+   Upon receiving this request, the Authorization Server MAY use the
+   contents of authorization_details to populate the transaction_data in
+   the OID4VP Authorization Request.  This enables the wallet to present
+   the user with the relevant information and prompt for explicit
+   consent for the specified action(s), as defined in [OpenID4VP].
+
 7.  Security Considerations
 
    Implementations of this specification SHOULD consider the security
@@ -650,22 +688,6 @@ Table of Contents
    response
 
    _Change Controller_: IETF
-
-   _Specification Document_: Section {#authorization-challenge-request}
-   of this specification
-
-   OAuth Server Metadata Registration
-
-   IANA has (TBD) registered the following values in the IANA "OAuth
-   Authorization Server Metadata" registry of [IANA.oauth-parameters]
-   established by [RFC8414].
-
-   _Metadata Name_: authentication_methods_supported
-
-   _Metadata Description_: A JSON array of strings identifying the
-   authentication methods supported by the authorization server.
-
-   _Change Controller_: IESG
 
    _Specification Document_: Section {#authorization-challenge-request}
    of this specification
