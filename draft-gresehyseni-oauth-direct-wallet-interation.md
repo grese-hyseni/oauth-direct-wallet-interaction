@@ -324,7 +324,7 @@ Content-Type: application/x-www-form-urlencoded
 auth_session=uY29tL2F1dGhlbnRpY
 &authentication_method=oid4vp
 &redirect_uri=https%3A%2F%2Fclient.example.org%2Fcb
-~~~ 
+~~~
 
 Example: Authorization Error Response containing OID4VP Authorization Request
 (Whitespace and line breaks added for readability only)
@@ -346,7 +346,7 @@ Cache-Control: no-store
    &nonce=n-0S6_WzA2Mj
    &client_metadata=%7B%22vp_formats_supported%22%3A%7B%22dc%2Bsd-jwt%22%3A%7B%22sd-jwt_alg_values%22%3A%20%5B%22ES256%22%5D%2C%22kb-jwt_alg_values%22%3A%20%5B%22ES256%22%5D%7D%7D%7D"
 }
-~~~ 
+~~~
 
 Example: Subsequent Authorization Challenge Request forwarding the Presentation Response:
 
@@ -357,7 +357,7 @@ Content-Type: application/x-www-form-urlencoded
 
 auth_session=uY29tL2F1dGhlbnRpY
 &vp_token=eyJhbGciOiJFUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ1c2VyMTIzIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNjI3MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c
-~~~ 
+~~~
 
 Example: Successful Authorization Challenge Response returning the authorization code
 
@@ -369,7 +369,7 @@ Cache-Control: no-store
 {
    "authorization_code": "c2VjdXJlL2F1dGgvY29kZQ=="
 }
-~~~ 
+~~~
 
 ## OpenID4VP Same-Device Flow using `direct_post` {#oid4vp-same-device-direct-post}
 
@@ -388,7 +388,7 @@ The Client then sends a subsequent Authorization Challenge Request including the
 
    auth_session="bXlzZXNzaW9uMTIzNDU2"
    &response_code="091535f699ea575c7937fa5f0f454aee"
-~~~ 
+~~~
 
 ## OpenID4VP over DC API {#oid4vp-over-dc-api}
 
