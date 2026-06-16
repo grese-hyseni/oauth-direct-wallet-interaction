@@ -2,8 +2,8 @@
 
 
 
-Web Authorization Protocol                                  grese-hyseni
-Internet-Draft                                    Your Organization Here
+Web Authorization Protocol                                     G. Hyseni
+Internet-Draft                             Raiffeisen Bank International
 Intended status: Informational                              16 June 2026
 Expires: 18 December 2026
 
@@ -764,6 +764,6 @@ Acknowledgments
 
 Author's Address
 
-   grese-hyseni
-   Your Organization Here
+   Gresë Hyseni
+   Raiffeisen Bank International
    Email: grese.hyseni@rbinternational.com
