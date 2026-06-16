@@ -432,7 +432,7 @@ IANA has (TBD) registered the following values in the IANA "OAuth Parameters" re
 
    *Change Controller*: IETF
 
-   *Specification Document*: Section {#authorization-challenge-request} of [[ this specification ]]
+   *Specification Document*: Section {#authorization-challenge-request} of this specification
 
 
    *Parameter name*: vp_token
@@ -441,7 +441,7 @@ IANA has (TBD) registered the following values in the IANA "OAuth Parameters" re
 
    *Change Controller*: IETF
 
-   *Specification Document*: Section {#authorization-challenge-request} of [[ this specification ]]
+   *Specification Document*: Section {#authorization-challenge-request} of this specification
 
 
    *Parameter name*: vp_response_code
@@ -450,7 +450,7 @@ IANA has (TBD) registered the following values in the IANA "OAuth Parameters" re
 
    *Change Controller*: IETF
 
-   *Specification Document*: Section {#authorization-challenge-request} of [[ this specification ]]
+   *Specification Document*: Section {#authorization-challenge-request} of this specification
 
 
    *Parameter name*: oid4vp_authorization_request
@@ -459,7 +459,7 @@ IANA has (TBD) registered the following values in the IANA "OAuth Parameters" re
 
    *Change Controller*: IETF
 
-   *Specification Document*: Section {#authorization-challenge-request} of [[ this specification ]]
+   *Specification Document*: Section {#authorization-challenge-request} of this specification
 
 
    *Parameter name*: authentication_methods_supported
@@ -468,7 +468,7 @@ IANA has (TBD) registered the following values in the IANA "OAuth Parameters" re
 
    *Change Controller*: IETF
 
-   *Specification Document*: Section {#authorization-challenge-request} of [[ this specification ]]
+   *Specification Document*: Section {#authorization-challenge-request} of this specification
 
 
    *Parameter name*: authentication_method
@@ -477,7 +477,7 @@ IANA has (TBD) registered the following values in the IANA "OAuth Parameters" re
 
    *Change Controller*: IETF
 
-   *Specification Document*: Section {#authorization-challenge-request} of [[ this specification ]]
+   *Specification Document*: Section {#authorization-challenge-request} of this specification
 
 
 OAuth Server Metadata Registration
@@ -495,7 +495,7 @@ Internet-Draft         OAuth for First-Party Apps          February 2026
 
    *Change Controller*: IESG
 
-   *Specification Document*: Section {#authorization-challenge-request} of [[ this specification ]]
+   *Specification Document*: Section {#authorization-challenge-request} of this specification
 
 
 --- back
