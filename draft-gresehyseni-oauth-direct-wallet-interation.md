@@ -310,7 +310,7 @@ Cache-Control: no-store
 {
    "error": "insufficient_authorization",
    "auth_session": "uY29tL2F1dGhlbnRpY",
-   "authentication_methods_supported": ["oid4vp","oid4vp_dc_api"]
+   "authentication_methods_supported": ['oid4vp','oid4vp_dc_api']
 }
 ```
 
@@ -337,7 +337,7 @@ Cache-Control: no-store
 {
    "error": "insufficient_authorization",
    "auth_session": "uY29tL2F1dGhlbnRpY",
-   "authentication_method": ["oid4vp"],
+   "authentication_method": ['oid4vp'],
    "oid4vp_authorization_request": "https://wallet.example.org/universal-link?
    response_type=vp_token
    &client_id=redirect_uri%3Ahttps%3A%2F%2Fclient.example.org%2Fcb
