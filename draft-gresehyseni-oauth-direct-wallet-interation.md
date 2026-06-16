@@ -239,7 +239,7 @@ The following figure illustrates the High Level use cases in which the Authoriza
 This document extends the FiPA {{I-D.ietf-oauth-first-party-apps}} Authorization Challenge Request by adding the following parameters:
 
 "authentication_method":
-:    OPTIONAL.  A string indicating the authentication method requested by the Client, e.g., a user-preselected method on the client side. This document defines the value 'oid4vp' and 'oid4vp_dc_api'. Parties using any other values must mutually agree on the values meanings, which may be context-specific.
+:    OPTIONAL.  A string indicating the authentication method requested by the Client, e.g., a user-preselected method on the client side. This document defines the value `oid4vp` and `oid4vp_dc_api`. Parties using any other values must mutually agree on the values meanings, which may be context-specific.
 
 "vp_token":
 :    OPTIONAL.  A value the VP Token returned from the wallet as part of the Presentation Response (e.g., in DC API or `response_mode=fragment` flows) or a `response_code` (for non-DC API, same-device, response_mode=direct_post flows).
@@ -263,7 +263,7 @@ The Authorization Server MAY respond with an Authorization Error Response contai
 This document extends FiPA's {{I-D.ietf-oauth-first-party-apps}} Authorization Error Response by adding the following attributes, used when the error code "insufficient_authorization" is returned:
 
 "authentication_methods_supported":
-:    OPTIONAL. A JSON array of strings identifying the authentication methods supported by the Authorization Server. support for OID4VP and OID4VP over DC API, respectively.  This document defines the value 'oid4vp' and 'oid4vp_dc_api'. Parties using any other values must mutually agree on the values meanings, which may be context-specific.
+:    OPTIONAL. A JSON array of strings identifying the authentication methods supported by the Authorization Server. support for OID4VP and OID4VP over DC API, respectively.  This document defines the value `oid4vp` and `oid4vp_dc_api`. Parties using any other values must mutually agree on the values meanings, which may be context-specific.
 
 "authentication_method":
 :    OPTIONAL.  A string indicating the authentication method requested by the Authorization Server. The value MUST be one of those listed in `authentication_methods_supported`. This parameter MUST be present when the Authorization Server lacks sufficient data to return the actual `oid4vp_authorization_request`.
@@ -291,7 +291,7 @@ In a same-device flow with `response_mode=fragment`, the Wallet returns the `vp_
 
 Example: Initial Authorization Challenge Request (no preferred authentication):
 
-```
+```http
    POST /authorize-challenge HTTP/1.1
    Host: server.example.com
    Content-Type: application/x-www-form-urlencoded
@@ -302,7 +302,7 @@ Example: Initial Authorization Challenge Request (no preferred authentication):
 
 Example: Authorization Error Response indicating supported authentication methods
 
-```
+```http
    HTTP/1.1 401 Unauthorized
    Content-Type: application/json
    Cache-Control: no-store
@@ -316,7 +316,7 @@ Example: Authorization Error Response indicating supported authentication method
 
 Example: Subsequent Authorization Challenge Request requesting OID4VP Authorization Request (non-DC API same-device flow)
 
-```
+```http
    POST /authorize-challenge HTTP/1.1
    Host: server.example.com
    Content-Type: application/x-www-form-urlencoded
@@ -329,7 +329,7 @@ Example: Subsequent Authorization Challenge Request requesting OID4VP Authorizat
 Example: Authorization Error Response containing OID4VP Authorization Request
 (Whitespace and line breaks added for readability only)
 
-```
+```http
   HTTP/1.1 401 Unauthorized
   Content-Type: application/json
   Cache-Control: no-store
@@ -350,7 +350,7 @@ Example: Authorization Error Response containing OID4VP Authorization Request
 
 Example: Subsequent Authorization Challenge Request forwarding the Presentation Response:
 
-```
+```http
   POST /authorize-challenge HTTP/1.1
   Host: server.example.com
   Content-Type: application/x-www-form-urlencoded
@@ -361,11 +361,7 @@ Example: Subsequent Authorization Challenge Request forwarding the Presentation 
 
 Example: Successful Authorization Challenge Response returning the authorization code
 
-```
-   The Authorization Server validates the auth_session to find the
-   expected user, then validates the OTP for that user, and responds
-   with an authorization code.
-
+```http
    HTTP/1.1 200 OK
    Content-Type: application/json
    Cache-Control: no-store
