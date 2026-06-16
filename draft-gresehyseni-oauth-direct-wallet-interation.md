@@ -239,7 +239,7 @@ The following figure illustrates the High Level use cases in which the Authoriza
 This document extends the FiPA {{I-D.ietf-oauth-first-party-apps}} Authorization Challenge Request by adding the following parameters:
 
 "authentication_method":
-:    OPTIONAL.  A string indicating the authentication method requested by the Client, e.g., a user-preselected method on the client side. This document uses the value "oid4vp" and "oid4vp_dc_api". Values used in the `authentication_method` parameter SHOULD be from those registered in the IANA Authentication Method Values registry [IANA.AMS] established by this specification. Parties using unregistered values must mutually agree on their meanings, which may be context-specific.
+:    OPTIONAL.  A string indicating the authentication method requested by the Client, e.g., a user-preselected method on the client side. This document defines the value "oid4vp" and "oid4vp_dc_api". Parties using any other values must mutually agree on the values meanings, which may be context-specific.
 
 "vp_token":
 :    OPTIONAL.  A value the VP Token returned from the wallet as part of the Presentation Response (e.g., in DC API or `response_mode=fragment` flows) or a `response_code` (for non-DC API, same-device, response_mode=direct_post flows).
@@ -263,7 +263,7 @@ The Authorization Server MAY respond with an Authorization Error Response contai
 This document extends FiPA's {{I-D.ietf-oauth-first-party-apps}} Authorization Error Response by adding the following attributes, used when the error code "insufficient_authorization" is returned:
 
 "authentication_methods_supported":
-:    OPTIONAL. A JSON array of strings identifying the authentication methods supported by the Authorization Server. support for OID4VP and OID4VP over DC API, respectively. Values SHOULD be from the IANA Authentication Method References Values registry [IANA.AMS]. Unregistered values require mutual agreement between parties.
+:    OPTIONAL. A JSON array of strings identifying the authentication methods supported by the Authorization Server. support for OID4VP and OID4VP over DC API, respectively.  This document defines the value "oid4vp" and "oid4vp_dc_api". Parties using any other values must mutually agree on the values meanings, which may be context-specific.
 
 "authentication_method":
 :    OPTIONAL.  A string indicating the authentication method requested by the Authorization Server. The value MUST be one of those listed in `authentication_methods_supported`. This parameter MUST be present when the Authorization Server lacks sufficient data to return the actual `oid4vp_authorization_request`.
