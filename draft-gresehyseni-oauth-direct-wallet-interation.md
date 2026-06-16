@@ -239,7 +239,7 @@ The following figure illustrates the High Level use cases in which the Authoriza
 This document extends the FiPA {{I-D.ietf-oauth-first-party-apps}} Authorization Challenge Request by adding the following parameters:
 
 "authentication_method":
-:    OPTIONAL.  A string indicating the authentication method requested by the Client, e.g., a user-preselected method on the client side. This document defines the value "oid4vp" and "oid4vp_dc_api". Parties using any other values must mutually agree on the values meanings, which may be context-specific.
+:    OPTIONAL.  A string indicating the authentication method requested by the Client, e.g., a user-preselected method on the client side. This document defines the value 'oid4vp' and 'oid4vp_dc_api'. Parties using any other values must mutually agree on the values meanings, which may be context-specific.
 
 "vp_token":
 :    OPTIONAL.  A value the VP Token returned from the wallet as part of the Presentation Response (e.g., in DC API or `response_mode=fragment` flows) or a `response_code` (for non-DC API, same-device, response_mode=direct_post flows).
@@ -321,9 +321,9 @@ Example: Subsequent Authorization Challenge Request requesting OID4VP Authorizat
    Host: server.example.com
    Content-Type: application/x-www-form-urlencoded
 
-   auth_session= "uY29tL2F1dGhlbnRpY"
-   authentication_method = "oid4vp"
-   &redirect_uri= [insert a deep link here]
+   auth_session=uY29tL2F1dGhlbnRpY
+   &authentication_method=oid4vp
+   &redirect_uri=https%3A%2F%2Fclient.example.org%2Fcb
 ```
 
 Example: Authorization Error Response containing OID4VP Authorization Request
@@ -356,7 +356,7 @@ Example: Subsequent Authorization Challenge Request forwarding the Presentation 
   Content-Type: application/x-www-form-urlencoded
 
   auth_session=uY29tL2F1dGhlbnRpY
-  &vp_token=[vp_token_value]
+  &vp_token=eyJhbGciOiJFUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ1c2VyMTIzIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNjI3MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c
 ```
 
 Example: Successful Authorization Challenge Response returning the authorization code
@@ -485,9 +485,6 @@ OAuth Server Metadata Registration
    IANA has (TBD) registered the following values in the IANA "OAuth
    Authorization Server Metadata" registry of [IANA.oauth-parameters]
    established by [RFC8414].
-
-Parecki, et al.         Expires 1 September 2026               [Page 23]
-Internet-Draft         OAuth for First-Party Apps          February 2026
 
    *Metadata Name*: authentication_methods_supported
 
