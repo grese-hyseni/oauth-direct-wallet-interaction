@@ -422,7 +422,7 @@ In deployment models where Authorization Requests and Presentation Responses tra
 
 ## Signed Authorization Requests
 
-To mitigate tampering and unauthorized disclosure risks, it is RECOMMENDED that the Authorization Server, acting as the OpenID4VP Verifier, sign Authorization Requests to ensure authenticity and integrity. 
+To mitigate tampering and unauthorized disclosure risks, it is RECOMMENDED that the Authorization Server, acting as the OpenID4VP Verifier, signs Authorization Requests to ensure authenticity and integrity.
 
 ## Signed and Encrypted Presentation Responses
 
