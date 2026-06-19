@@ -158,7 +158,7 @@ The figure below illustrates a high-level use case where the Authorization Serve
 
 (B) Once the Authorization Server determines the authentication method and has the necessary data, it responds with an Authorization Error Response containing the OID4VP Authorization Request (Presentation Request) suitable for a same-device flow. See Sections {{authorization-error-response}} for details.
 
-(C) The Client invokes the Wallet on the user’s device with the OID4VP Authorization Request, as defined in {{OID4VP}}, where the user is prompted to authenticate, authorize, and consent to share credentials.
+(C) The Client invokes the Wallet on the user’s device with the OID4VP Authorization Request, as defined in {{OpenID4VP}}, where the user is prompted to authenticate, authorize, and consent to share credentials.
 
 (D) The Client receives the Presentation Response from the Wallet, which MAY include a VP Token or other presentation artifacts depending on the Presentation Request used in (C). If a `oid4vp_response_code` is present, it indicates that Wallet submitted the VP Token directly to the Verifier’s Response Endpoint (see {{oid4vp-same-device-direct-post}}).
 
@@ -168,7 +168,7 @@ The figure below illustrates a high-level use case where the Authorization Serve
 
 (G) The Client sends a Token Request to the Authorization Server’s Token Endpoint to exchange the Authorization Code.
 
-(H) The Authorization Server validates the Token Request and responds with an Access Token and optionally additional OAuth 2.0 or OpenID Connect tokens.
+(H) The Authorization Server validates the Token Request and responds with an Access Token and optionally additional OAuth 2.0 tokens.
 
 
 ## Cross Device Flow {#cross-device-flow}
@@ -418,7 +418,7 @@ Upon receiving this request, the Authorization Server MAY use the contents of au
 
 # Security Considerations
 
-Implementations SHOULD adhere to the security and privacy considerations specified in all referenced specifications used in this document, including but not limited to OAuth 2.1 {{RFC9126}}, OpenID Connect {{OIDC-Core}}, OpenID4VP {{OpenID4VP}}, and Rich Authorization Requests (RAR) {{RFC9396}}.
+Implementations SHOULD adhere to the security and privacy considerations specified in all referenced specifications used in this document, including but not limited to OAuth 2.0 Authorization Framework {{RFC6749}}, OpenID4VP {{OpenID4VP}}, and Rich Authorization Requests (RAR) {{RFC9396}}.
 
 In deployments where Authorization Requests and Presentation Responses transit through third-party applications or intermediaries, additional risks to integrity, confidentiality, and privacy arise due to potential exposure of sensitive data.
 
