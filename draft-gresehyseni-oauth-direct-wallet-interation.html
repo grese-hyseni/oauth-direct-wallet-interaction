@@ -4,29 +4,30 @@
 <meta charset="utf-8">
 <meta content="Common,Latin" name="scripts">
 <meta content="initial-scale=1.0" name="viewport">
-<title>OAuth 2.0 direct wallet interaction</title>
+<title>OAuth 2.0 direct Wallet interaction</title>
 <meta content="Gresë Hyseni" name="author">
 <meta content="
-       This document defines a protocol for Authorization Servers to request Verifiable Presentations as part of authentication and authorization processes. 
+       This document defines a protocol for Authorization Servers to request Presentation of Credentials, as part of authentication and authorization processes. 
     " name="description">
-<meta content="xml2rfc 3.33.0" name="generator">
+<meta content="xml2rfc 3.34.0" name="generator">
 <meta content="next generation" name="keyword">
 <meta content="unicorn" name="keyword">
 <meta content="sparkling distributed ledger" name="keyword">
 <meta content="draft-gresehyseni-oauth-direct-wallet-interation-latest" name="ietf.draft">
 <!-- Generator version information:
-  xml2rfc 3.33.0
-    Python 3.12.13
-    ConfigArgParse 1.7
+  xml2rfc 3.34.0
+    Python 3.14.5
+    ConfigArgParse 1.7.5
     google-i18n-address 3.1.1
     intervaltree 3.2.1
     Jinja2 3.1.6
-    lxml 6.0.2
-    platformdirs 4.9.6
+    lxml 6.1.1
+    natsort 8.4.0
+    platformdirs 4.10.0
     pycountry 24.6.1
     PyYAML 6.0.3
     requests 2.33.1
-    wcwidth 0.7.0
+    wcwidth 0.8.1
 -->
 <link href="draft-gresehyseni-oauth-direct-wallet-interation.xml" rel="alternate" type="application/rfc+xml">
 <link href="#copyright" rel="license">
@@ -1044,12 +1045,12 @@ svg {
 <table class="ears">
 <thead><tr>
 <td class="left">Internet-Draft</td>
-<td class="center">OAuth direct wallet interaction</td>
+<td class="center">OAuth direct Wallet interaction</td>
 <td class="right">June 2026</td>
 </tr></thead>
 <tfoot><tr>
 <td class="left">Hyseni</td>
-<td class="center">Expires 18 December 2026</td>
+<td class="center">Expires 24 December 2026</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1062,12 +1063,12 @@ svg {
 <dd class="internet-draft">draft-gresehyseni-oauth-direct-wallet-interation-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2026-06-16" class="published">16 June 2026</time>
+<time datetime="2026-06-22" class="published">22 June 2026</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Informational</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2026-12-18">18 December 2026</time></dd>
+<dd class="expires"><time datetime="2026-12-24">24 December 2026</time></dd>
 <dt class="label-authors">Author:</dt>
 <dd class="authors">
 <div class="author">
@@ -1077,10 +1078,10 @@ svg {
 </dd>
 </dl>
 </div>
-<h1 id="title">OAuth 2.0 direct wallet interaction</h1>
+<h1 id="title">OAuth 2.0 direct Wallet interaction</h1>
 <section id="section-abstract">
       <h2 id="abstract"><a href="#abstract" class="selfRef">Abstract</a></h2>
-<p id="section-abstract-1">This document defines a protocol for Authorization Servers to request Verifiable Presentations as part of authentication and authorization processes.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
+<p id="section-abstract-1">This document defines a protocol for Authorization Servers to request Presentation of Credentials, as part of authentication and authorization processes.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
 </section>
 <section class="note rfcEditorRemove" id="section-note.1">
       <h2 id="name-about-this-document">
@@ -1088,7 +1089,7 @@ svg {
       </h2>
 <p id="section-note.1-1">This note is to be removed before publishing as an RFC.<a href="#section-note.1-1" class="pilcrow">¶</a></p>
 <p id="section-note.1-2">
-        The latest revision of this draft can be found at <span><a href="https://grese-hyseni.github.io/oauth-direct-wallet-interaction/draft-gresehyseni-oauth-direct-wallet-interation.html">https://grese-hyseni.github.io/oauth-direct-wallet-interaction/draft-gresehyseni-oauth-direct-wallet-interation.html</a></span>.
+        The latest revision of this draft can be found at <span><a href="https://grese-hyseni.github.io/oauth-direct-Wallet-interaction/draft-gresehyseni-oauth-direct-Wallet-interation.html">https://grese-hyseni.github.io/oauth-direct-Wallet-interaction/draft-gresehyseni-oauth-direct-Wallet-interation.html</a></span>.
         Status information for this document may be found at <span><a href="https://datatracker.ietf.org/doc/draft-gresehyseni-oauth-direct-wallet-interation/">https://datatracker.ietf.org/doc/draft-gresehyseni-oauth-direct-wallet-interation/</a></span>.<a href="#section-note.1-2" class="pilcrow">¶</a></p>
 <p id="section-note.1-3">
         Discussion of this document takes place on the
@@ -1096,7 +1097,7 @@ svg {
         which is archived at <span><a href="https://mailarchive.ietf.org/arch/browse/oauth/">https://mailarchive.ietf.org/arch/browse/oauth/</a></span>.
         Subscribe at <span><a href="https://www.ietf.org/mailman/listinfo/oauth/">https://www.ietf.org/mailman/listinfo/oauth/</a></span>.<a href="#section-note.1-3" class="pilcrow">¶</a></p>
 <p id="section-note.1-4">Source for this draft and an issue tracker can be found at
-        <span><a href="https://github.com/grese-hyseni/oauth-direct-wallet-interaction">https://github.com/grese-hyseni/oauth-direct-wallet-interaction</a></span>.<a href="#section-note.1-4" class="pilcrow">¶</a></p>
+        <span><a href="https://github.com/grese-hyseni/oauth-direct-Wallet-interaction">https://github.com/grese-hyseni/oauth-direct-Wallet-interaction</a></span>.<a href="#section-note.1-4" class="pilcrow">¶</a></p>
 </section>
 <div id="status-of-memo">
 <section id="section-boilerplate.1">
@@ -1117,7 +1118,7 @@ svg {
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 18 December 2026.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 24 December 2026.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1234,12 +1235,12 @@ svg {
       <h2 id="name-introduction">
 <a href="#section-1" class="section-number selfRef">1. </a><a href="#name-introduction" class="section-name selfRef">Introduction</a>
       </h2>
-<p id="section-1-1">This specification provides a mechanism on top of First-Party Apps (FiPA) <span>[<a href="#I-D.ietf-oauth-first-party-apps" class="cite xref">I-D.ietf-oauth-first-party-apps</a>]</span> that enables Authorization Servers to request Verifiable Presentations as part of the authentication and authorization proccess.<a href="#section-1-1" class="pilcrow">¶</a></p>
-<p id="section-1-2">OAuth for First-Party Apps (FiPA) is used as a base protocol as it extends the OAuth 2.0 Authorization Framework <span>[<a href="#RFC6749" class="cite xref">RFC6749</a>]</span> with a new endpoint to support applications that want to control the process of obtaining authorization from the user using a native experience, which serves a smooth user experience when using digital credentials from a wallet app.<a href="#section-1-2" class="pilcrow">¶</a></p>
-<p id="section-1-3">The scope of this document is not limited to First-Party Apps but extends to Third-Party Apps as defined by <span>[<a href="#RFC6749" class="cite xref">RFC6749</a>]</span> while keeping the rest of the base model as defined in First-Party Apps (FiPA) <span>[<a href="#I-D.ietf-oauth-first-party-apps" class="cite xref">I-D.ietf-oauth-first-party-apps</a>]</span>.<a href="#section-1-3" class="pilcrow">¶</a></p>
-<p id="section-1-4">This specification is intended to support use cases including login, transaction approval, and presentation during issuance credential based on <span>[<a href="#OpenID4VP" class="cite xref">OpenID4VP</a>]</span> and <span>[<a href="#OpenID4VCI" class="cite xref">OpenID4VCI</a>]</span>.<a href="#section-1-4" class="pilcrow">¶</a></p>
+<p id="section-1-1">This specification builds on the First-Party Apps (FiPA) framework <span>[<a href="#I-D.ietf-oauth-first-party-apps" class="cite xref">I-D.ietf-oauth-first-party-apps</a>]</span> to enable Authorization Servers to request Presentation of Credentials as part of the authentication and authorization processes in OAuth flows.<a href="#section-1-1" class="pilcrow">¶</a></p>
+<p id="section-1-2">OAuth for First-Party Apps (FiPA) is used as a base protocol as it extends the OAuth 2.0 Authorization Framework <span>[<a href="#RFC6749" class="cite xref">RFC6749</a>]</span> with a new endpoint to support applications that want to control the process of obtaining authorization from the user using a native experience. This approach facilitates a smooth user experience when leveraging digital credentials from a Wallet app.<a href="#section-1-2" class="pilcrow">¶</a></p>
+<p id="section-1-3">The scope of this document extends to Third-Party Apps as defined in <span>[<a href="#RFC6749" class="cite xref">RFC6749</a>]</span>, maintaining the core model established by FiPA <span>[<a href="#I-D.ietf-oauth-first-party-apps" class="cite xref">I-D.ietf-oauth-first-party-apps</a>]</span>.<a href="#section-1-3" class="pilcrow">¶</a></p>
+<p id="section-1-4">This specification supports use cases such as user login, transaction approval, and credential presentation during issuance, based on <span>[<a href="#OpenID4VP" class="cite xref">OpenID4VP</a>]</span> and <span>[<a href="#OpenID4VCI" class="cite xref">OpenID4VCI</a>]</span>.<a href="#section-1-4" class="pilcrow">¶</a></p>
 <p id="section-1-5">The integration of OpenID4VP Verifier functionality within an Authorization Server, as well as the internal communication between an Authorization Server and a Verifier, are outside the scope of this specification.<a href="#section-1-5" class="pilcrow">¶</a></p>
-<p id="section-1-6">The browser-based wallet interactions are not the focus of this document since such flows are expected to work well in web environments without any additional extension to the existing authorization models such as the Authorization Code Flow defined in the section 4.1. of <span>[<a href="#RFC6749" class="cite xref">RFC6749</a>]</span>.<a href="#section-1-6" class="pilcrow">¶</a></p>
+<p id="section-1-6">Browser-based Wallet interactions are not the focus of this document, as such flows are expected to function effectively in web environments without extensions to existing authorization models, such as the Authorization Code Flow defined in section 4.1 of <span>[<a href="#RFC6749" class="cite xref">RFC6749</a>]</span>.<a href="#section-1-6" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="conventions-and-definitions">
@@ -1258,7 +1259,7 @@ appear in all capitals, as shown here.<a href="#section-2-1" class="pilcrow">¶<
       <h2 id="name-protocol">
 <a href="#section-3" class="section-number selfRef">3. </a><a href="#name-protocol" class="section-name selfRef">Protocol</a>
       </h2>
-<p id="section-3-1">In the model introduces in this document, the Client acts as an orchestrator of the Wallet interaction while the Authorization Server remains responsible for authorization decisions and for integrating Verifier Capabilities.<a href="#section-3-1" class="pilcrow">¶</a></p>
+<p id="section-3-1">In the model introduced in this document, the Client acts as the orchestrator of Wallet interactions, while the Authorization Server remains responsible for authorization decisions and for integrating Verifier capabilities.<a href="#section-3-1" class="pilcrow">¶</a></p>
 <p id="section-3-2">The mechanisms defined in this document support:<a href="#section-3-2" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-3-3.1">
@@ -1274,19 +1275,19 @@ appear in all capitals, as shown here.<a href="#section-2-1" class="pilcrow">¶<
           <p id="section-3-3.4.1">Deployments using platform Digital Credentials APIs <span>[<a href="#DC.API" class="cite xref">DC.API</a>]</span> or equivalent native SDKs.<a href="#section-3-3.4.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
-<p id="section-3-4">The Verifier is a separate logical component, as it has it's own endpoints and functionality, as defined in OpenID4VP <span>[<a href="#OpenID4VP" class="cite xref">OpenID4VP</a>]</span>.<a href="#section-3-4" class="pilcrow">¶</a></p>
+<p id="section-3-4">The Verifier is a separate logical component with its own endpoints and functionality, as defined in OpenID4VP <span>[<a href="#OpenID4VP" class="cite xref">OpenID4VP</a>]</span>.<a href="#section-3-4" class="pilcrow">¶</a></p>
 <div id="same-device-flow">
 <section id="section-3.1">
         <h3 id="name-same-device-flow">
 <a href="#section-3.1" class="section-number selfRef">3.1. </a><a href="#name-same-device-flow" class="section-name selfRef">Same Device Flow</a>
         </h3>
-<p id="section-3.1-1">The following figure illustrates the High Level use case in which the Authorization Server (AS) requests a Verifiable Presentation from the Wallet as part of the authorization process and the wallet is on the same device as the client app. This does not represent the OID4VP over DC API, see section <a href="#oid4vp-over-dc-api" class="auto internal xref">Section 6.3</a>.<a href="#section-3.1-1" class="pilcrow">¶</a></p>
+<p id="section-3.1-1">The figure below illustrates a high-level use case where the Authorization Server (AS) requests a Verifiable Presentation from the Wallet as part of the authorization process, and the Wallet is on the same device as the Client app. This flow does not represent OID4VP over DC API; see section <a href="#oid4vp-over-dc-api" class="auto internal xref">Section 6.3</a>.<a href="#section-3.1-1" class="pilcrow">¶</a></p>
 <div class="alignLeft art-ascii-art art-text artwork" id="section-3.1-2">
 <pre>
 +----------+                 +----------+                       +-------------------+                      +------------+
-|  Wallet  |                 |  Third   |                       |   Authorization   |                      |  Verifier  |
-|          |                 |  Party-  |                       |      Server       |                      |            |
-|          |                 |  Client  |  (A) Authorization    |+-----------------+|                      |            |
+|  Wallet  |                 |  Client  |                       |   Authorization   |                      |  Verifier  |
+|          |                 |          |                       |      Server       |                      |            |
+|          |                 |          |  (A) Authorization    |+-----------------+|                      |            |
 |          |                 |          |  Challenge Request    |+-----------------+| (A) Create           |            |
 |          |                 |          |----------------------&gt;||  Authorization  ||     Presentation     |            |
 |          |                 |          |                       ||   Challenge     ||     Request          |            |
@@ -1306,8 +1307,8 @@ appear in all capitals, as shown here.<a href="#section-2-1" class="pilcrow">¶<
 |          |----------------&gt;|          | (E) Authorization     ||                 ||                      |            |
 |          |(D) Presentation |          | Challenge Request     ||                 || (E) Validate         |            |
 |          |    Response     |          | (Presentation Res.)   ||                 ||     Presentation     |            |
-|          | (reponse_code/  |          |----------------------&gt;||                 ||     Response         |            |
-|          |  vp_token)      |          |                       ||                 ||---------------------&gt;|            |
+|          | w/ reponse_code |          |----------------------&gt;||                 ||     Response         |            |
+|          | or vp_token     |          |                       ||                 ||---------------------&gt;|            |
 |          |                 |          |                       ||                 ||                      |            |
 |          |                 |          |                       ||                 ||&lt;---------------------|            |
 |          |                 |          |&lt;----------------------||                 || (F) Presentation     |            |
@@ -1324,14 +1325,14 @@ appear in all capitals, as shown here.<a href="#section-2-1" class="pilcrow">¶<
 +----------+                 +----------+                       +-------------------+                      +------------+
 </pre><a href="#section-3.1-2" class="pilcrow">¶</a>
 </div>
-<p id="section-3.1-3">(A) The Client sends an Authorization Challenge Request to the Authorization Server’s Authorization Challenge Endpoint. The client <span class="bcp14">MUST</span> provide <code>authentication_method</code> and <span class="bcp14">MAY</span> provide <code>redirect_uri</code> to request an OID4VP Authorization Request for a same-device flow. The Client <span class="bcp14">MAY</span> provide these parameters in the initial or in a subsequent Authorization Challenge Request. See Sections <a href="#authorization-challenge-request" class="auto internal xref">Section 4</a> for details.<a href="#section-3.1-3" class="pilcrow">¶</a></p>
+<p id="section-3.1-3">(A) The Client sends an Authorization Challenge Request to the Authorization Server’s Authorization Challenge Endpoint. The Client <span class="bcp14">MUST</span> provide authentication_method and <span class="bcp14">MAY</span> provide redirect_uri to request an OID4VP Authorization Request for a same-device flow. These parameters may be included in the initial or a subsequent Authorization Challenge Request. See Section <a href="#authorization-challenge-request" class="auto internal xref">Section 4</a> for details.<a href="#section-3.1-3" class="pilcrow">¶</a></p>
 <p id="section-3.1-4">(B) Once the Authorization Server determines the authentication method and has the necessary data, it responds with an Authorization Error Response containing the OID4VP Authorization Request (Presentation Request) suitable for a same-device flow. See Sections <a href="#authorization-error-response" class="auto internal xref">Section 5</a> for details.<a href="#section-3.1-4" class="pilcrow">¶</a></p>
-<p id="section-3.1-5">(C) The Client invokes the wallet on the user’s device with the OID4VP Authorization Request, where user is promted to authenticate, authorize, and consent to share credentials.<a href="#section-3.1-5" class="pilcrow">¶</a></p>
-<p id="section-3.1-6">(D) The Client receives the Presentation Response from the wallet, which <span class="bcp14">MAY</span> include a VP Token or other presentation artifacts depending on the Presentation Request used in (C). If a <code>oid4vp_response_code</code> is present, it indicates that wallet submitted the VP Token directly to the Verifier’s Response Endpoint (see <a href="#oid4vp-same-device-direct-post" class="auto internal xref">Section 6.2</a>).<a href="#section-3.1-6" class="pilcrow">¶</a></p>
-<p id="section-3.1-7">(E) The Client forwards the wallet response from (D) in a subsequent Authorization Challenge Request to the Authorization Server.<a href="#section-3.1-7" class="pilcrow">¶</a></p>
+<p id="section-3.1-5">(C) The Client invokes the Wallet on the user’s device with the OID4VP Authorization Request, as defined in <span>[<a href="#OpenID4VP" class="cite xref">OpenID4VP</a>]</span>, where the user is prompted to authenticate, authorize, and consent to share credentials.<a href="#section-3.1-5" class="pilcrow">¶</a></p>
+<p id="section-3.1-6">(D) The Client receives the Presentation Response from the Wallet, which <span class="bcp14">MAY</span> include a VP Token or other presentation artifacts depending on the Presentation Request used in (C). If a <code>oid4vp_response_code</code> is present, it indicates that Wallet submitted the VP Token directly to the Verifier’s Response Endpoint (see <a href="#oid4vp-same-device-direct-post" class="auto internal xref">Section 6.2</a>).<a href="#section-3.1-6" class="pilcrow">¶</a></p>
+<p id="section-3.1-7">(E) The Client forwards the Wallet response from (D) in a subsequent Authorization Challenge Request to the Authorization Server.<a href="#section-3.1-7" class="pilcrow">¶</a></p>
 <p id="section-3.1-8">(F) Upon successful validation of the Presentation Response by the verifier and completion of authorization checks, the Authorization Server issues an Authorization Code.<a href="#section-3.1-8" class="pilcrow">¶</a></p>
 <p id="section-3.1-9">(G) The Client sends a Token Request to the Authorization Server’s Token Endpoint to exchange the Authorization Code.<a href="#section-3.1-9" class="pilcrow">¶</a></p>
-<p id="section-3.1-10">(H) The Authorization Server validates the Token Request and responds with an Access Token and optionally additional OAuth 2.0 or OpenID Connect tokens.<a href="#section-3.1-10" class="pilcrow">¶</a></p>
+<p id="section-3.1-10">(H) The Authorization Server validates the Token Request and responds with an Access Token and optionally additional OAuth 2.0 tokens.<a href="#section-3.1-10" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="cross-device-flow">
@@ -1339,13 +1340,13 @@ appear in all capitals, as shown here.<a href="#section-2-1" class="pilcrow">¶<
         <h3 id="name-cross-device-flow">
 <a href="#section-3.2" class="section-number selfRef">3.2. </a><a href="#name-cross-device-flow" class="section-name selfRef">Cross Device Flow</a>
         </h3>
-<p id="section-3.2-1">The following figure illustrates the High Level use cases in which the Authorization Server (AS) requests a Verifiable Presentation from the Wallet as part of the authorization process and the wallet is on a different device from the client app. This does not represent the OID4VP over DC API, see section <a href="#oid4vp-over-dc-api" class="auto internal xref">Section 6.3</a>.<a href="#section-3.2-1" class="pilcrow">¶</a></p>
+<p id="section-3.2-1">The figure below illustrates a high-level use case where the Authorization Server (AS) requests a Verifiable Presentation from the Wallet as part of the authorization process, and the Wallet is on a different device from the Client app. This flow does not represent OID4VP over DC API; see section <a href="#oid4vp-over-dc-api" class="auto internal xref">Section 6.3</a>.<a href="#section-3.2-1" class="pilcrow">¶</a></p>
 <div class="alignLeft art-ascii-art art-text artwork" id="section-3.2-2">
 <pre>
 +----------+                   +----------+                        +-------------------+                   +------------+
-|  Wallet  |                   |  Third   |                       |   Authorization   |                    |  Verifier  |
-|          |                   |  Party-  |                       |      Server       |                    |            |
-|          |                   |  Client  | (A) Authorization     |+-----------------+|                    |            |
+|  Wallet  |                   |  Client  |                       |   Authorization   |                    |  Verifier  |
+|          |                   |          |                       |      Server       |                    |            |
+|          |                   |          | (A) Authorization     |+-----------------+|                    |            |
 |          |                   |          |     Challenge Request |+-----------------+| (A) Create         |            |
 |          |                   |          |----------------------&gt;||  Authorization  ||     Presentation   |            |
 |          |                   |          |                       ||   Challenge     ||     Request        |            |
@@ -1363,6 +1364,7 @@ appear in all capitals, as shown here.<a href="#section-2-1" class="pilcrow">¶<
 |          |                   |          |                       ||                 ||                    |            |
 |          |(D) Presentation   |          |                       ||                 ||                    |            |
 |          |    Response       |          |                       ||                 ||                    |            |
+|          |    w/ VP Token    |          |                       ||                 ||                    |            |
 |          |----------------------------------------------------------------------------------------------&gt;|            |
 |          |                   |          |                       ||                 ||                    |            |
 |          |                   |          |                       ||                 ||(D) Get Presentation|            |
@@ -1384,13 +1386,13 @@ appear in all capitals, as shown here.<a href="#section-2-1" class="pilcrow">¶<
 +----------+                   +----------+                       +-------------------+                    +------------+
 </pre><a href="#section-3.2-2" class="pilcrow">¶</a>
 </div>
-<p id="section-3.2-3">(A) The Client sends an Authorization Challenge Request to the Authorization Server’s Authorization Challenge Endpoint. The client <span class="bcp14">MUST</span> provide <code>authentication_method</code> and ommit the <code>redirect_uri</code> to request an OID4VP Authorization Request for a cross-device flow. The Client <span class="bcp14">MAY</span> provide these parameters in the initial or in a subsequent Authorization Challenge Request. See Sections <a href="#authorization-challenge-request" class="auto internal xref">Section 4</a> for details.<a href="#section-3.2-3" class="pilcrow">¶</a></p>
-<p id="section-3.2-4">(B) Once the Authorization Server determines the authentication method and has the necessary data, it responds with an Authorization Error Response containing the OID4VP Authorization Request (Presentation Request) suitable for a cross-device flow. See Section <a href="#authorization-error-response" class="auto internal xref">Section 5</a> for details.<a href="#section-3.2-4" class="pilcrow">¶</a></p>
-<p id="section-3.2-5">(C) The Client generated the QR Code for the user to invoke the wallet on another device which contains the OID4VP Authorization Request.<a href="#section-3.2-5" class="pilcrow">¶</a></p>
-<p id="section-3.2-6">(D) The wallet sends the Presentation Response which contains the VP Token directly to the Verifier's Response Endpoint.<a href="#section-3.2-6" class="pilcrow">¶</a></p>
-<p id="section-3.2-7">(F) Upon successful validation of the Presentation Response by the verifier and completion of authorization checks, the Authorization Server issues an Authorization Code.<a href="#section-3.2-7" class="pilcrow">¶</a></p>
-<p id="section-3.2-8">(G) The Client sends a Token Request to the Authorization Server’s Token Endpoint to exchange the Authorization Code.<a href="#section-3.2-8" class="pilcrow">¶</a></p>
-<p id="section-3.2-9">(H) The Authorization Server validates the Token Request and responds with an Access Token and optionally additional OAuth 2.0 or OpenID Connect tokens.<a href="#section-3.2-9" class="pilcrow">¶</a></p>
+<p id="section-3.2-3">(A) The Client sends an Authorization Challenge Request to the Authorization Server’s Authorization Challenge Endpoint. The Client <span class="bcp14">MUST</span> provide <code>authentication_method</code> and omit the <code>redirect_uri</code> to request an OID4VP Authorization Request for a cross-device flow. These parameters may be included in the initial or a subsequent Authorization Challenge Request. See Section <a href="#authorization-challenge-request" class="auto internal xref">Section 4</a> for details.<a href="#section-3.2-3" class="pilcrow">¶</a></p>
+<p id="section-3.2-4">(B) Same as for the <a href="#same-device-flow" class="auto internal xref">Section 3.1</a>.<a href="#section-3.2-4" class="pilcrow">¶</a></p>
+<p id="section-3.2-5">(C) The Client generates a QR Code containing the OID4VP Authorization Request for the user to invoke the Wallet on another device.<a href="#section-3.2-5" class="pilcrow">¶</a></p>
+<p id="section-3.2-6">(D) The Wallet sends the Presentation Response containing the VP Token directly to the Verifier's Response Endpoint.<a href="#section-3.2-6" class="pilcrow">¶</a></p>
+<p id="section-3.2-7">(F) Same as for the <a href="#same-device-flow" class="auto internal xref">Section 3.1</a>.<a href="#section-3.2-7" class="pilcrow">¶</a></p>
+<p id="section-3.2-8">(G) Same as for the <a href="#same-device-flow" class="auto internal xref">Section 3.1</a>.<a href="#section-3.2-8" class="pilcrow">¶</a></p>
+<p id="section-3.2-9">(H) Same as for the <a href="#same-device-flow" class="auto internal xref">Section 3.1</a>.<a href="#section-3.2-9" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -1404,30 +1406,30 @@ appear in all capitals, as shown here.<a href="#section-2-1" class="pilcrow">¶<
 <span class="break"></span><dl class="dlParallel" id="section-4-2">
         <dt id="section-4-2.1">"authentication_method":</dt>
         <dd style="margin-left: 1.5em" id="section-4-2.2">
-          <p id="section-4-2.2.1"><span class="bcp14">OPTIONAL</span>.  A string indicating the authentication method requested by the Client, e.g., a user-preselected method on the client side. Client <span class="bcp14">MUST</span> include this in order to request a OID4VP Authorization Request from the Authorization Server. This document defines the value <code>oid4vp</code> and <code>oid4vp_dc_api</code>. Parties using any other values must mutually agree on the values meanings, which may be context-specific.<a href="#section-4-2.2.1" class="pilcrow">¶</a></p>
+          <p id="section-4-2.2.1"><span class="bcp14">OPTIONAL</span>.  A string indicating the authentication method requested by the Client, e.g., a user-preselected method on the client side. The Client <span class="bcp14">MUST</span> include this to request an OID4VP Authorization Request from the Authorization Server. This document defines the value <code>oid4vp</code> and <code>oid4vp_dc_api</code>. Parties using other values must mutually agree on their meanings, which may be context-specific.<a href="#section-4-2.2.1" class="pilcrow">¶</a></p>
 </dd>
         <dd class="break"></dd>
 <dt id="section-4-2.3">"oid4vp_vp_token":</dt>
         <dd style="margin-left: 1.5em" id="section-4-2.4">
-          <p id="section-4-2.4.1"><span class="bcp14">OPTIONAL</span>.  A value the VP Token, as defined in section 8 of <span>[<a href="#OpenID4VP" class="cite xref">OpenID4VP</a>]</span>, returned from the wallet as part of the Presentation Response (e.g., in DC API or <code>response_mode=fragment</code> flows).<a href="#section-4-2.4.1" class="pilcrow">¶</a></p>
+          <p id="section-4-2.4.1"><span class="bcp14">OPTIONAL</span>.  The VP Token value, as defined in section 8 of <span>[<a href="#OpenID4VP" class="cite xref">OpenID4VP</a>]</span>, returned from the Wallet as part of the Presentation Response (e.g., in DC API or <code>response_mode=fragment</code> flows).<a href="#section-4-2.4.1" class="pilcrow">¶</a></p>
 </dd>
         <dd class="break"></dd>
 <dt id="section-4-2.5">"oid4vp_response_code":</dt>
         <dd style="margin-left: 1.5em" id="section-4-2.6">
-          <p id="section-4-2.6.1"><span class="bcp14">OPTIONAL</span>.  A value of the <code>response_code</code>, as defined in section 13.3. of <span>[<a href="#OpenID4VP" class="cite xref">OpenID4VP</a>]</span>, returned from the wallet as part of the Presentation Response (for non-DC API, same-device, response_mode=direct_post flows).<a href="#section-4-2.6.1" class="pilcrow">¶</a></p>
+          <p id="section-4-2.6.1"><span class="bcp14">OPTIONAL</span>.  The <code>response_code</code> value, as defined in section 13.3 of <span>[<a href="#OpenID4VP" class="cite xref">OpenID4VP</a>]</span>, returned from the Wallet as part of the Presentation Response (for non-DC API, same-device, response_mode=direct_post flows).<a href="#section-4-2.6.1" class="pilcrow">¶</a></p>
 </dd>
       <dd class="break"></dd>
 </dl>
-<p id="section-4-3">Additionally, the client <span class="bcp14">MAY</span> add to the request URI the following parameters to the query component of the authorization challenge endpoint URI using the "application/x-www-form-urlencoded" format:<a href="#section-4-3" class="pilcrow">¶</a></p>
+<p id="section-4-3">Additionally, the Client <span class="bcp14">MAY</span> add the following parameters to the query component of the Authorization Challenge Endpoint URI using the "application/x-www-form-urlencoded" format:<a href="#section-4-3" class="pilcrow">¶</a></p>
 <span class="break"></span><dl class="dlParallel" id="section-4-4">
         <dt id="section-4-4.1">"redirect_uri":</dt>
         <dd style="margin-left: 1.5em" id="section-4-4.2">
-          <p id="section-4-4.2.1"><span class="bcp14">OPTIONAL</span>.  The OAuth redirect_uri defined in <span>[<a href="#RFC6749" class="cite xref">RFC6749</a>]</span>. This parameter <span class="bcp14">MUST</span> be included in same-device flows along with <code>authentication_method</code> and represents the client URI to which the wallet redirects the user for the same-device flows. If the Authorization Server receives <code>authentication_method</code> without <code>redirect_uri</code>, it <span class="bcp14">SHOULD</span> treat the request as a request for cross-device flow. This parameter <span class="bcp14">SHOULD NOT</span> be sent when <code>authentication_method=oid4vp_dc_api</code>. If it is sent, the Authorization Server <span class="bcp14">MUST</span> ignore it.<a href="#section-4-4.2.1" class="pilcrow">¶</a></p>
+          <p id="section-4-4.2.1"><span class="bcp14">OPTIONAL</span>.  The OAuth redirect_uri defined in <span>[<a href="#RFC6749" class="cite xref">RFC6749</a>]</span>. This parameter <span class="bcp14">MUST</span> be included in same-device flows along with <code>authentication_method</code> and represents the Client URI to which the Wallet redirects the user in same-device flows. If the Authorization Server receives <code>authentication_method</code> without <code>redirect_uri</code>, it <span class="bcp14">SHOULD</span> treat the request as a cross-device flow. This parameter <span class="bcp14">SHOULD NOT</span> be sent when <code>authentication_method=oid4vp_dc_api</code>; if sent, the Authorization Server <span class="bcp14">MUST</span> ignore it.<a href="#section-4-4.2.1" class="pilcrow">¶</a></p>
 </dd>
         <dd class="break"></dd>
 <dt id="section-4-4.3">"authorization_details":</dt>
         <dd style="margin-left: 1.5em" id="section-4-4.4">
-          <p id="section-4-4.4.1"><span class="bcp14">OPTIONAL</span>. A JSON object as defined in <span>[<a href="#RFC9396" class="cite xref">RFC9396</a>]</span>, representing OAuth authorization details. See <a href="#oid4vp-with-rar" class="auto internal xref">Section 6.4</a> to understand its usage.<a href="#section-4-4.4.1" class="pilcrow">¶</a></p>
+          <p id="section-4-4.4.1"><span class="bcp14">OPTIONAL</span>. A JSON object as defined in <span>[<a href="#RFC9396" class="cite xref">RFC9396</a>]</span>, representing OAuth authorization details. See <a href="#oid4vp-with-rar" class="auto internal xref">Section 6.4</a> for usage details.<a href="#section-4-4.4.1" class="pilcrow">¶</a></p>
 </dd>
       <dd class="break"></dd>
 </dl>
@@ -1436,7 +1438,7 @@ appear in all capitals, as shown here.<a href="#section-2-1" class="pilcrow">¶<
         <h3 id="name-initial-authorization-chall">
 <a href="#section-4.1" class="section-number selfRef">4.1. </a><a href="#name-initial-authorization-chall" class="section-name selfRef">Initial Authorization Challenge Request</a>
         </h3>
-<p id="section-4.1-1">The initial Authorization Challenge Request includes only the information available at that time. For example, if the client has no prior information on preferred user login methods, it can send a Authorization Challenge Request without specifying the <code>authentication_method</code> or any additional data relevant for it. See {#example-flows}. Similarly, in another time, if/when the client knows pre-flow such information, it can already send everything in the first authrization challenge request.<a href="#section-4.1-1" class="pilcrow">¶</a></p>
+<p id="section-4.1-1">The initial Authorization Challenge Request includes only the information available at that time. For example, if the Client has no prior knowledge of preferred user login methods, it can send an Authorization Challenge Request without specifying <code>authentication_method</code> or any related parameters. See <a href="#example-flows" class="auto internal xref">Section 6</a>. Conversely, if the Client has such information beforehand, it can include it in the initial Authorization Challenge Request.<a href="#section-4.1-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="subs-authorization-challenge-request">
@@ -1444,7 +1446,7 @@ appear in all capitals, as shown here.<a href="#section-2-1" class="pilcrow">¶<
         <h3 id="name-subsequest-uthorization-cha">
 <a href="#section-4.2" class="section-number selfRef">4.2. </a><a href="#name-subsequest-uthorization-cha" class="section-name selfRef">Subsequest uthorization Challenge Requests</a>
         </h3>
-<p id="section-4.2-1">The Authorization Server <span class="bcp14">MAY</span> respond with an Authorization Error Response containing <code>oid4vp</code> or/and <code>oid4vp_dc_api</code> as one of the <code>authentication_methods_supported</code>. In such case, the Client should provide in a subsequent Authorization Challenge Request additional parameters such as <code>authenticaion_method</code> and/or <code>redirect_uri</code>. See {#example-flows}.<a href="#section-4.2-1" class="pilcrow">¶</a></p>
+<p id="section-4.2-1">The Authorization Server <span class="bcp14">MAY</span> respond with an Authorization Error Response containing <code>oid4vp</code> or/and <code>oid4vp_dc_api</code> as one of the supported authentication methods (<code>authentication_methods_supported</code>). In such cases, the Client <span class="bcp14">SHOULD</span> provide additional parameters such as <code>authentication_method</code> and/or <code>redirect_uri</code> in a subsequent Authorization Challenge Request. See <a href="#example-flows" class="auto internal xref">Section 6</a><a href="#section-4.2-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -1458,7 +1460,7 @@ appear in all capitals, as shown here.<a href="#section-2-1" class="pilcrow">¶<
 <span class="break"></span><dl class="dlParallel" id="section-5-2">
         <dt id="section-5-2.1">"authentication_methods_supported":</dt>
         <dd style="margin-left: 1.5em" id="section-5-2.2">
-          <p id="section-5-2.2.1"><span class="bcp14">OPTIONAL</span>. A JSON array of strings identifying the authentication methods supported by the Authorization Server. support for OID4VP and OID4VP over DC API, respectively.  This document defines the value <code>oid4vp</code> and <code>oid4vp_dc_api</code>. Parties using any other values must mutually agree on the values meanings, which may be context-specific.<a href="#section-5-2.2.1" class="pilcrow">¶</a></p>
+          <p id="section-5-2.2.1"><span class="bcp14">OPTIONAL</span>. A JSON array of strings identifying the authentication methods supported by the Authorization Server. This document defines the value <code>oid4vp</code> and <code>oid4vp_dc_api</code> for OID4VP and OID4VP over DC API respectively. Parties using other values must mutually agree on their meanings, which may be context-specific.<a href="#section-5-2.2.1" class="pilcrow">¶</a></p>
 </dd>
         <dd class="break"></dd>
 <dt id="section-5-2.3">"authentication_method":</dt>
@@ -1484,28 +1486,14 @@ appear in all capitals, as shown here.<a href="#section-2-1" class="pilcrow">¶<
       <h2 id="name-example-flows">
 <a href="#section-6" class="section-number selfRef">6. </a><a href="#name-example-flows" class="section-name selfRef">Example flows</a>
       </h2>
-<p id="section-6-1">The Client <span class="bcp14">MAY</span> send an Authorization Challenge Request using one of the following mechanisms:<a href="#section-6-1" class="pilcrow">¶</a></p>
-<ul class="normal">
-<li class="normal" id="section-6-2.1">
-          <p id="section-6-2.1.1">Including a <code>redirect_uri</code> + <code>response_mode = fragment</code> parameter to indicate a same-device flow.<a href="#section-6-2.1.1" class="pilcrow">¶</a></p>
-</li>
-        <li class="normal" id="section-6-2.2">
-          <p id="section-6-2.2.1">Omitting the <code>redirect_uri</code> + <code>response_mode = direct_post</code> parameter to indicate a cross-device flow.<a href="#section-6-2.2.1" class="pilcrow">¶</a></p>
-</li>
-        <li class="normal" id="section-6-2.3">
-          <p id="section-6-2.3.1">Including a <code>redirect_uri</code> + <code>response_mode = direct_post</code> parameter to indicate a same-device flow.<a href="#section-6-2.3.1" class="pilcrow">¶</a></p>
-</li>
-        <li class="normal" id="section-6-2.4">
-          <p id="section-6-2.4.1">Including <code>type=dc_api</code> to indicate that the Presentation Request <span class="bcp14">SHOULD</span> be conformant with OpenID4VP over DC API.<a href="#section-6-2.4.1" class="pilcrow">¶</a></p>
-</li>
-      </ul>
-<p id="section-6-3">This section provides non-normative examples illustrating how this specification supports specific deployment models.<a href="#section-6-3" class="pilcrow">¶</a></p>
+<p id="section-6-1">The Client <span class="bcp14">MAY</span> send an Authorization Challenge Request indicating whether it supports same-device or cross-device flows, and whether it supports the DC API. For same-device flows, the Authorization Server decides whether the VP Token should be returned to the Client for forwarding (using <code>response_mode=fragment</code>), or submitted directly from the Wallet to the Verifier (using response_mode=direct_post). For details on response_mode, see <span>[<a href="#OpenID4VP" class="cite xref">OpenID4VP</a>]</span>.<a href="#section-6-1" class="pilcrow">¶</a></p>
+<p id="section-6-2">This section provides non-normative examples illustrating how this specification supports various deployment models.<a href="#section-6-2" class="pilcrow">¶</a></p>
 <div id="oid4vp-same-device">
 <section id="section-6.1">
         <h3 id="name-openid4vp-same-device-flow">
 <a href="#section-6.1" class="section-number selfRef">6.1. </a><a href="#name-openid4vp-same-device-flow" class="section-name selfRef">OpenID4VP Same-Device Flow</a>
         </h3>
-<p id="section-6.1-1">In a same-device flow with <code>response_mode=fragment</code>, the Wallet returns the <code>vp_token</code> directly to the Client. The Client then includes the <code>vp_token</code> in an Authorization Challenge Request sent to the Authorization Server.<a href="#section-6.1-1" class="pilcrow">¶</a></p>
+<p id="section-6.1-1">In this example, the Client includes a <code>redirect_uri</code> and <code>authentication_method=oid4vp</code> to indicate a same-device flow. The Authorization Server generates an OID4VP Authorization Request containing <code>response_mode=fragment</code>, meaning the Wallet returns the VP Token directly to the Client. The Client then forwards the VP Token via the <code>oid4vp_vp_token</code> parameter in an Authorization Challenge Request sent to the Authorization Server.<a href="#section-6.1-1" class="pilcrow">¶</a></p>
 <p id="section-6.1-2">Example: Initial Authorization Challenge Request (no preferred authentication):<a href="#section-6.1-2" class="pilcrow">¶</a></p>
 <div class="lang-http-message sourcecode" id="section-6.1-3">
 <pre>
@@ -1554,14 +1542,15 @@ Cache-Control: no-store
 {
    "error": "insufficient_authorization",
    "auth_session": "uY29tL2F1dGhlbnRpY",
-   "authentication_method": ['oid4vp'],
-   "oid4vp_authorization_request": "https://wallet.example.org/universal-link?
+   "authentication_method": ["oid4vp"],
+   "oid4vp_authorization_request": "https://Wallet.example.org/universal-link?
    response_type=vp_token
+   &amp;response_mode=fragment
    &amp;client_id=redirect_uri%3Ahttps%3A%2F%2Fclient.example.org%2Fcb
    &amp;redirect_uri=https%3A%2F%2Fclient.example.org%2Fcb
    &amp;dcql_query=...
    &amp;nonce=n-0S6_WzA2Mj
-   &amp;client_metadata=%7B%22vp_formats_supported%22%3A%7B%22dc%2Bsd-jwt%22%3A%7B%22sd-jwt_alg_values%22%3A%20%5B%22ES256%22%5D%2C%22kb-jwt_alg_values%22%3A%20%5B%22ES256%22%5D%7D%7D%7D"
+   &amp;client_metadata=%7B%22vp_formats_supported%22%3A%7B%22dc%2Bsd-jwt%22%3A%7B%22sd-jwt_alg_values%22%3A%5B%22ES256%22%5D%2C%22kb-jwt_alg_values%22%3A%5B%22ES256%22%5D%7D%7D%7D"
 }
 </pre><a href="#section-6.1-9" class="pilcrow">¶</a>
 </div>
@@ -1595,19 +1584,18 @@ Cache-Control: no-store
         <h3 id="name-openid4vp-same-device-flow-">
 <a href="#section-6.2" class="section-number selfRef">6.2. </a><a href="#name-openid4vp-same-device-flow-" class="section-name selfRef">OpenID4VP Same-Device Flow using <code>direct_post</code></a>
         </h3>
-<p id="section-6.2-1">In a same-device flow where the OID4VP Authorization Request <code>response_mode</code> is set to <code>direct_post</code>, the Wallet submits the VP Token directly to the Verifier Response Endpoint as depicted on section 8.2 of <span>[<a href="#OpenID4VP" class="cite xref">OpenID4VP</a>]</span>. This is the recommended flow for our scenario where the Client isn't the Verifier, and it might be a third-party application, and such flow avoids having to send a VP Token via the client when the client isn't its dedicated audience.<a href="#section-6.2-1" class="pilcrow">¶</a></p>
-<p id="section-6.2-2">In a same-device flow with <code>response_mode=direct_post</code>, the Wallet submits the vp_token directly to the Authorization Server provided <code>response_uri</code>, which serves as the Verifier Response Endpoint as described in Section 8.2 of <span>[<a href="#OpenID4VP" class="cite xref">OpenID4VP</a>]</span>. This flow is recommended when the Client is not the Verifier, such as when it is a third-party app, because it avoids sending the <code>vp_token</code> through the Client, which is not the intended audience for the token.<a href="#section-6.2-2" class="pilcrow">¶</a></p>
-<p id="section-6.2-3">In this deployment model, the Authorization Server <span class="bcp14">MUST</span> recognize that the flow is same-device, as the Verifier Response Endpoint is expected to return a <code>redirect_uri</code> containing a <code>response_code</code> only for same-device flows. This <code>response_code</code> enables the Client to resume and complete the authorization flow.<a href="#section-6.2-3" class="pilcrow">¶</a></p>
-<p id="section-6.2-4">The Client then sends a subsequent Authorization Challenge Request including the response_code to finalize the authorization process, as illustrated in the example below:<a href="#section-6.2-4" class="pilcrow">¶</a></p>
-<div class="lang-http-message sourcecode" id="section-6.2-5">
+<p id="section-6.2-1">In this example, the Client includes a <code>redirect_uri</code> to indicate a same-device flow. The Authorization Server issues an OID4VP Authorization Request with <code>response_mode=direct_post</code>, instructing the Wallet to submit the VP Token directly to the Verifier’s Response Endpoint, per section 8.2 of <span>[<a href="#OpenID4VP" class="cite xref">OpenID4VP</a>]</span>. This avoids sending the VP Token through the Client when it is not the intended audience.<a href="#section-6.2-1" class="pilcrow">¶</a></p>
+<p id="section-6.2-2">The Authorization Server <span class="bcp14">MUST</span> inform the Verifier that this is a same-device flow, so the Verifier Response Endpoint knows to return a <code>redirect_uri</code> with a <code>response_code</code> only in this scenario. The Client then uses this <code>response_code</code> to complete the authorization<a href="#section-6.2-2" class="pilcrow">¶</a></p>
+<p id="section-6.2-3">The Client then sends a subsequent Authorization Challenge Request including the <code>oid4vp_response_code</code>:<a href="#section-6.2-3" class="pilcrow">¶</a></p>
+<div class="lang-http-message sourcecode" id="section-6.2-4">
 <pre>
-   POST /authorize-challenge HTTP/1.1
-   Host: server.example.com
-   Content-Type: application/x-www-form-urlencoded
+POST /authorize-challenge HTTP/1.1
+Host: server.example.com
+Content-Type: application/x-www-form-urlencoded
 
-   auth_session="bXlzZXNzaW9uMTIzNDU2"
-   &amp;oid4vp_response_code="091535f699ea575c7937fa5f0f454aee"
-</pre><a href="#section-6.2-5" class="pilcrow">¶</a>
+auth_session=bXlzZXNzaW9uMTIzNDU2
+&amp;oid4vp_response_code=091535f699ea575c7937fa5f0f454aee
+</pre><a href="#section-6.2-4" class="pilcrow">¶</a>
 </div>
 </section>
 </div>
@@ -1616,8 +1604,8 @@ Cache-Control: no-store
         <h3 id="name-openid4vp-over-dc-api">
 <a href="#section-6.3" class="section-number selfRef">6.3. </a><a href="#name-openid4vp-over-dc-api" class="section-name selfRef">OpenID4VP over DC API</a>
         </h3>
-<p id="section-6.3-1">When the Client supports the DC API, it indicates this capability to the Authorization Server in the Authorization Challenge Request via the appropriate parameter (e.g., authentication_method=oid4vp_dc_api). The Authorization Server responds with a Presentation Request formatted for OpenID4VP over DC API processing.<a href="#section-6.3-1" class="pilcrow">¶</a></p>
-<p id="section-6.3-2">In this deployment model, the <code>vp_token</code> is returned always returned to the Client via the DC API. The Client then forwards the received <code>vp_token</code> to the Authorization Server in a subsequent Authorization Challenge Request to complete the authorization process.<a href="#section-6.3-2" class="pilcrow">¶</a></p>
+<p id="section-6.3-1">The Client indicates support for the DC API by including <code>authentication_method=oid4vp_dc_api</code> in the Authorization Challenge Request. The Authorization Server responds with a Presentation Request formatted for OpenID4VP over DC API.<a href="#section-6.3-1" class="pilcrow">¶</a></p>
+<p id="section-6.3-2">In this model, the vp_token is always returned to the Client via the DC API. The Client then forwards the received vp_token to the Authorization Server in a subsequent Authorization Challenge Request to complete the authorization process.<a href="#section-6.3-2" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="oid4vp-with-rar">
@@ -1625,17 +1613,17 @@ Cache-Control: no-store
         <h3 id="name-openid4vp-with-rar">
 <a href="#section-6.4" class="section-number selfRef">6.4. </a><a href="#name-openid4vp-with-rar" class="section-name selfRef">OpenID4VP with RAR</a>
         </h3>
-<p id="section-6.4-1">A useful use case is when the user is already authenticated but needs to provide explicit approval using their wallet.<a href="#section-6.4-1" class="pilcrow">¶</a></p>
-<p id="section-6.4-2">In such a case, the Client <span class="bcp14">MUST</span> include the <code>authorization_details</code> parameter as defined in <span>[<a href="#RFC9396" class="cite xref">RFC9396</a>]</span> within the Authorization Challenge Request. This allows the Authorization Server to convey the specific authorization requirements to the wallet, enabling the user to approve the requested action.<a href="#section-6.4-2" class="pilcrow">¶</a></p>
-<p id="section-6.4-3">An non-normative example Authorization Challenge Request is shown below:<a href="#section-6.4-3" class="pilcrow">¶</a></p>
+<p id="section-6.4-1">A common use case is when the user is already authenticated but must provide explicit approval via their Wallet.<a href="#section-6.4-1" class="pilcrow">¶</a></p>
+<p id="section-6.4-2">In this scenario, the Client <span class="bcp14">MUST</span> include the <code>authorization_details</code> parameter, as defined in <span>[<a href="#RFC9396" class="cite xref">RFC9396</a>]</span>, within the Authorization Challenge Request. This enables the Authorization Server to communicate specific authorization requirements to the Wallet, allowing the user to approve the requested action.<a href="#section-6.4-2" class="pilcrow">¶</a></p>
+<p id="section-6.4-3">A non-normative example Authorization Challenge Request is shown below:<a href="#section-6.4-3" class="pilcrow">¶</a></p>
 <div class="lang-http-message sourcecode" id="section-6.4-4">
 <pre>
 POST /authorize-challenge HTTP/1.1
 Host: server.example.com
 Content-Type: application/x-www-form-urlencoded
 
-auth_session="bXlzZXNzaW9uMTIzNDU2"
-&amp;oid4vp_response_code="091535f699ea575c7937fa5f0f454aee"
+auth_session=bXlzZXNzaW9uMTIzNDU2
+&amp;oid4vp_response_code=091535f699ea575c7937fa5f0f454aee
 &amp;authorization_details='{
   "type": "openid_credential",
   "actions": ["approve"],
@@ -1643,7 +1631,7 @@ auth_session="bXlzZXNzaW9uMTIzNDU2"
 }'
 </pre><a href="#section-6.4-4" class="pilcrow">¶</a>
 </div>
-<p id="section-6.4-5">Upon receiving this request, the Authorization Server <span class="bcp14">MAY</span> use the contents of authorization_details to populate the transaction_data in the OID4VP Authorization Request. This enables the wallet to present the user with the relevant information and prompt for explicit consent for the specified action(s), as defined in <span>[<a href="#OpenID4VP" class="cite xref">OpenID4VP</a>]</span>.<a href="#section-6.4-5" class="pilcrow">¶</a></p>
+<p id="section-6.4-5">Upon receiving this request, the Authorization Server <span class="bcp14">MAY</span> use the contents of authorization_details to populate the transaction_data in the OID4VP Authorization Request. This enables the Wallet to present the user with the relevant information and prompt for explicit consent for the specified action(s), as defined in <span>[<a href="#OpenID4VP" class="cite xref">OpenID4VP</a>]</span>.<a href="#section-6.4-5" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -1653,9 +1641,18 @@ auth_session="bXlzZXNzaW9uMTIzNDU2"
       <h2 id="name-security-considerations">
 <a href="#section-7" class="section-number selfRef">7. </a><a href="#name-security-considerations" class="section-name selfRef">Security Considerations</a>
       </h2>
-<p id="section-7-1">Implementations of this specification <span class="bcp14">SHOULD</span> consider the security and privacy considerations defined by <span>[<a href="#OpenID4VP" class="cite xref">OpenID4VP</a>]</span>, in particular those described in the OpenID for Verifiable Presentations Security Considerations section.<a href="#section-7-1" class="pilcrow">¶</a></p>
-<p id="section-7-2">Implementations <span class="bcp14">SHOULD</span> additionally follow OAuth 2.0 and OpenID Connect security best current practices, including recommendations related to authorization server validation, redirect URI validation, token protection, replay prevention, transaction binding, and secure handling of authorization artifacts.<a href="#section-7-2" class="pilcrow">¶</a></p>
-<p id="section-7-3">In deployment models where Authorization Requests and Presentation Responses transit through a third-party application or intermediary component, additional integrity, confidentiality, and privacy risks may arise due to potential exposure of sensitive request parameters, credential data, or presentation artifacts.<a href="#section-7-3" class="pilcrow">¶</a></p>
+<p id="section-7-1">Implementations <span class="bcp14">SHOULD</span> adhere to the security and privacy considerations specified in all referenced specifications used in this document, including but not limited to OAuth 2.0 Authorization Framework <span>[<a href="#RFC6749" class="cite xref">RFC6749</a>]</span>, OpenID4VP <span>[<a href="#OpenID4VP" class="cite xref">OpenID4VP</a>]</span>, and Rich Authorization Requests (RAR) <span>[<a href="#RFC9396" class="cite xref">RFC9396</a>]</span>.<a href="#section-7-1" class="pilcrow">¶</a></p>
+<p id="section-7-2">In deployments where Authorization Requests and Presentation Responses transit through third-party applications or intermediaries, additional risks to integrity, confidentiality, and privacy arise due to potential exposure of sensitive data.<a href="#section-7-2" class="pilcrow">¶</a></p>
+<p id="section-7-3">To mitigate these risks:<a href="#section-7-3" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-7-4.1">
+          <p id="section-7-4.1.1">Authorization Requests are <span class="bcp14">RECOMMENDED</span> to be signed by the Verifier to ensure authenticity and integrity.<a href="#section-7-4.1.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="section-7-4.2">
+          <p id="section-7-4.2.1">Presentation Responses <span class="bcp14">RECOMMENDED</span> to be signed and encrypted to protect confidentiality and privacy, especially in flows where responses pass through third-party components, such as OpenID4VP over DC API or OpenID4VP with <code>response_mode=fragment</code>.<a href="#section-7-4.2.1" class="pilcrow">¶</a></p>
+</li>
+      </ul>
+<p id="section-7-5">Consistent with FiPA guidance, when third-party Clients are involved, Authorization Servers <span class="bcp14">MUST NOT</span> require Clients to handle sensitive user credential data directly. Instead, the <code>response_mode=direct_post</code> flow <span class="bcp14">SHOULD</span> be used, allowing the Wallet to submit the Verifiable Presentation directly to the Verifier’s Response Endpoint. This minimizes exposure of sensitive data to third-party Clients and reduces associated risks.<a href="#section-7-5" class="pilcrow">¶</a></p>
 <div id="signed-authorization-requests">
 <section id="section-7.1">
         <h3 id="name-signed-authorization-reques">
