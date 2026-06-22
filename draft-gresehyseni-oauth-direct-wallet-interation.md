@@ -424,8 +424,8 @@ In deployments where Authorization Requests and Presentation Responses transit t
 
 To mitigate these risks:
 
-* Authorization Requests are RECOMMENDED to be signed by the Authorization Server (acting as Verifier) to ensure authenticity and integrity.
-* Presentation Responses are RECOMMENDED to be signed and encrypted to protect confidentiality and privacy, especially in flows like OpenID4VP over DC API where responses pass through third-party components.
+* Authorization Requests are RECOMMENDED to be signed by the Verifier to ensure authenticity and integrity.
+* Presentation Responses RECOMMENDED to be signed and encrypted to protect confidentiality and privacy, especially in flows where responses pass through third-party components, such as OpenID4VP over DC API or OpenID4VP with `response_mode=fragment`.
 
 Consistent with FiPA guidance, when third-party Clients are involved, Authorization Servers MUST NOT require Clients to handle sensitive user credential data directly. Instead, the `response_mode=direct_post` flow SHOULD be used, allowing the Wallet to submit the Verifiable Presentation directly to the Verifier’s Response Endpoint. This minimizes exposure of sensitive data to third-party Clients and reduces associated risks.
 
