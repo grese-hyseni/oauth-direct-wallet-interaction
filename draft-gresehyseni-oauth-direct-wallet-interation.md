@@ -3,7 +3,7 @@ title: "OAuth 2.0 direct Wallet interaction"
 abbrev: "OAuth direct Wallet interaction"
 category: info
 
-docname: draft-gresehyseni-oauth-direct-Wallet-interation-latest
+docname: draft-gresehyseni-oauth-direct-wallet-interation-latest
 submissiontype: IETF  # also: "independent", "editorial", "IAB", or "IRTF"
 number:
 date:
