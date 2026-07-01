@@ -510,7 +510,7 @@ IANA has (TBD) registered the following values in the IANA "OAuth Parameters" re
 
 --- back
 
-# Appendix A: Extended OAuth FiPA Authorization Flow with OpenID4VP over DC API {#extended-oauth-fipa-oid4vp-flow}
+# Appendix A: Extended OAuth FiPA Authorization Flow with OpenID4VP (including over DC API) {#extended-oauth-fipa-oid4vp-flow}
 
 This appendix illustrates an extended flow combining OAuth 2.0 for First-Party Applications (FiPA) {{I-D.ietf-oauth-first-party-apps}} with OpenID4VP {{OpenID4VP}} verifiable presentation requests. It distinguishes between the Authorization Server (AS), as defined in {{RFC6749}}, and the Verifier, as defined in {{OpenID4VP}}, treating them as separate logical components. The integration and communication between these components remain outside the scope of this document.
 
