@@ -1,5 +1,5 @@
 ---
-title: "OAuth 2.0 direct Wallet interaction"
+title: "OAuth 2.0 Direct Wallet interaction"
 abbrev: "OAuth direct Wallet interaction"
 category: info
 
@@ -12,16 +12,16 @@ v: 3
 area: "Security"
 workgroup: "Web Authorization Protocol"
 keyword:
- - next generation
- - unicorn
- - sparkling distributed ledger
+ - Wallet
+ - FiPA
+ - OAuth
 venue:
   group: "Web Authorization Protocol"
   type: "Working Group"
   mail: "oauth@ietf.org"
   arch: "https://mailarchive.ietf.org/arch/browse/oauth/"
-  github: "grese-hyseni/oauth-direct-Wallet-interaction"
-  latest: "https://grese-hyseni.github.io/oauth-direct-Wallet-interaction/draft-gresehyseni-oauth-direct-Wallet-interation.html"
+  github: "grese-hyseni/oauth-direct-wallet-interaction"
+  latest: "https://grese-hyseni.github.io/oauth-direct-wallet-interaction/draft-gresehyseni-oauth-direct-wallet-interaction.html"
 
 author:
  -
@@ -72,218 +72,148 @@ informative:
 
 --- abstract
 
-This document defines a protocol for Authorization Servers to request Presentation of Credentials, as part of authentication and authorization processes.
+This document defines a protocol extension that enables OAuth 2.0 Authorization Servers to request verifiable presentations of digital credentials as part of authorization flows.
 
 --- middle
 
 # Introduction
 
-Digital credentials are increasingly used for user authentication and authorization. However, the existing protocol for presenting digital credentials, {{OpenID4VP}}, results in a Verifiable Presentation (VP) Token rather than an Access Token, limiting seamless integration with OAuth authorization flows.
+Digital credentials are increasingly used for authentication and authorization. Existing credential presentation protocols, such as {{OpenID4VP}}, produce presentation artifacts (e.g., VP Tokens) and not OAuth authorization artifacts like Authorization Codes or Access Tokens, limiting seamless integration with OAuth authorization flows.
 
-This document specifies a method to integrate Presentation of Credentials into OAuth authorization flows that enables Authorization Servers to request credential presentations as part of the authentication and authorization process.
+This document specifies a method to integrate Presentation of Credentials into OAuth authorization flows, enabling OAuth 2.0 Authorization Servers to request digital credential presentations as part of the authentication and authorization process.
 
-Specifically, this specification builds on top of FiPA {{I-D.ietf-oauth-first-party-apps}} by introducing:
+Specifically, this specification extends OAuth 2.0 for First-Party Applications (FiPA) {{I-D.ietf-oauth-first-party-apps}} by introducing:
 * New parameters for the FiPA-defined Authorization Challenge Requests (see {{authorization-challenge-request}}).
 * New fields for Authorization Error Responses (see {{authorization-error-response}}).
 
-While building upon the FiPA model, this specification also applies to Third-Party Apps as defined in {{RFC6749}}.
+While building upon the FiPA model, this specification also applies to third-party applications as defined in {{RFC6749}}.
 
-Browser-based Wallet interactions are not the focus of this document, as such flows are expected to function effectively in web environments without extensions to existing authorization models, such as the Authorization Code Flow defined in section 4.1 of {{RFC6749}}.
+This document focuses on native applications. Existing browser-based OAuth authorization flows, such as the Authorization Code Grant defined in Section 4.1 of {{RFC6749}}, generally suffice for Wallet interactions and do not require the extensions defined here. 
+
+This document defines mechanisms that facilitate Wallet interactions across same-device and cross-device scenarios, supporting deployments based on OpenID4VP {{OpenID4VP}} as well as OpenID4VP over Digital Credentials APIs (DC API) {{DC.API}} or equivalent native SDKs.
 
 # Conventions and Definitions
 
 {::boilerplate bcp14-tagged}
 
+## Terminology
+
+This specification uses the following terms:
+
+* Access Token, Authorization Code, Client, and Third-Party Application as defined by [RFC6749].
+
+* Authorization Challenge Request, Authorization Challenge Error Response, Authorization Challenge Response as defined by [I-D.ietf-oauth-first-party-apps].
+
+* Verifier, Wallet, Verifiable Presentation, VP Token, OID4VP Authorization Request (Presentation Request), and OID4VP Authorization Response (Presentation Response) as defined by [OpenID4VP].
+
 # Protocol
 
-This document models the Authorization Server (AS), as defined in {{RFC6749}}, and the Verifier, as defined in {{OpenID4VP}}, as separate logical components. The exact integration or communication between these components is outside the scope of this specification.
+This specification focuses on the OAuth 2.0 authorization flow based on the First-Party Applications (FiPA) model {{I-D.ietf-oauth-first-party-apps}}. The Client and Authorization Server (AS), as defined in {{RFC6749}}, are the primary actors depicted in the flow.
 
-The Client, as defined in {{RFC6749}}, acts as the orchestrator of Wallet interactions, while the Authorization Server remains responsible for authorization decisions and for integrating Verifier capabilities.
+While the Verifier and Wallet play critical roles in credential presentation, their interactions and integration with the AS and Client are outside the scope of this document and are governed by {{OpenID4VP}}.
 
-The mechanisms defined in this document support:
+The Client acts as the orchestrator for Wallet interactions within the OAuth flow, and the Authorization Server remains responsible for authorization decisions and Verifier integration.
 
-* Same-device Wallet interactions;
-* Cross-device Wallet interactions;
-* Deployments using OpenID4VP {{OpenID4VP}}; and
-* Deployments using platform Digital Credentials APIs {{DC.API}} or equivalent native SDKs.
+This abstraction allows the specification to focus on extending FiPA flows to support verifiable credential presentations without detailing Wallet or Verifier protocols. For an extended flow please see {{extended-oauth-fipa-oid4vp-flow}}.
 
-## Same Device Flow {#same-device-flow}
+## High Level Flow {#high-level-flow}
 
-The figure below illustrates a high-level use case where the Authorization Server (AS) requests a Verifiable Presentation from the Wallet as part of the authorization process, and the Wallet is on the same device as the Client app. This flow does not represent OID4VP over DC API; see section {{oid4vp-over-dc-api}}.
+The following figure illustrates a high-level protocol flow in which the Authorization Server (AS) requests a Verifiable Presentation from the Wallet as part of the authorization process. 
 
 ~~~ ascii-art
-+----------+                 +----------+                       +-------------------+                      +------------+
-|  Wallet  |                 |  Client  |                       |   Authorization   |                      |  Verifier  |
-|          |                 |          |                       |      Server       |                      | (Internal/ |
-|          |                 |          |                       |                   |                      |  External) |
-|          |                 |          |  (A) Authorization    |+-----------------+|                      |            |
-|          |                 |          |  Challenge Request    |+-----------------+| (A1) Create          |            |
-|          |                 |          |---------------------->||  Authorization  ||     Presentation     |            |
-|          |                 |          |                       ||   Challenge     ||     Request          |            |
-|          |                 |          |          :            ||    Endpoint     ||--------------------->|            |
-|          |                 |          |                       ||                 ||                      |            |
-|          |                 |          |                       ||                 ||<---------------------|            |
-|          |                 |          |                       ||                 || (A2) Presentation    |            |
-|          |                 |          |<----------------------||                 ||     Request          |            |
-|          |                 |          | (B) Authorization     ||                 ||                      |            |
-|          |                 |          | Error Response        ||                 ||                      |            |
-|          |                 |          | (Presentation Req.)   ||                 ||                      |            |
-|          |<----------------|          |                       ||                 ||                      |            |
-|          |(C) Presentation |          |          :            ||                 ||                      |            |
-|          |    Request      |          |                       ||                 ||                      |            |
-|          | (response_mode) |          |                       ||                 ||                      |            |
-|          |                 |          |                       ||                 ||                      |            |
-|          |---------------->|          | (E) Authorization     ||                 ||                      |            |
-|          |(D) Presentation |          | Challenge Request     ||                 || (E1) Validate        |            |
-|          |    Response     |          | (Presentation Res.)   ||                 ||      Presentation    |            |
-|          | w/ response_code|          |---------------------->||                 ||      Response        |            |
-|          | or vp_token     |          |                       ||                 ||--------------------->|            |
-|          |                 |          |                       ||                 ||                      |            |
-|          |                 |          |                       ||                 ||<---------------------|            |
-|          |                 |          |<----------------------||                 || (E2) Presentation    |            |
-|          |                 |          | (F) Authorization     |+-----------------+|     Data             |            |
-|          |                 |          |     Code Response     |                   |                      |            |
-|          |                 |          |                       |                   |                      |            |
-|          |                 |          | (G) Token             |                   |                      |            |
-|          |                 |          |     Request           |+-----------------+|                      |            |
-|          |                 |          |---------------------->||      Token      ||                      |            |
-|          |                 |          |                       ||     Endpoint    ||                      |            |
-|          |                 |          |<----------------------||                 ||                      |            |
-|          |                 |          | (H) Access Token      |+-----------------+|                      |            |
-|          |                 |          |                       |                   |                      |            |
-+----------+                 +----------+                       +-------------------+                      +------------+
-
+                  +----------+                       +-------------------+
+                  |  Client  |                       |   Authorization  |
+                  |          |                       |      Server      |
+                  |          |  (A) Authorization    |+----------------+|
+                  |          |  Challenge Request    ||  Authorization ||
+                  |          |---------------------->||   Challenge    ||
+                  |          |                       ||    Endpoint    ||
+                  |          |<----------------------||                ||
+                  |          | (B) Authorization     ||                ||
+                  |          |     Error Response    ||                ||
+                  |          |    (w/ auth_methods)  ||                ||
+                  |          |                       ||                ||
+                  |          |                       ||                ||
+                  |          |  (C) Authorization    ||                ||
+                  |          |  Challenge Request    ||                ||
+                  |          |  (w/ auth_method)     ||                ||
+                  |          |---------------------->||                ||
+                  |          |                       || +----------------------------------------+
+                  |          |<----------------------|| | Note: AS creates Presentation Request  |
++--------------------------+ | (D) Authorization     || | with the Verifier                      |
+| Note: Client interacts   | |     Error Response    || +----------------------------------------+
+| with the Wallet          | |     (w/ Pres. Req.    ||                ||
++--------------------------+ |      response_mode)   ||                ||
+                  |          |                       ||                ||
+                  |          | (E) Authorization     ||                ||
+                  |          |     Challenge Request ||                ||
+                  |          |     (w/ Pres. Res.    ||                ||
+                  |          |     or Poll)          ||                ||
+                  |          |---------------------->||                ||
+                  |          |                       || +--------------------------------------------------------+
+                  |          |                       || | Note: AS receives and validates Presentation Response  |
+                  |          |                       || | with the Verifier                                      |
+                  |          |                       || +--------------------------------------------------------+
+                  |          |<----------------------||                ||
+                  |          | (F) Authorization     |+----------------+|
+                  |          |     Code Response     |                  |
+                  |          |                       |                  |
+                  |          | (G) Token             |                  |
+                  |          |     Request           |+----------------+|
+                  |          |---------------------->||     Token      ||
+                  |          |                       ||    Endpoint    ||
+                  |          |<----------------------||                ||
+                  |          | (H) Access Token      |+----------------+|
+                  |          |                       |                  |
+                  +----------+                       +-------------------+
 ~~~
 
-(A) The Client sends an Authorization Challenge Request to the Authorization Server’s Authorization Challenge Endpoint. The Client MUST provide `authentication_method` and MAY provide `redirect_uri` to request an OID4VP Authorization Request for a same-device flow. These parameters may be included in the initial or a subsequent Authorization Challenge Request. See Section {{authorization-challenge-request}} for details.
+(A) The Client sends an Authorization Challenge Request to the Authorization Server’s Authorization Challenge Endpoint. See Section {{authorization-challenge-request}} for details.
 
-(A1–A2) The Authorization Server (AS) creates the Presentation Request with the Verifier component.
+(B) The Authorization Server responds with an Authorization Error Response indicating the supported challenge methods (`challenge_methods`) to the Client. See {{authorization-error-response}} for details.
 
-(B) Once the Authorization Server determines the authentication method and has the necessary data, it responds with an Authorization Error Response containing the OID4VP Authorization Request (Presentation Request) suitable for a same-device flow. See Section {{authorization-error-response}} for details.
+(C) The Client sends a subsequent Authorization Challenge Request to the Authorization Server’s Authorization Challenge Endpoint where it MUST specify the challenge method (`challenge_method`) and MAY provide the Client’s redirect URI (`oid4vp_redirect_uri`) to request an OID4VP Authorization Request.
 
-(C) The Client invokes the Wallet on the user’s device with the OID4VP Authorization Request, as defined in {{OpenID4VP}}, where the user is prompted to authenticate, authorize, and consent to share credentials.
+(D) The Authorization Server determines the challenge method and responds with an Authorization Error Response containing the OID4VP Authorization Request (`oid4vp_request`), a response mode (`response_mode`) and `auth_session`. See {{authorization-error-response}} for details.
 
-(D) The Client receives the Presentation Response from the Wallet, which MAY include a VP Token or other presentation artifacts depending on the Presentation Request used in (C). If a `oid4vp_response_code` is present, it indicates that Wallet submitted the VP Token directly to the Verifier’s Response Endpoint (see {{oid4vp-same-device-direct-post}}).
+(E) Following the Wallet interaction, the Client submits a subsequent Authorization Challenge Request to the Authorization Server’s Authorization Challenge Endpoint to request the Authorization Code. If the Client retrieved the OID4VP Authorization Response directly from the Wallet, it includes it; if not, it polls using the `auth_session`.
 
-(E) The Client sends a subsequent Authorization Challenge Request to the Authorization Server, including the Presentation Response received from the Wallet in (D).
-
-(E1–E2) The Authorization Server (AS) validates the Presentation Response with the Verifier component.
-
-(F) Upon successful validation in (E1-E2) and authorization checks, the Authorization Server issues an Authorization Code.
+(F) After the Authorization Server validates the OID4VP Authorization Response with the Verifier and performs authorization checks, it responds with an Authorization Challenge Response including the Authorization Code.
 
 (G) The Client sends a Token Request to the Authorization Server’s Token Endpoint to exchange the Authorization Code.
 
 (H) The Authorization Server validates the Token Request and responds with an Access Token and optionally additional OAuth 2.0 tokens.
 
-
-## Cross Device Flow {#cross-device-flow}
-
-The figure below illustrates a high-level use case where the Authorization Server (AS) requests a Verifiable Presentation from the Wallet as part of the authorization process, and the Wallet is on a different device from the Client app. This flow does not represent OID4VP over DC API; see section {{oid4vp-over-dc-api}}.
-
-~~~ ascii-art
-+----------+                   +----------+                        +-------------------+                    +------------+
-|  Wallet  |                   |  Client  |                       |   Authorization   |                     |  Verifier  |
-|          |                   |          |                       |      Server       |                     |            |
-|          |                   |          | (A) Authorization     |+-----------------+|                     |            |
-|          |                   |          |     Challenge Request |+-----------------+| (A1) Create         |            |
-|          |                   |          |---------------------->||  Authorization  ||     Presentation    |            |
-|          |                   |          |                       ||   Challenge     ||     Request         |            |
-|          |                   |          |          :            ||    Endpoint     ||-------------------->|            |
-|          |                   |          |                       ||                 ||                     |            |
-|          |                   |          |                       ||                 ||<--------------------|            |
-|          |                   |          |                       ||                 || (A2) Presentation   |            |
-|          |                   |          |<----------------------||                 ||     Request         |            |
-|          |                   |          | (B) Authorization     ||                 ||                     |            |
-|          |                   |          |     Error Respons     ||                 ||                     |            |
-|          |                   |          |    (Presentation Req.)||                 ||                     |            |
-|          |<------------------|          |                       ||                 ||                     |            |
-|          |(C) Presentation   |          |          :            ||                 ||                     |            |
-|          |    Request        |          |                       ||                 ||                     |            |
-|          |                   |          |                       ||                 ||                     |            |
-|          |(D) Presentation   |          |                       ||                 ||                     |            |
-|          |    Response       |          |                       ||                 ||                     |            |
-|          |    w/ VP Token    |          |                       ||                 ||                     |+----------+|
-|          |----------------------------------------------------------------------------------------------->|| Response ||
-|          |                   |          | (E) Get               ||                 ||                     || URI      ||
-|          |                   |          |     Authorization     ||                 ||                     |+----------+|
-|          |                   |          |     Response          ||                 ||(E1) Get Presentation|            |
-|          |                   |          |---------------------->||                 ||     Data            |            |
-|          |                   |          |                       ||                 ||-------------------->|            |
-|          |                   |          |                       ||                 ||                     |            |
-|          |                   |          |                       ||                 ||<--------------------|            |
-|          |                   |          |<----------------------||                 ||(E2) Presentation    |            |
-|          |                   |          | (F) Authorization     |+-----------------+|     Data            |            |
-|          |                   |          |     Code Response     |                   |                     |            |
-|          |                   |          |                       |                   |                     |            |
-|          |                   |          | (G) Token             |                   |                     |            |
-|          |                   |          |     Request           |+-----------------+|                     |            |
-|          |                   |          |---------------------->||      Token      ||                     |            |
-|          |                   |          |                       ||     Endpoint    ||                     |            |
-|          |                   |          |<----------------------||                 ||                     |            |
-|          |                   |          | (H) Access Token      |+-----------------+|                     |            |
-|          |                   |          |                       |                   |                     |            |
-+----------+                   +----------+                       +-------------------+                     +------------+
-~~~
-
-(A) The Client sends an Authorization Challenge Request to the Authorization Server’s Authorization Challenge Endpoint. The Client MUST provide `authentication_method` and omit the `redirect_uri` to request an OID4VP Authorization Request for a cross-device flow. These parameters may be included in the initial or a subsequent Authorization Challenge Request. See Section {{authorization-challenge-request}} for details.
-
-(A1-A2) See in {{same-device-flow}}.
-
-(B) See in {{same-device-flow}}.
-
-(C) The Client generates a QR Code containing the OID4VP Authorization Request for the user to invoke the Wallet on another device.
-
-(D) The Wallet sends the Presentation Response containing the VP Token directly to the Verifier's Response URI, defined in {{OpenID4VP}}.
-
-(E) The Client polls for the Authorization Challenge Response.
-
-(E1-E2) See in {{same-device-flow}}.
-
-(F) See in {{same-device-flow}}.
-
-(G) See in {{same-device-flow}}.
-
-(H) See in {{same-device-flow}}.
-
 # Authorization Challenge Request {#authorization-challenge-request}
 
-This document extends the FiPA {{I-D.ietf-oauth-first-party-apps}} Authorization Challenge Request by adding the following parameters:
+This document extends the FiPA {{I-D.ietf-oauth-first-party-apps}} Authorization Challenge Request by introducing the following parameters:
 
-"authentication_method":
-:    OPTIONAL.  A string indicating the authentication method requested by the Client, e.g., a user-preselected method on the client side. The Client MUST include this to request an OID4VP Authorization Request from the Authorization Server. This document defines the value `oid4vp` and `oid4vp_dc_api`. Parties using other values must mutually agree on their meanings, which may be context-specific.
-
-"oid4vp_vp_token":
-:    OPTIONAL.  The VP Token value, as defined in section 8 of {{OpenID4VP}}, returned from the Wallet as part of the Presentation Response (e.g., in DC API or `response_mode=fragment` flows).
-
-"oid4vp_response_code":
-:    OPTIONAL.  The `response_code` value, as defined in section 13.3 of {{OpenID4VP}}, returned from the Wallet as part of the Presentation Response (for non-DC API, same-device, response_mode=direct_post flows).
+"challenge_method":
+:    OPTIONAL.  A string indicating the challenge method requested by the Client, e.g., a user selected method on the client side. This document defines the value `oid4vp` and `oid4vp_dc_api`. Parties using other values must mutually agree on their meanings, which may be context-specific.
 
 "oid4vp_redirect_uri":
-:    OPTIONAL.  This parameter represents the Client URI to which the Wallet redirects the user in same-device flows and MUST be included in same-device flows alongside `authentication_method`. If the Authorization Server receives `authentication_method` without `oid4vp_redirect_uri`, it SHOULD treat the request as a cross-device flow. This parameter SHOULD NOT be sent when `authentication_method=oid4vp_dc_api`; if sent, the Authorization Server MUST ignore it.
+:    OPTIONAL.  The Client URI to which the Wallet redirects the user in same-device flows. This parameter MUST be included in same-device flows alongside`challenge_method`. If the Authorization Server receives `challenge_method` without `oid4vp_redirect_uri`, it SHOULD treat the request as a cross-device flow. This parameter SHOULD NOT be sent when `challenge_method=oid4vp_dc_api`; if sent, the Authorization Server MUST ignore it.
 
-Additionally, the Client MAY add the following parameters to the query component of the Authorization Challenge Endpoint URI using the "application/x-www-form-urlencoded" format:
+"oid4vp_response_code":
+:    OPTIONAL.  The value of `response_code`, as defined in section 13.3 of {{OpenID4VP}}, returned from the Wallet as part of the Presentation Response. The Client SHOULD expect the `response_code` only for same-device flows with `oid4vp_response_mode=direct_post`.
 
-"authorization_details":
-:    OPTIONAL. A JSON object as defined in {{RFC9396}}, representing OAuth authorization details. See {{oid4vp-with-rar}} for usage details.
+"oid4vp_vp_token":
+:    OPTIONAL.  The VP Token value, as defined in section 8 of {{OpenID4VP}}, returned from the Wallet as part of the Presentation Response (e.g., in DC API or same-device redirect flows).
 
-
-## Initial Authorization Challenge Request {#init-authorization-challenge-request}
-The initial Authorization Challenge Request includes only the information available at that time. For example, if the Client has no prior knowledge of preferred user login methods, it can send an Authorization Challenge Request without specifying `authentication_method` or any related parameters. See {{example-flows}}. Conversely, if the Client has such information beforehand, it can include it in the initial Authorization Challenge Request.
-
-## Subsequest uthorization Challenge Requests {#subs-authorization-challenge-request}
-The Authorization Server MAY respond with an Authorization Error Response containing `oid4vp` or/and `oid4vp_dc_api` as one of the supported authentication methods (`authentication_methods_supported`). In such cases, the Client SHOULD provide additional parameters such as `authentication_method` and/or `redirect_uri` in a subsequent Authorization Challenge Request. See {{example-flows}}
+## Subsequent Authorization Challenge Requests {#subs-authorization-challenge-request}
+If the Client has not specified a `challenge_method`, or if the provided method is not supported by the Authorization Server, the Authorization Server MAY respond with an Authorization Error Response containing supported challenge methods (`challenge_methods`). In such cases, the Client SHOULD include `challenge_method` and related parameters in a subsequent Authorization Challenge Request. See {{example-flows}}.
 
 # Authorization Error Response {#authorization-error-response}
 This document extends FiPA's {{I-D.ietf-oauth-first-party-apps}} Authorization Error Response by adding the following attributes, used when the error code "insufficient_authorization" is returned:
 
-"authentication_methods_supported":
-:    OPTIONAL. A JSON array of strings identifying the authentication methods supported by the Authorization Server. This document defines the value `oid4vp` and `oid4vp_dc_api` for OID4VP and OID4VP over DC API respectively. Parties using other values must mutually agree on their meanings, which may be context-specific.
-
-"authentication_method":
-:    OPTIONAL.  A string indicating the authentication method requested by the Authorization Server. The value MUST be one of those listed in `authentication_methods_supported`. This parameter MUST be present when the Authorization Server lacks sufficient data to return the actual `oid4vp_authorization_request`.
+"challenge_methods":
+:    OPTIONAL. A JSON array of strings identifying the challenge methods supported by the Authorization Server. This document defines the value `oid4vp` and `oid4vp_dc_api` for OID4VP and OID4VP over DC API, respectively. Parties using other values MUST mutually agree on their meanings, which may be context-specific. 
 
 "oid4vp_authorization_request":
 :   OPTIONAL. An OpenID4VP {{OpenID4VP}} request URL.
+
+"oid4vp_response_mode":
+:   OPTIONAL. A string indicating the expected response format or mechanism. This document uses values from `response_mode` defined in {{OpenID4VP}}. This, together with the same/cross-device flow information, tells the client whether it should expect a direct response from the Wallet, or poll the Authorization Server for the result.
 
 "status":
 :    OPTIONAL.  Indicates the status of the ongoing operation. This document uses the value "pending".
@@ -294,9 +224,9 @@ The Client MAY send an Authorization Challenge Request indicating whether it sup
 
 This section provides non-normative examples illustrating how this specification supports various deployment models.
 
-## OpenID4VP Same-Device Flow {#oid4vp-same-device}
+## OpenID4VP Same-Device Flow with `response_mode=fragment` {#oid4vp-same-device}
 
-In this example, the Client includes a `redirect_uri` and `authentication_method=oid4vp` to indicate a same-device flow. The Authorization Server generates an OID4VP Authorization Request containing `response_mode=fragment`, meaning the Wallet returns the VP Token directly to the Client. The Client then forwards the VP Token via the `oid4vp_vp_token` parameter in an Authorization Challenge Request sent to the Authorization Server.
+Since this is a non-DC API flow, the Client should prompt the user to confirm whether the Wallet is on the same device or another device. The Authorization Server generates an OID4VP Authorization Request with `response_mode=fragment`, indicating that the Wallet returns the VP Token directly to the Client. The Client then forwards the VP Token via the `oid4vp_vp_token` parameter in a subsequent Authorization Challenge Request to the Authorization Server.
 
 Example: Initial Authorization Challenge Request (no preferred authentication):
 
@@ -309,7 +239,7 @@ Example: Initial Authorization Challenge Request (no preferred authentication):
    &client_id=bb16c14c73415
 ~~~
 
-Example: Authorization Error Response indicating supported authentication methods
+Example: Authorization Error Response indicating supported challenge methods
 
 ~~~ http-message
 HTTP/1.1 401 Unauthorized
@@ -319,7 +249,7 @@ Cache-Control: no-store
 {
    "error": "insufficient_authorization",
    "auth_session": "uY29tL2F1dGhlbnRpY",
-   "authentication_methods_supported": ['oid4vp','oid4vp_dc_api']
+   "challenge_methods": ["oid4vp","oid4vp_dc_api"]
 }
 ~~~
 
@@ -331,8 +261,8 @@ Host: server.example.com
 Content-Type: application/x-www-form-urlencoded
 
 auth_session=uY29tL2F1dGhlbnRpY
-&authentication_method=oid4vp
-&redirect_uri=https%3A%2F%2Fclient.example.org%2Fcb
+&challenge_method=oid4vp
+&oid4vp_redirect_uri=https%3A%2F%2Fclient.example.org%2Fcb
 ~~~
 
 Example: Authorization Error Response containing OID4VP Authorization Request
@@ -346,7 +276,8 @@ Cache-Control: no-store
 {
    "error": "insufficient_authorization",
    "auth_session": "uY29tL2F1dGhlbnRpY",
-   "authentication_method": ["oid4vp"],
+   "challenge_method": ["oid4vp"],
+   "response_mode": "fragment",
    "oid4vp_authorization_request": "https://Wallet.example.org/universal-link?
    response_type=vp_token
    &response_mode=fragment
@@ -366,7 +297,7 @@ Host: server.example.com
 Content-Type: application/x-www-form-urlencoded
 
 auth_session=uY29tL2F1dGhlbnRpY
-&vp_token=eyJhbGciOiJFUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ1c2VyMTIzIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNjI3MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c
+&oid4vp_vp_token=eyJhbGciOiJFUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ1c2VyMTIzIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNjI3MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c
 ~~~
 
 Example: Successful Authorization Challenge Response returning the authorization code
@@ -383,7 +314,7 @@ Cache-Control: no-store
 
 ## OpenID4VP Cross-Device Flow using `direct_post` {#oid4vp-cross-device-direct-post}
 
-In this example, the Client ommits a `redirect_uri` to indicate a same-device flow. The Authorization Server issues an OID4VP Authorization Request with `response_mode=direct_post`, instructing the Wallet to submit the VP Token directly to the Verifier’s Response Endpoint, per section 8.2 of {{OpenID4VP}}.
+In this example, the Client omits `oid4vp_redirect_uri` to indicate a cross-device flow. The Authorization Server issues an OID4VP Authorization Request with `response_mode=direct_post`, instructing the Wallet to submit the VP Token directly to the Verifier’s Response Endpoint, per section 8.2 of {{OpenID4VP}}.
 
 The Authorization Server MUST inform the Verifier that this is a cross-device flow, so the Verifier's Response URI does not return a `redirect_uri` with a `response_code` to the Wallet.
 
@@ -413,9 +344,9 @@ Cache-Control: no-store
 
 ## OpenID4VP Same-Device Flow using `direct_post` {#oid4vp-same-device-direct-post}
 
-In this example, the Client includes a `redirect_uri` to indicate a same-device flow. Similar to {{oid4vp-cross-device-direct-post}}, the Authorization Server issues an OID4VP Authorization Request with `response_mode=direct_post`. This avoids sending the VP Token through the Client when it is not the intended audience.
+In this example, the Client includes `oid4vp_redirect_uri` to indicate a same-device flow. Similar to {{oid4vp-cross-device-direct-post}}, the Authorization Server issues an OID4VP Authorization Request with `response_mode=direct_post`. This avoids sending the VP Token through the Client when it is not the intended audience.
 
-The Authorization Server MUST inform the Verifier that this is a same-device flow, so the Verifier's Response URI knows to return a `redirect_uri` with a `response_code` to the wallet.
+The Authorization Server MUST inform the Verifier that this is a same-device flow, so the Verifier's Response URI knows to return a `redirect_uri` with a `response_code` to the Wallet as part of the OID4VP flow.
 
 The Client then sends a subsequent Authorization Challenge Request including the `oid4vp_response_code`:
 
@@ -430,9 +361,44 @@ auth_session=bXlzZXNzaW9uMTIzNDU2
 
 ## OpenID4VP over DC API {#oid4vp-over-dc-api}
 
-The Client indicates support for the DC API by including `authentication_method=oid4vp_dc_api` in the Authorization Challenge Request. The Authorization Server responds with a Presentation Request formatted for OpenID4VP over DC API.
+The Client indicates support for the DC API by including `challenge_method=oid4vp_dc_api` in the Authorization Challenge Request. The Authorization Server responds with a Presentation Request formatted for OpenID4VP over DC API.
 
-In this model, the vp_token is always returned to the Client via the DC API. The Client then forwards the received vp_token to the Authorization Server in a subsequent Authorization Challenge Request to complete the authorization process.
+
+Example: Subsequent Authorization Challenge Request requesting OID4VP Authorization Request over DC API
+
+~~~ http-message
+POST /authorize-challenge HTTP/1.1
+Host: server.example.com
+Content-Type: application/x-www-form-urlencoded
+
+auth_session=uY29tL2F1dGhlbnRpY
+&challenge_method=oid4vp_dc_api
+~~~
+
+Example: Authorization Error Response containing OID4VP Authorization Request over DC API
+
+~~~ http-message
+HTTP/1.1 401 Unauthorized
+Content-Type: application/json
+Cache-Control: no-store
+
+{
+   "error": "insufficient_authorization",
+   "auth_session": "uY29tL2F1dGhlbnRpY",
+   "challenge_method": ["oid4vp"],
+   "response_mode": "dc_api",
+   "oid4vp_authorization_request": "https://Wallet.example.org/universal-link?
+   response_type=dc_api
+   &response_mode=fragment
+   &client_id=redirect_uri%3Ahttps%3A%2F%2Fclient.example.org%2Fcb
+   &redirect_uri=https%3A%2F%2Fclient.example.org%2Fcb
+   &dcql_query=...
+   &nonce=n-0S6_WzA2Mj
+   &client_metadata=%7B%22vp_formats_supported%22%3A%7B%22dc%2Bsd-jwt%22%3A%7B%22sd-jwt_alg_values%22%3A%5B%22ES256%22%5D%2C%22kb-jwt_alg_values%22%3A%5B%22ES256%22%5D%7D%7D%7D"
+}
+~~~
+
+In this model, the VP Token is always returned to the Client via the DC API. The Client then forwards the received `oid4vp_vp_token` to the Authorization Server in a subsequent Authorization Challenge Request, similar to {{oid4vp-same-device}}, to complete the authorization process.
 
 ## OpenID4VP with RAR {#oid4vp-with-rar}
 
@@ -456,11 +422,11 @@ auth_session=bXlzZXNzaW9uMTIzNDU2
 }'
 ~~~
 
-Upon receiving this request, the Authorization Server MAY use the contents of authorization_details to populate the transaction_data in the OID4VP Authorization Request. This enables the Wallet to present the user with the relevant information and prompt for explicit consent for the specified action(s), as defined in {{OpenID4VP}}.
+Upon receiving this request, the Authorization Server MAY use the contents of `authorization_details` to populate the `transaction_data` in the OID4VP Authorization Request. This enables the Wallet to present the user with the relevant information and prompt for explicit consent for the specified action(s), as defined in {{OpenID4VP}}.
 
 # Security Considerations
 
-Implementations SHOULD adhere to the security and privacy considerations specified in all referenced specifications used in this document, including but not limited to OAuth 2.0 Authorization Framework {{RFC6749}}, OpenID4VP {{OpenID4VP}}, and Rich Authorization Requests (RAR) {{RFC9396}}.
+Implementations SHOULD comply with the security and privacy considerations outlined in all referenced specifications relevant to this document, including but not limited to OAuth 2.0 Authorization Framework {{RFC6749}}, OpenID4VP {{OpenID4VP}}, and Rich Authorization Requests (RAR) {{RFC9396}}.
 
 In deployments where Authorization Requests and Presentation Responses transit through third-party applications or intermediaries, additional risks to integrity, confidentiality, and privacy arise due to potential exposure of sensitive data.
 
@@ -488,7 +454,7 @@ OAuth Parameters Registration
 
 IANA has (TBD) registered the following values in the IANA "OAuth Parameters" registry of [IANA.oauth-parameters] established by [RFC6749].
 
-   *Parameter name*: authentication_method
+   *Parameter name*: challenge_method
 
    *Parameter usage location*: authorization request
 
@@ -497,7 +463,7 @@ IANA has (TBD) registered the following values in the IANA "OAuth Parameters" re
    *Specification Document*: Section {#authorization-challenge-request} of this specification
 
 
-   *Parameter name*: vp_token
+   *Parameter name*: oid4vp_vp_token
 
    *Parameter usage location*: authorization request
 
@@ -506,7 +472,7 @@ IANA has (TBD) registered the following values in the IANA "OAuth Parameters" re
    *Specification Document*: Section {#authorization-challenge-request} of this specification
 
 
-   *Parameter name*: vp_response_code
+   *Parameter name*: oid4vp_response_code
 
    *Parameter usage location*: authorization request
 
@@ -524,7 +490,7 @@ IANA has (TBD) registered the following values in the IANA "OAuth Parameters" re
    *Specification Document*: Section {#authorization-challenge-request} of this specification
 
 
-   *Parameter name*: authentication_methods_supported
+   *Parameter name*: challenge_methods
 
    *Parameter usage location*: authorization response
 
@@ -533,7 +499,7 @@ IANA has (TBD) registered the following values in the IANA "OAuth Parameters" re
    *Specification Document*: Section {#authorization-challenge-request} of this specification
 
 
-   *Parameter name*: authentication_method
+   *Parameter name*: challenge_method
 
    *Parameter usage location*: authorization request, authorization response
 
@@ -543,6 +509,100 @@ IANA has (TBD) registered the following values in the IANA "OAuth Parameters" re
 
 
 --- back
+
+# Appendix A: Extended OAuth FiPA Authorization Flow with OpenID4VP over DC API {#extended-oauth-fipa-oid4vp-flow}
+
+This appendix illustrates an extended flow combining OAuth 2.0 for First-Party Applications (FiPA) {{I-D.ietf-oauth-first-party-apps}} with OpenID4VP {{OpenID4VP}} verifiable presentation requests. It distinguishes between the Authorization Server (AS), as defined in {{RFC6749}}, and the Verifier, as defined in {{OpenID4VP}}, treating them as separate logical components. The integration and communication between these components remain outside the scope of this document.
+
+The flow includes optional steps that differ for OID4VP same-device, cross-device, or OID4VP over DC API flows.
+
+~~~ ascii-art
++----------+                 +----------+                       +-------------------+                      +------------+
+|  Wallet  |                 |  Client  |                       |   Authorization   |                      |  Verifier  |
+|          |                 |          |                       |      Server       |                      | (Internal/ |
+|          |                 |          |                       |                   |                      |  External) |
+|          |                 |          |  (A) Authorization    |+-----------------+|                      |            |
+|          |                 |          |  Challenge Request    |+-----------------+| (A1) Create          |            |
+|          |                 |          |---------------------->||  Authorization  ||     Presentation     |            |
+|          |                 |          |                       ||   Challenge     ||     Request          |            |
+|          |                 |          |          .            ||    Endpoint     ||--------------------->|            |
+|          |                 |          |          .            ||                 ||                      |            |
+|          |                 |          |          .            ||                 ||<---------------------|            |
+|          |                 |          |                       ||                 || (A2) Presentation    |            |
+|          |                 |          |<----------------------||                 ||     Request          |            |
+|          |                 |          | (B) Authorization     ||                 ||                      |            |
+|          |                 |          | Error Response        ||                 ||                      |            |
+|          |                 |          | (Presentation Req.)   ||                 ||                      |            |
+|          |<----------------|          |                       ||                 ||                      |            |
+|          |(C) Presentation |          |          .            ||                 ||                      |            |
+|          |    Request      |          |          .            ||                 ||                      |            |
+|          | (response_mode) |          |          .            ||                 ||                      |            |
+|          |                 |          |                       ||                 ||                      |            |
+|        +--OPT: SD / CD + 'direct_post'---------------------------------------------------------------------+          |
+|        | |(C1) VP Token    |          |                       ||                 ||                      | |          |
+|        | |---------------------------------------------------------------------------------------------->| |          |
+|        | |                 |          |                       ||                 ||                      | |          |
+|        +---------------------------------------------------------------------------------------------------+          |
+|          |                 |          |                       ||                 ||                      |            |
+|        +--OPT: SD + 'direct_post'---------------------------------------------------------------------------------------+
+|        | |(C2) redirect_uri + response_code                   ||                 ||                      |+----------+| |
+|        | |<----------------------------------------------------------------------------------------------|| Response || |
+|        | |                 |          |                       ||                 ||                      || URI      || |
+|        | |                 |          |                       ||                 ||                      |+----------+| |
+|        +----------------------------------------------------------------------------------------------------------------+
+|          |                 |          |                       ||                 ||                      |            |
+|        +--OPT: SD / DC API---+        |                       ||                 ||                      |            |
+|        | |---------------->| |        |                       ||                 ||                      |            |
+|        | |(D) Presentation | |        |                       ||                 ||                      |            |
+|        | |    Response w/  | |        |                       ||                 ||                      |            |
+|        | |    response code| |        |                       ||                 ||                      |            |
+|        | |    or VP Token  | |        |                       ||                 ||                      |            |
+|        | |                 | |        |                       ||                 ||                      |            |
+|        +---------------------+        |                       ||                 ||                      |            |
+|          |                 |          | (E) Authorization     ||                 ||                      |            |
+|          |                 |          | Challenge Request     ||                 || (E1) Validate        |            |
+|          |                 |          | (opt. w/ Pres. Res)   ||                 ||      Presentation    |            |
+|          |                 |          |---------------------->||                 ||      Response        |            |
+|          |                 |          |                       ||                 ||--------------------->|            |
+|          |                 |          |                       ||                 ||                      |            |
+|          |                 |          |                       ||                 ||<---------------------|            |
+|          |                 |          |<----------------------||                 || (E2) Presentation    |            |
+|          |                 |          | (F) Authorization     |+-----------------+|     Data             |            |
+|          |                 |          |     Code Response     |                   |                      |            |
+|          |                 |          |                       |                   |                      |            |
+|          |                 |          | (G) Token             |                   |                      |            |
+|          |                 |          |     Request           |+-----------------+|                      |            |
+|          |                 |          |---------------------->||      Token      ||                      |            |
+|          |                 |          |                       ||     Endpoint    ||                      |            |
+|          |                 |          |<----------------------||                 ||                      |            |
+|          |                 |          | (H) Access Token      |+-----------------+|                      |            |
+|          |                 |          |                       |                   |                      |            |
++----------+                 +----------+                       +-------------------+   
+~~~
+
+(A) The Client sends an Authorization Challenge Request to the Authorization Server’s Authorization Challenge Endpoint specifying the challenge method (`challenge_method`) to request an OID4VP Authorization Request.
+
+(A1–A2) The Authorization Server determines the challenge method and generates an OID4VP Authorization Request (Presentation Request) with `response_mode` in coordination with the Verifier component.
+
+(B) The Authorization Server and responds with the Authorization Error Response containing the OID4VP Authorization Request from (A1-A2), the respective `response_mode` and `auth_session`. 
+
+(C) The Client invokes the Wallet via a link, QR Code, or DC API, depending on the OID4VP Authorization Request received in (B). 
+
+(C1) Optionally, for `response_mode:direct_post`, the Wallet submits the VP Token directly to the Verifier’s Response Endpoint.
+
+(C2) Optionally, for `response_mode:direct_post` in same-device flows, the Verifier’s Endpoint responds to the Wallet with `redirect_uri` and `response_code`.
+
+(D) Optionally, for DC API flows or same-device flows, the Client receives the OID4VP Authorization Response (Presentation Response) from the Wallet, which MAY include a VP Token or presentation artifacts from (C2). Otherwise, the Client SHOULD skip this step and continue with (E).
+
+(E) The Client submits a subsequent Authorization Challenge Request to the Authorization Server’s Authorization Challenge Endpoint to request the Authorization Code. If the Client retrieved the OID4VP Authorization Response in (D), it includes it; if not, it polls using the `auth_session`.
+
+(E1–E2) The Authorization Server validates the Presentation Response with the Verifier component.
+
+(F) After a successful validation in (E1-E2) and performing authorization checks, the Authorization Server responds with an Authorization Challenge Response including the Authorization Code.
+
+(G) The Client sends a Token Request to the Authorization Server’s Token Endpoint to exchange the Authorization Code.
+
+(H) The Authorization Server validates the Token Request and responds with an Access Token and optionally additional OAuth 2.0 tokens.
 
 # Acknowledgments
 {:numbered="false"}
