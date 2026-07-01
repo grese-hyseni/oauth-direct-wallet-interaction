@@ -90,7 +90,7 @@ Table of Contents
      9.1.  Normative References
      9.2.  Informative References
    Appendix A.  Appendix A: Extended OAuth FiPA Authorization Flow
-           with OpenID4VP over DC API
+           with OpenID4VP (including over DC API)
    Acknowledgments
    Author's Address
 
@@ -740,7 +740,7 @@ Table of Contents
               <https://w3c-fedid.github.io/digital-credentials/>.
 
 Appendix A.  Appendix A: Extended OAuth FiPA Authorization Flow with
-             OpenID4VP over DC API
+             OpenID4VP (including over DC API)
 
    This appendix illustrates an extended flow combining OAuth 2.0 for
    First-Party Applications (FiPA) [I-D.ietf-oauth-first-party-apps]
