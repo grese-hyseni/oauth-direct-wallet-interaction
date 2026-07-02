@@ -532,6 +532,15 @@ IANA has (TBD) registered the following values in the IANA "OAuth Parameters" re
 
    *Specification Document*: Section {#authorization-challenge-request} of this specification
 
+   
+   *Parameter name*: wallet_device_context
+
+   *Parameter usage location*: authorization request
+
+   *Change Controller*: IETF
+
+   *Specification Document*: Section {#authorization-challenge-request} of this specification
+
 --- back
 
 # Appendix A: Extended OAuth FiPA Authorization Flow with OpenID4VP (including over DC API) {#extended-oauth-fipa-oid4vp-flow}
