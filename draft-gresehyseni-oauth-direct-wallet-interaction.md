@@ -532,7 +532,7 @@ IANA has (TBD) registered the following values in the IANA "OAuth Parameters" re
 
    *Specification Document*: Section {#authorization-challenge-request} of this specification
 
-   
+
    *Parameter name*: wallet_device_context
 
    *Parameter usage location*: authorization request
