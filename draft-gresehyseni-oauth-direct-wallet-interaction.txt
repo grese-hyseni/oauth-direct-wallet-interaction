@@ -4,8 +4,8 @@
 
 Web Authorization Protocol                                     G. Hyseni
 Internet-Draft                             Raiffeisen Bank International
-Intended status: Informational                               2 July 2026
-Expires: 3 January 2027
+Intended status: Informational                               3 July 2026
+Expires: 4 January 2027
 
 
                   OAuth 2.0 Direct Wallet Interaction
@@ -50,7 +50,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 3 January 2027.
+   This Internet-Draft will expire on 4 January 2027.
 
 Copyright Notice
 
@@ -516,9 +516,9 @@ Table of Contents
 6.2.  OpenID4VP Cross-Device Flow using direct_post
 
    In this example, the Client omits oid4vp_redirect_uri and
-   wallet_context, indicating a cross-device flow (e.g., based on pre-
-   stored user preferences).  The Authorization Server issues an OID4VP
-   Authorization Request with response_mode=direct_post.
+   wallet_device_context, indicating a cross-device flow (e.g., based on
+   pre-stored user preferences).  The Authorization Server issues an
+   OID4VP Authorization Request with response_mode=direct_post.
 
    The Client polls for the presentation result by sending subsequent
    Authorization Challenge Requests including only the auth_session
@@ -726,6 +726,15 @@ Table of Contents
    of this specification
 
    _Parameter name_: oid4vp_vp_token
+
+   _Parameter usage location_: authorization request
+
+   _Change Controller_: IETF
+
+   _Specification Document_: Section {#authorization-challenge-request}
+   of this specification
+
+   _Parameter name_: wallet_device_context
 
    _Parameter usage location_: authorization request
 
