@@ -357,7 +357,7 @@ Cache-Control: no-store
 
 ## OpenID4VP Cross-Device Flow using `direct_post` {#oid4vp-cross-device-direct-post}
 
-In this example, the Client omits `oid4vp_redirect_uri` and `wallet_context`, indicating a cross-device flow (e.g., based on pre-stored user preferences). The Authorization Server issues an OID4VP Authorization Request with `response_mode=direct_post`.
+In this example, the Client omits `oid4vp_redirect_uri` and `wallet_device_context`, indicating a cross-device flow (e.g., based on pre-stored user preferences). The Authorization Server issues an OID4VP Authorization Request with `response_mode=direct_post`.
 
 The Client polls for the presentation result by sending subsequent Authorization Challenge Requests including only the `auth_session` parameter:
 
