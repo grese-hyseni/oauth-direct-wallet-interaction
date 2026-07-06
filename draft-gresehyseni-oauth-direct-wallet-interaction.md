@@ -144,7 +144,7 @@ The following figure illustrates a high-level protocol flow in which the Authori
 | with the Wallet          | |     (w/ Pres. Req.    ||                ||
 +--------------------------+ |                       ||                ||
                   |          |                       ||                ||
-              +--OPT: SD --------------------------------------------------+       
+              +--OPT: SD --------------------------------------------------+
               |   |          | (E) Authorization     ||                ||  |
               |   |          |     Challenge Request ||                ||  |
               |   |          | (w/ wallet_device_ctx)||                ||  |
@@ -154,9 +154,9 @@ The following figure illustrates a high-level protocol flow in which the Authori
               |   |          | (F) Authorization     ||                ||  |
               |   |          |     Error Response    ||                ||  |
               |   |          | (w/ status pending)   ||                ||  |
-              +------------------------------------------------------------+  
+              +------------------------------------------------------------+
                   |          |                       ||                ||
-                  |          |                       ||                ||                                  
+                  |          |                       ||                ||
                   |          | (G) Authorization     ||                ||
                   |          |     Challenge Request ||                ||
                   |          |     (w/ Pres. Res.    ||                ||
@@ -607,7 +607,7 @@ The flow includes optional steps that differ for OID4VP same-device, cross-devic
 |        | |                 |          | Error Response        ||                 ||                      |            | |
 |        | |                 |          | (w/ status pending)   ||                 ||                      |            | |
 |        +----------------------------------------------------------------------------------------------------------------+
-|        | |                 |          |                       ||                 ||                      |            | 
+|        | |                 |          |                       ||                 ||                      |            |
 |        +--OPT: SD / CD + 'direct_post'---------------------------------------------------------------------+          |
 |        | |(F) VP Token     |          |                       ||                 ||                      | |          |
 |        | |---------------------------------------------------------------------------------------------->| |          |
