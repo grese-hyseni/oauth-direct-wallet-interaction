@@ -206,12 +206,20 @@ Table of Contents
 | with the Wallet          | |     (w/ Pres. Req.    ||                ||
 +--------------------------+ |                       ||                ||
                   |          |                       ||                ||
-                  |          | (E1) OPT:Authorization||                ||
-                  |          |     Challenge Request ||                ||
-                  |          | (w/ wallet_device_ctx)||                ||
-                  |          |---------------------->||                ||
+              +--OPT: SD --------------------------------------------------+
+              |   |          | (E) Authorization     ||                ||  |
+              |   |          |     Challenge Request ||                ||  |
+              |   |          | (w/ wallet_device_ctx)||                ||  |
+              |   |          |---------------------->||                ||  |
+              |   |          |                       ||                ||  |
+              |   |          |<----------------------||                ||  |
+              |   |          | (F) Authorization     ||                ||  |
+              |   |          |     Error Response    ||                ||  |
+              |   |          | (w/ status pending)   ||                ||  |
+              +------------------------------------------------------------+
                   |          |                       ||                ||
-                  |          | (E2) Authorization    ||                ||
+                  |          |                       ||                ||
+                  |          | (G) Authorization     ||                ||
                   |          |     Challenge Request ||                ||
                   |          |     (w/ Pres. Res.    ||                ||
                   |          |     or Poll)          ||                ||
@@ -221,15 +229,15 @@ Table of Contents
                   |          |                       || | with the Verifier                                      |
                   |          |                       || +--------------------------------------------------------+
                   |          |<----------------------||                ||
-                  |          | (F) Authorization     |+----------------+|
+                  |          | (H) Authorization     |+----------------+|
                   |          |     Code Response     |                  |
                   |          |                       |                  |
-                  |          | (G) Token             |                  |
+                  |          | (I) Token             |                  |
                   |          |     Request           |+----------------+|
                   |          |---------------------->||     Token      ||
                   |          |                       ||    Endpoint    ||
                   |          |<----------------------||                ||
-                  |          | (H) Access Token      |+----------------+|
+                  |          | (J) Access Token      |+----------------+|
                   |          |                       |                  |
                   +----------+                       +-------------------+
 
@@ -252,27 +260,33 @@ Table of Contents
    Authorization Request (oid4vp_request) and auth_session.  See
    Section Section 5 for details.
 
-   (E1) Optionally, the Client sends an Authorization Challenge Request
+   (E) Optionally, the Client sends an Authorization Challenge Request
    to the Authorization Server’s Authorization Challenge Endpoint with
    Wallet device context information (wallet_device_context), indicating
-   same-device ("sd") or cross-device ("cd").
+   either same-device ("sd") or cross-device ("cd").
 
-   (E2) Following the Wallet interaction, the Client submits an
+   (F) When the Authorization Server records the device context but the
+   authorization process is not yet complete, it responds with an
+   Authorization Error Response indicating that the request in (E) was
+   received and that the authorization process is still pending
+   (status="pending").
+
+   (G) Following the Wallet interaction, the Client submits an
    Authorization Challenge Request to the Authorization Server’s
    Authorization Challenge Endpoint to request the Authorization Code.
    If the Client has received the OID4VP Authorization Response directly
    from the Wallet, it includes it; otherwise, it polls using the
    auth_session.
 
-   (F) After the Authorization Server validates the OID4VP Authorization
+   (H) After the Authorization Server validates the OID4VP Authorization
    Response with the Verifier and performs authorization checks, it
    responds with an Authorization Challenge Response including the
    Authorization Code.
 
-   (G) The Client sends a Token Request to the Authorization Server’s
+   (I) The Client sends a Token Request to the Authorization Server’s
    Token Endpoint to exchange the Authorization Code.
 
-   (H) The Authorization Server validates the Token Request and responds
+   (J) The Authorization Server validates the Token Request and responds
    with an Access Token and optionally additional OAuth 2.0 tokens.
 
 4.  Authorization Challenge Request
@@ -490,6 +504,19 @@ Table of Contents
 
    auth_session=uY29tL2F1dGhlbnRpY
    &wallet_device_context=sd
+
+   Example: Authorization Error Response indicating that the status is
+   still pending
+
+   HTTP/1.1 401 Unauthorized
+   Content-Type: application/json
+   Cache-Control: no-store
+
+   {
+      "error": "insufficient_authorization",
+      "auth_session": "bXlzZXNzaW9uMTIzNDU2",
+      "status": "pending"
+   }
 
    Example: Subsequent Authorization Challenge Request forwarding the
    response_code returned from the Wallet
@@ -839,19 +866,29 @@ Appendix A.  Appendix A: Extended OAuth FiPA Authorization Flow with
 |          |(C) Presentation |          |          .            ||                 ||                      |            |
 |          |    Request      |          |          .            ||                 ||                      |            |
 |          |                 |          |                       ||                 ||                      |            |
+|          |                 |          |                       ||                 ||                      |            |
+|        +--OPT: SD + 'direct_post'---------------------------------------------------------------------------------------+
+|        | |                 |          | (D) OPT:Authorization||                  ||                      |            | |
+|        | |                 |          |     Challenge Request ||                 ||                      |            | |
+|        | |                 |          | (w/ wallet_device_ctx)||                 ||                      |            | |
+|        | |                 |          |---------------------->||                 ||(D1) wallet_device_ctx|            | |
+|        | |                 |          |                       ||                 ||--------------------->|            | |
+|        | |                 |          |                       ||                 ||                      |            | |
+|        | |                 |          |                       ||                 ||<---------------------|            | |
+|        | |                 |          |<----------------------||                 ||(D2) wallet_device_ctx|            | |
+|        | |                 |          | (E) Authorization     ||                 ||     updated          |            | |
+|        | |                 |          | Error Response        ||                 ||                      |            | |
+|        | |                 |          | (w/ status pending)   ||                 ||                      |            | |
+|        +----------------------------------------------------------------------------------------------------------------+
+|        | |                 |          |                       ||                 ||                      |            |
 |        +--OPT: SD / CD + 'direct_post'---------------------------------------------------------------------+          |
-|        | |(C1) VP Token    |          |                       ||                 ||                      | |          |
+|        | |(F) VP Token     |          |                       ||                 ||                      | |          |
 |        | |---------------------------------------------------------------------------------------------->| |          |
 |        | |                 |          |                       ||                 ||                      | |          |
 |        +---------------------------------------------------------------------------------------------------+          |
-|          |                 |          |                       ||                 ||                      |            |
 |        +--OPT: SD + 'direct_post'---------------------------------------------------------------------------------------+
-|        | |                 |          | (C2) OPT:Authorization||                 ||                      |            | |
-|        | |                 |          |     Challenge Request ||                 ||                      |            | |
-|        | |                 |          | (w/ wallet_device_ctx)||                 ||                      |            | |
-|        | |                 |          |---------------------->||                 ||(C3) wallet_device_ctx|            | |
-|        | |                 |          |                       ||                 ||--------------------->|            | |
-|        | |(C2) redirect_uri + response_code                   ||                 ||                      |+----------+| |
+|        | |                 |          |                       ||                 ||                      |            | |
+|        | |(G) redirect_uri + response_code                    ||                 ||                      |+----------+| |
 |        | |<----------------------------------------------------------------------------------------------|| Response || |
 |        | |                 |          |                       ||                 ||                      || URI      || |
 |        | |                 |          |                       ||                 ||                      |+----------+| |
@@ -859,29 +896,29 @@ Appendix A.  Appendix A: Extended OAuth FiPA Authorization Flow with
 |          |                 |          |                       ||                 ||                      |            |
 |        +--OPT: SD / DC API---+        |                       ||                 ||                      |            |
 |        | |---------------->| |        |                       ||                 ||                      |            |
-|        | |(D) Presentation | |        |                       ||                 ||                      |            |
+|        | |(H) Presentation | |        |                       ||                 ||                      |            |
 |        | |    Response w/  | |        |                       ||                 ||                      |            |
 |        | |    response code| |        |                       ||                 ||                      |            |
 |        | |    or VP Token  | |        |                       ||                 ||                      |            |
 |        | |                 | |        |                       ||                 ||                      |            |
 |        +---------------------+        |                       ||                 ||                      |            |
-|          |                 |          | (E) Authorization     ||                 ||                      |            |
-|          |                 |          | Challenge Request     ||                 || (E1) Validate        |            |
+|          |                 |          | (I) Authorization     ||                 ||                      |            |
+|          |                 |          | Challenge Request     ||                 || (I1) Validate        |            |
 |          |                 |          | (opt. w/ Pres. Res)   ||                 ||      Presentation    |            |
 |          |                 |          |---------------------->||                 ||      Response        |            |
 |          |                 |          |                       ||                 ||--------------------->|            |
 |          |                 |          |                       ||                 ||                      |            |
 |          |                 |          |                       ||                 ||<---------------------|            |
-|          |                 |          |<----------------------||                 || (E2) Presentation    |            |
-|          |                 |          | (F) Authorization     |+-----------------+|     Data             |            |
+|          |                 |          |<----------------------||                 || (I2) Presentation    |            |
+|          |                 |          | (J) Authorization     |+-----------------+|     Data             |            |
 |          |                 |          |     Code Response     |                   |                      |            |
 |          |                 |          |                       |                   |                      |            |
-|          |                 |          | (G) Token             |                   |                      |            |
+|          |                 |          | (K) Token             |                   |                      |            |
 |          |                 |          |     Request           |+-----------------+|                      |            |
 |          |                 |          |---------------------->||      Token      ||                      |            |
 |          |                 |          |                       ||     Endpoint    ||                      |            |
 |          |                 |          |<----------------------||                 ||                      |            |
-|          |                 |          | (H) Access Token      |+-----------------+|                      |            |
+|          |                 |          | (L) Access Token      |+-----------------+|                      |            |
 |          |                 |          |                       |                   |                      |            |
 +----------+                 +----------+                       +-------------------+
 
@@ -901,42 +938,47 @@ Appendix A.  Appendix A: Extended OAuth FiPA Authorization Flow with
    (C) The Client invokes the Wallet via a link, QR Code, or DC API,
    depending on the OID4VP Authorization Request received in (B).
 
-   (C1) Optionally, for an OID4VP Authorization Request with
-   response_mode=direct_post, the Wallet submits the VP Token directly
-   to the Verifier’s Response Endpoint.
-
-   (C2) Optionally, the Client sends an Authorization Challenge Request
+   (D) Optionally, the Client sends an Authorization Challenge Request
    to the Authorization Server’s Authorization Challenge Endpoint with
    Wallet device context information (wallet_device_context), indicating
    same-device ("sd") or cross-device ("cd").
 
-   (C3) Optionally, for an OID4VP Authorization Request with
+   (D1-D2) The Authorization Server informs the Verifier.
+
+   (E) The Authorization Server responds to the Client with an
+   Authorization Error Response that indicates status=pending.
+
+   (F) Optionally, for an OID4VP Authorization Request with
+   response_mode=direct_post, the Wallet submits the VP Token directly
+   to the Verifier’s Response Endpoint.
+
+   (G) Optionally, for an OID4VP Authorization Request with
    response_mode=direct_post in same-device flows, the Verifier’s
    Endpoint responds to the Wallet with redirect_uri and response_code.
 
-   (D) Optionally, for DC API flows or same-device flows, the Client
+   (H) Optionally, for DC API flows or same-device flows, the Client
    receives the OID4VP Authorization Response (Presentation Response)
    from the Wallet, which MAY include a VP Token or presentation
    artifacts from (C2).  Otherwise, the Client SHOULD skip this step and
    continue with (E).
 
-   (E) The Client submits a subsequent Authorization Challenge Request
+   (I) The Client submits a subsequent Authorization Challenge Request
    to the Authorization Server’s Authorization Challenge Endpoint to
    request the Authorization Code.  If the Client retrieved the OID4VP
    Authorization Response in (D), it includes it; if not, it polls using
    the auth_session.
 
-   (E1–E2) The Authorization Server validates the Presentation Response
+   (I1–I2) The Authorization Server validates the Presentation Response
    with the Verifier component.
 
-   (F) After a successful validation in (E1-E2) and performing
+   (J) After a successful validation in (E1-E2) and performing
    authorization checks, the Authorization Server responds with an
    Authorization Challenge Response including the Authorization Code.
 
-   (G) The Client sends a Token Request to the Authorization Server’s
+   (K) The Client sends a Token Request to the Authorization Server’s
    Token Endpoint to exchange the Authorization Code.
 
-   (H) The Authorization Server validates the Token Request and responds
+   (L) The Authorization Server validates the Token Request and responds
    with an Access Token and optionally additional OAuth 2.0 tokens.
 
 Acknowledgments
