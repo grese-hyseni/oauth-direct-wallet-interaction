@@ -4,8 +4,8 @@
 
 Web Authorization Protocol                                     G. Hyseni
 Internet-Draft                             Raiffeisen Bank International
-Intended status: Informational                               3 July 2026
-Expires: 4 January 2027
+Intended status: Informational                               6 July 2026
+Expires: 7 January 2027
 
 
                   OAuth 2.0 Direct Wallet Interaction
@@ -50,7 +50,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 4 January 2027.
+   This Internet-Draft will expire on 7 January 2027.
 
 Copyright Notice
 
@@ -204,8 +204,7 @@ Table of Contents
 +--------------------------+ | (D) Authorization     || | with the Verifier                      |
 | Note: Client interacts   | |     Error Response    || +----------------------------------------+
 | with the Wallet          | |     (w/ Pres. Req.    ||                ||
-+--------------------------+ |      response_mode)   ||                ||
-                  |          |                       ||                ||
++--------------------------+ |                       ||                ||
                   |          |                       ||                ||
                   |          | (E1) OPT:Authorization||                ||
                   |          |     Challenge Request ||                ||
@@ -576,8 +575,8 @@ Table of Contents
       "error": "insufficient_authorization",
       "auth_session": "uY29tL2F1dGhlbnRpY",
       "oid4vp_authorization_request": "https://Wallet.example.org/universal-link?
-      response_type=dc_api
-      &response_mode=fragment
+      response_type=vp_token
+      &response_mode=dc_api
       &client_id=redirect_uri%3Ahttps%3A%2F%2Fclient.example.org%2Fcb
       &redirect_uri=https%3A%2F%2Fclient.example.org%2Fcb
       &dcql_query=...
@@ -839,7 +838,6 @@ Appendix A.  Appendix A: Extended OAuth FiPA Authorization Flow with
 |          |<----------------|          |                       ||                 ||                      |            |
 |          |(C) Presentation |          |          .            ||                 ||                      |            |
 |          |    Request      |          |          .            ||                 ||                      |            |
-|          | (response_mode) |          |          .            ||                 ||                      |            |
 |          |                 |          |                       ||                 ||                      |            |
 |        +--OPT: SD / CD + 'direct_post'---------------------------------------------------------------------+          |
 |        | |(C1) VP Token    |          |                       ||                 ||                      | |          |
@@ -898,22 +896,23 @@ Appendix A.  Appendix A: Extended OAuth FiPA Authorization Flow with
 
    (B) The Authorization Server and responds with the Authorization
    Error Response containing the OID4VP Authorization Request from
-   (A1-A2), the respective response_mode and auth_session.
+   (A1-A2) and auth_session.
 
    (C) The Client invokes the Wallet via a link, QR Code, or DC API,
    depending on the OID4VP Authorization Request received in (B).
 
-   (C1) Optionally, for response_mode=direct_post, the Wallet submits
-   the VP Token directly to the Verifier’s Response Endpoint.
+   (C1) Optionally, for an OID4VP Authorization Request with
+   response_mode=direct_post, the Wallet submits the VP Token directly
+   to the Verifier’s Response Endpoint.
 
    (C2) Optionally, the Client sends an Authorization Challenge Request
    to the Authorization Server’s Authorization Challenge Endpoint with
    Wallet device context information (wallet_device_context), indicating
    same-device ("sd") or cross-device ("cd").
 
-   (C3) Optionally, for response_mode=direct_post in same-device flows,
-   the Verifier’s Endpoint responds to the Wallet with redirect_uri and
-   response_code.
+   (C3) Optionally, for an OID4VP Authorization Request with
+   response_mode=direct_post in same-device flows, the Verifier’s
+   Endpoint responds to the Wallet with redirect_uri and response_code.
 
    (D) Optionally, for DC API flows or same-device flows, the Client
    receives the OID4VP Authorization Response (Presentation Response)

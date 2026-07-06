@@ -1050,7 +1050,7 @@ svg {
 </tr></thead>
 <tfoot><tr>
 <td class="left">Hyseni</td>
-<td class="center">Expires 4 January 2027</td>
+<td class="center">Expires 7 January 2027</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1063,12 +1063,12 @@ svg {
 <dd class="internet-draft">draft-gresehyseni-oauth-direct-wallet-interaction-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2026-07-03" class="published">3 July 2026</time>
+<time datetime="2026-07-06" class="published">6 July 2026</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Informational</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2027-01-04">4 January 2027</time></dd>
+<dd class="expires"><time datetime="2027-01-07">7 January 2027</time></dd>
 <dt class="label-authors">Author:</dt>
 <dd class="authors">
 <div class="author">
@@ -1118,7 +1118,7 @@ svg {
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 4 January 2027.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 7 January 2027.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1335,8 +1335,7 @@ Verifier, Wallet, Verifiable Presentation, VP Token, OID4VP Authorization Reques
 +--------------------------+ | (D) Authorization     || | with the Verifier                      |
 | Note: Client interacts   | |     Error Response    || +----------------------------------------+
 | with the Wallet          | |     (w/ Pres. Req.    ||                ||
-+--------------------------+ |      response_mode)   ||                ||
-                  |          |                       ||                ||
++--------------------------+ |                       ||                ||
                   |          |                       ||                ||
                   |          | (E1) OPT:Authorization||                ||
                   |          |     Challenge Request ||                ||
@@ -1646,8 +1645,8 @@ Cache-Control: no-store
    "error": "insufficient_authorization",
    "auth_session": "uY29tL2F1dGhlbnRpY",
    "oid4vp_authorization_request": "https://Wallet.example.org/universal-link?
-   response_type=dc_api
-   &amp;response_mode=fragment
+   response_type=vp_token
+   &amp;response_mode=dc_api
    &amp;client_id=redirect_uri%3Ahttps%3A%2F%2Fclient.example.org%2Fcb
    &amp;redirect_uri=https%3A%2F%2Fclient.example.org%2Fcb
    &amp;dcql_query=...
@@ -1868,7 +1867,6 @@ auth_session=bXlzZXNzaW9uMTIzNDU2
 |          |&lt;----------------|          |                       ||                 ||                      |            |
 |          |(C) Presentation |          |          .            ||                 ||                      |            |
 |          |    Request      |          |          .            ||                 ||                      |            |
-|          | (response_mode) |          |          .            ||                 ||                      |            |
 |          |                 |          |                       ||                 ||                      |            |
 |        +--OPT: SD / CD + 'direct_post'---------------------------------------------------------------------+          |
 |        | |(C1) VP Token    |          |                       ||                 ||                      | |          |
@@ -1919,11 +1917,11 @@ auth_session=bXlzZXNzaW9uMTIzNDU2
 </div>
 <p id="appendix-A-4">(A) The Client sends an Authorization Challenge Request to the Authorization Server’s Authorization Challenge Endpoint specifying the challenge method (<code>challenge_method</code>) to request an OID4VP Authorization Request.<a href="#appendix-A-4" class="pilcrow">¶</a></p>
 <p id="appendix-A-5">(A1–A2) The Authorization Server determines the challenge method and generates an OID4VP Authorization Request (Presentation Request) with <code>response_mode</code> in coordination with the Verifier component.<a href="#appendix-A-5" class="pilcrow">¶</a></p>
-<p id="appendix-A-6">(B) The Authorization Server and responds with the Authorization Error Response containing the OID4VP Authorization Request from (A1-A2), the respective <code>response_mode</code> and <code>auth_session</code>.<a href="#appendix-A-6" class="pilcrow">¶</a></p>
+<p id="appendix-A-6">(B) The Authorization Server and responds with the Authorization Error Response containing the OID4VP Authorization Request from (A1-A2) and <code>auth_session</code>.<a href="#appendix-A-6" class="pilcrow">¶</a></p>
 <p id="appendix-A-7">(C) The Client invokes the Wallet via a link, QR Code, or DC API, depending on the OID4VP Authorization Request received in (B).<a href="#appendix-A-7" class="pilcrow">¶</a></p>
-<p id="appendix-A-8">(C1) Optionally, for <code>response_mode=direct_post</code>, the Wallet submits the VP Token directly to the Verifier’s Response Endpoint.<a href="#appendix-A-8" class="pilcrow">¶</a></p>
+<p id="appendix-A-8">(C1) Optionally, for an OID4VP Authorization Request with <code>response_mode=direct_post</code>, the Wallet submits the VP Token directly to the Verifier’s Response Endpoint.<a href="#appendix-A-8" class="pilcrow">¶</a></p>
 <p id="appendix-A-9">(C2) Optionally, the Client sends an Authorization Challenge Request to the Authorization Server’s Authorization Challenge Endpoint with Wallet device context information (<code>wallet_device_context</code>), indicating same-device ("sd") or cross-device ("cd").<a href="#appendix-A-9" class="pilcrow">¶</a></p>
-<p id="appendix-A-10">(C3) Optionally, for <code>response_mode=direct_post</code> in same-device flows, the Verifier’s Endpoint responds to the Wallet with <code>redirect_uri</code> and <code>response_code</code>.<a href="#appendix-A-10" class="pilcrow">¶</a></p>
+<p id="appendix-A-10">(C3) Optionally, for an OID4VP Authorization Request with <code>response_mode=direct_post</code> in same-device flows, the Verifier’s Endpoint responds to the Wallet with <code>redirect_uri</code> and <code>response_code</code>.<a href="#appendix-A-10" class="pilcrow">¶</a></p>
 <p id="appendix-A-11">(D) Optionally, for DC API flows or same-device flows, the Client receives the OID4VP Authorization Response (Presentation Response) from the Wallet, which <span class="bcp14">MAY</span> include a VP Token or presentation artifacts from (C2). Otherwise, the Client <span class="bcp14">SHOULD</span> skip this step and continue with (E).<a href="#appendix-A-11" class="pilcrow">¶</a></p>
 <p id="appendix-A-12">(E) The Client submits a subsequent Authorization Challenge Request to the Authorization Server’s Authorization Challenge Endpoint to request the Authorization Code. If the Client retrieved the OID4VP Authorization Response in (D), it includes it; if not, it polls using the <code>auth_session</code>.<a href="#appendix-A-12" class="pilcrow">¶</a></p>
 <p id="appendix-A-13">(E1–E2) The Authorization Server validates the Presentation Response with the Verifier component.<a href="#appendix-A-13" class="pilcrow">¶</a></p>
