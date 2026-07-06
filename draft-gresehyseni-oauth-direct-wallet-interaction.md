@@ -142,8 +142,7 @@ The following figure illustrates a high-level protocol flow in which the Authori
 +--------------------------+ | (D) Authorization     || | with the Verifier                      |
 | Note: Client interacts   | |     Error Response    || +----------------------------------------+
 | with the Wallet          | |     (w/ Pres. Req.    ||                ||
-+--------------------------+ |      response_mode)   ||                ||
-                  |          |                       ||                ||
++--------------------------+ |                       ||                ||
                   |          |                       ||                ||
                   |          | (E1) OPT:Authorization||                ||
                   |          |     Challenge Request ||                ||
@@ -410,8 +409,8 @@ Cache-Control: no-store
    "error": "insufficient_authorization",
    "auth_session": "uY29tL2F1dGhlbnRpY",
    "oid4vp_authorization_request": "https://Wallet.example.org/universal-link?
-   response_type=dc_api
-   &response_mode=fragment
+   response_type=vp_token
+   &response_mode=dc_api
    &client_id=redirect_uri%3Ahttps%3A%2F%2Fclient.example.org%2Fcb
    &redirect_uri=https%3A%2F%2Fclient.example.org%2Fcb
    &dcql_query=...
@@ -569,7 +568,6 @@ The flow includes optional steps that differ for OID4VP same-device, cross-devic
 |          |<----------------|          |                       ||                 ||                      |            |
 |          |(C) Presentation |          |          .            ||                 ||                      |            |
 |          |    Request      |          |          .            ||                 ||                      |            |
-|          | (response_mode) |          |          .            ||                 ||                      |            |
 |          |                 |          |                       ||                 ||                      |            |
 |        +--OPT: SD / CD + 'direct_post'---------------------------------------------------------------------+          |
 |        | |(C1) VP Token    |          |                       ||                 ||                      | |          |
@@ -622,15 +620,15 @@ The flow includes optional steps that differ for OID4VP same-device, cross-devic
 
 (A1–A2) The Authorization Server determines the challenge method and generates an OID4VP Authorization Request (Presentation Request) with `response_mode` in coordination with the Verifier component.
 
-(B) The Authorization Server and responds with the Authorization Error Response containing the OID4VP Authorization Request from (A1-A2), the respective `response_mode` and `auth_session`.
+(B) The Authorization Server and responds with the Authorization Error Response containing the OID4VP Authorization Request from (A1-A2) and `auth_session`.
 
 (C) The Client invokes the Wallet via a link, QR Code, or DC API, depending on the OID4VP Authorization Request received in (B).
 
-(C1) Optionally, for `response_mode=direct_post`, the Wallet submits the VP Token directly to the Verifier’s Response Endpoint.
+(C1) Optionally, for an OID4VP Authorization Request with `response_mode=direct_post`, the Wallet submits the VP Token directly to the Verifier’s Response Endpoint.
 
 (C2) Optionally, the Client sends an Authorization Challenge Request to the Authorization Server’s Authorization Challenge Endpoint with Wallet device context information (`wallet_device_context`), indicating same-device ("sd") or cross-device ("cd").
 
-(C3) Optionally, for `response_mode=direct_post` in same-device flows, the Verifier’s Endpoint responds to the Wallet with `redirect_uri` and `response_code`.
+(C3) Optionally, for an OID4VP Authorization Request with `response_mode=direct_post` in same-device flows, the Verifier’s Endpoint responds to the Wallet with `redirect_uri` and `response_code`.
 
 (D) Optionally, for DC API flows or same-device flows, the Client receives the OID4VP Authorization Response (Presentation Response) from the Wallet, which MAY include a VP Token or presentation artifacts from (C2). Otherwise, the Client SHOULD skip this step and continue with (E).
 
