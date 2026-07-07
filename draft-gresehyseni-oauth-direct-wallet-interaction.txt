@@ -72,20 +72,19 @@ Table of Contents
    2.  Conventions and Definitions
      2.1.  Terminology
    3.  Protocol
-     3.1.  High Level Flow
+     3.1.  High-Level Flow
    4.  Authorization Challenge Request
      4.1.  Initial Authorization Challenge Requests
      4.2.  Subsequent Authorization Challenge Requests
      4.3.  Implementation Considerations
-   5.  Authorization Error Response
-   6.  Example flows
+   5.  Authorization Challenge Error Response
+   6.  Example Flows
      6.1.  OpenID4VP Same-Device Flow with response_mode=direct_post
      6.2.  OpenID4VP Cross-Device Flow using direct_post
      6.3.  OpenID4VP over DC API
      6.4.  OpenID4VP with RAR
    7.  Security Considerations
-     7.1.  Signed Authorization Requests
-     7.2.  Signed and Encrypted Presentation Responses
+     7.1.  Signed and Encrypted Presentation Responses
    8.  IANA Considerations
    9.  References
      9.1.  Normative References
@@ -100,7 +99,7 @@ Table of Contents
    Digital credentials are increasingly used for authentication and
    authorization.  Existing credential presentation protocols, such as
    [OpenID4VP], produce presentation artifacts (e.g., VP Tokens) rather
-   than OAuth authorization grants or tokens, limiting seamless
+   than OAuth authorization grants or tokens, which limits seamless
    integration with OAuth authorization flows.
 
    This document specifies a mechanism to integrate Presentation of
@@ -114,7 +113,8 @@ Table of Contents
    *  New parameters for the FiPA-defined Authorization Challenge
       Requests (see Section 4).
 
-   *  New fields for Authorization Error Responses (see Section 5).
+   *  New fields for Authorization Challenge Error Responses (see
+      Section 5).
 
    While building upon the FiPA model, this specification also applies
    to third-party applications as defined in [RFC6749].
@@ -145,11 +145,13 @@ Table of Contents
       Application as defined by [RFC6749].
 
    *  Authorization Challenge Request, Authorization Challenge Error
-      Response, Authorization Challenge Response as defined by
-      [I-D.ietf-oauth-first-party-apps] . Verifier, Wallet, Verifiable
-      Presentation, VP Token, OID4VP Authorization Request (Presentation
-      Request), and OID4VP Authorization Response (Presentation
-      Response) as defined by [OpenID4VP] .
+      Response, and Authorization Challenge Response as defined by
+      [I-D.ietf-oauth-first-party-apps].
+
+   *  Verifier, Wallet, Verifiable Presentation, VP Token, OID4VP
+      Authorization Request (Presentation Request), and OID4VP
+      Authorization Response (Presentation Response) as defined by
+      [OpenID4VP].
 
    *  FiPA: First-Party Applications, as defined in
       [I-D.ietf-oauth-first-party-apps].
@@ -173,10 +175,10 @@ Table of Contents
 
    This abstraction allows the specification to focus on extending FiPA
    flows to support verifiable credential presentations without
-   detailing Wallet or Verifier protocols.  For an extended flow please
-   see Appendix A.
+   detailing Wallet or Verifier protocols.  For an extended flow, see
+   Appendix A.
 
-3.1.  High Level Flow
+3.1.  High-Level Flow
 
    The following figure illustrates a high-level protocol flow in which
    the Authorization Server (AS) requests a Verifiable Presentation from
@@ -231,20 +233,20 @@ Table of Contents
    Authorization Server’s Authorization Challenge Endpoint.  See
    Section Section 4 for details.
 
-   (B) The Authorization Server responds with an Authorization Error
-   Response indicating the supported challenge methods
+   (B) The Authorization Server responds with an Authorization Challenge
+   Error Response indicating the supported challenge methods
    (challenge_methods) to the Client.  See Section 5 for details.
 
-   (C) The Client sends a subsequent Authorization Challenge Requests to
+   (C) The Client sends a subsequent Authorization Challenge Request to
    the Authorization Server’s Authorization Challenge Endpoint, where it
    MUST specify the challenge method (challenge_method) and any other
-   relevant and known parameters to request an OID4VP Authorization
-   Request.
+   relevant parameters known to the Client to request an OID4VP
+   Authorization Request.
 
    (D) The Authorization Server determines the challenge method and
-   responds with an Authorization Error Response containing the OID4VP
-   Authorization Request(s) (oid4vp_request) and auth_session.  See
-   Section Section 5 for details.
+   responds with an Authorization Challenge Error Response containing
+   the OID4VP Authorization Request(s) (oid4vp_request) and
+   auth_session.  See Section Section 5 for details.
 
    (E) Following the Wallet interaction, the Client submits an
    Authorization Challenge Request to the Authorization Server’s
@@ -271,9 +273,9 @@ Table of Contents
    parameters:
 
    "challenge_method":  OPTIONAL.  A string indicating the challenge
-      method requested by the Client, for example a user-selected
+      method requested by the Client, for example, a user-selected
       method.  This document defines the values "oid4vp" and
-      "oid4vp_dc_api".  Parties using other values must mutually agree
+      "oid4vp_dc_api".  Parties using other values MUST mutually agree
       on their meanings, which may be context-specific.
 
    "oid4vp_redirect_uri":  OPTIONAL.  The Client URI to which the Wallet
@@ -299,7 +301,7 @@ Table of Contents
 
    "oid4vp_vp_token":  OPTIONAL.  The VP Token value, as defined in
       section 8 of [OpenID4VP], returned from the Wallet as part of the
-      Presentation Response, for example in DC API or same-device
+      Presentation Response, for example, in DC API or same-device
       redirect flows.
 
    When the Client receives the OID4VP Authorization Response directly
@@ -325,9 +327,9 @@ Table of Contents
 
    If the Client omits challenge_method or specifies a method not
    supported by the Authorization Server, the Authorization Server MAY
-   respond with an Authorization Error Response listing supported
-   challenge_methods.  In this case, the Client SHOULD include an
-   appropriate challenge_method (e.g., oid4vp) in a subsequent
+   respond with an Authorization Challenge Error Response listing
+   supported challenge_methods.  In this case, the Client SHOULD include
+   an appropriate challenge_method (e.g., oid4vp) in a subsequent
    Authorization Challenge Request.
 
    For non-DC API deployments, the Client MAY also include
@@ -352,11 +354,12 @@ Table of Contents
    convey or determine the Wallet device context; such mechanisms are
    outside the scope of this specification.
 
-5.  Authorization Error Response
+5.  Authorization Challenge Error Response
 
    This document extends FiPA's [I-D.ietf-oauth-first-party-apps]
-   Authorization Error Response by adding the following attributes, used
-   when the error code "insufficient_authorization" is returned:
+   Authorization Challenge Error Response by adding the following
+   attributes, used when the error code "insufficient_authorization" is
+   returned:
 
    "challenge_methods":  OPTIONAL.  A JSON array of strings identifying
       the challenge methods supported by the Authorization Server.  This
@@ -376,7 +379,7 @@ Table of Contents
    "status":  OPTIONAL.  Indicates the status of the ongoing operation.
       This document uses the value "pending".
 
-6.  Example flows
+6.  Example Flows
 
    This section provides non-normative examples illustrating how this
    specification supports various flows and deployment models.
@@ -406,8 +409,8 @@ Table of Contents
    scope=openid
    &client_id=bb16c14c73415
 
-   Example: Authorization Error Response indicating supported challenge
-   methods:
+   Example: Authorization Challenge Error Response indicating supported
+   challenge methods:
 
    HTTP/1.1 401 Unauthorized
    Content-Type: application/json
@@ -470,8 +473,8 @@ Table of Contents
 6.2.  OpenID4VP Cross-Device Flow using direct_post
 
    In this example, the Client provides challenge_method but omits
-   oid4vp_redirect_uri which inherently results in a cross-device flow.
-   The Authorization Server issues OID4VP Authorization Request with
+   oid4vp_redirect_uri, which indicates a cross-device flow.  The
+   Authorization Server issues an OID4VP Authorization Request with
    response_mode=direct_post.
 
    The Client polls for the presentation result by sending subsequent
@@ -484,9 +487,9 @@ Table of Contents
 
    auth_session=bXlzZXNzaW9uMTIzNDU2
 
-   Example: Authorization Error Response indicating that the Wallet
-   presentation and/or required Authorization Server checks are still in
-   progress:
+   Example: Authorization Challenge Error Response indicating that the
+   Wallet presentation and/or required Authorization Server checks are
+   still in progress:
 
    HTTP/1.1 401 Unauthorized
    Content-Type: application/json
@@ -519,8 +522,8 @@ Table of Contents
 
    challenge_method=oid4vp_dc_api
 
-   Example: Authorization Error Response containing OID4VP Authorization
-   Request over DC API
+   Example: Authorization Challenge Error Response containing OID4VP
+   Authorization Request over DC API:
 
    HTTP/1.1 401 Unauthorized
    Content-Type: application/json
@@ -529,7 +532,7 @@ Table of Contents
    {
       "error": "insufficient_authorization",
       "auth_session": "uY29tL2F1dGhlbnRpY",
-      "oid4vp_authorization_request": {
+      "oid4vp_authorization_requests": {
          "dc_api": "openid4vp://authorize?
             response_type=vp_token
             &response_mode=dc_api
@@ -541,8 +544,8 @@ Table of Contents
       }
    }
 
-   Example: Subsequent Authorization Challenge Request forwarding the
-   Presentation Response:
+   Example: Subsequent Authorization Challenge Request forwarding the VP
+   Token:
 
    POST /authorize-challenge HTTP/1.1
    Host: server.example.com
@@ -560,12 +563,6 @@ Table of Contents
    parameter, as defined in [RFC9396], within the Authorization
    Challenge Request.
 
-   Upon receiving this request, the Authorization Server MAY use the
-   contents of authorization_details to populate the transaction_data in
-   the OID4VP Authorization Request.  This enables the Wallet to present
-   the user with the relevant information and prompt for explicit
-   consent for the specified action(s), as defined in [OpenID4VP].
-
    A non-normative example Authorization Challenge Request is shown
    below:
 
@@ -573,8 +570,7 @@ Table of Contents
    Host: server.example.com
    Content-Type: application/x-www-form-urlencoded
 
-   auth_session=bXlzZXNzaW9uMTIzNDU2
-   &oid4vp_response_code=091535f699ea575c7937fa5f0f454aee
+   &challenge_method=oid4vp
    &authorization_details='{
      "type": "openid_credential",
      "actions": ["approve"],
@@ -605,8 +601,8 @@ Table of Contents
    *  Authorization Requests are RECOMMENDED to be signed by the
       Verifier to ensure authenticity and integrity.
 
-   *  Presentation Responses RECOMMENDED to be signed and encrypted to
-      protect confidentiality and privacy, especially in flows where
+   *  Presentation Responses are RECOMMENDED to be signed and encrypted
+      to protect confidentiality and privacy, especially in flows where
       responses pass through third-party components, such as OpenID4VP
       over DC API or OpenID4VP with response_mode=fragment.
 
@@ -618,14 +614,7 @@ Table of Contents
    Verifier’s Response Endpoint.  This minimizes exposure of sensitive
    data to third-party Clients and reduces associated risks.
 
-7.1.  Signed Authorization Requests
-
-   To mitigate tampering and unauthorized disclosure risks, it is
-   RECOMMENDED that the Authorization Server, acting as the OpenID4VP
-   Verifier, signs Authorization Requests to ensure authenticity and
-   integrity.
-
-7.2.  Signed and Encrypted Presentation Responses
+7.1.  Signed and Encrypted Presentation Responses
 
    To protect the integrity, confidentiality, and privacy of
    Presentation Responses, it is RECOMMENDED that the Authorization
@@ -656,20 +645,20 @@ Table of Contents
 
    _Parameter name_: challenge_methods
 
-   _Parameter usage location_: authorization response
+   _Parameter usage location_: authorization challenge response
 
    _Change Controller_: IETF
 
-   _Specification Document_: Section {#authorization-challenge-request}
+   _Specification Document_: Section {#authorization-challenge-response}
    of this specification
 
-   _Parameter name_: oid4vp_authorization_request
+   _Parameter name_: oid4vp_authorization_requests
 
-   _Parameter usage location_: authorization response
+   _Parameter usage location_: authorization challenge response
 
    _Change Controller_: IETF
 
-   _Specification Document_: Section {#authorization-challenge-request}
+   _Specification Document_: Section {#authorization-challenge-response}
    of this specification
 
    _Parameter name_: oid4vp_response_code
@@ -846,9 +835,9 @@ Appendix A.  Appendix A: Extended OAuth FiPA Authorization Flow with
    generates an OID4VP Authorization Request (Presentation Request) with
    response_mode in coordination with the Verifier component.
 
-   (B) The Authorization Server and responds with the Authorization
-   Error Response containing the OID4VP Authorization Request from
-   (A1-A2) and auth_session.
+   (B) The Authorization Server responds with the Authorization
+   Challenge Error Response containing the OID4VP Authorization Request
+   from (A1-A2) and auth_session.
 
    (C) The Client invokes the Wallet via a link, QR Code, or DC API,
    depending on the OID4VP Authorization Request received in (B).
@@ -864,19 +853,19 @@ Appendix A.  Appendix A: Extended OAuth FiPA Authorization Flow with
    (F) Optionally, for DC API flows or same-device flows, the Client
    receives the OID4VP Authorization Response (Presentation Response)
    from the Wallet, which MAY include a VP Token or presentation
-   artifacts from (C2).  Otherwise, the Client SHOULD skip this step and
-   continue with (E).
+   artifacts from (E).  Otherwise, the Client SHOULD skip this step and
+   continue with (G).
 
    (G) The Client submits a subsequent Authorization Challenge Request
    to the Authorization Server’s Authorization Challenge Endpoint to
    request the Authorization Code.  If the Client retrieved the OID4VP
-   Authorization Response in (D), it includes it; if not, it polls using
+   Authorization Response in (F), it includes it; if not, it polls using
    the auth_session.
 
    (G1–G2) The Authorization Server validates the Presentation Response
    with the Verifier component.
 
-   (H) After a successful validation in (E1-E2) and performing
+   (H) After a successful validation in (G1-G2) and performing
    authorization checks, the Authorization Server responds with an
    Authorization Challenge Response including the Authorization Code.
 
