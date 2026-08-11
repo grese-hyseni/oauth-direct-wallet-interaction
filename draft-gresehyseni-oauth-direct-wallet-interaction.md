@@ -30,7 +30,6 @@ author:
     email: "grese.hyseni@rbinternational.com"
 
 normative:
- RFC8414:
  RFC6749:
  RFC9396:
  I-D.ietf-oauth-first-party-apps:
@@ -44,15 +43,6 @@ normative:
     - ins: K. Yasuda
     - ins: D. Fett
     - ins: J. Heenan
- OpenID4VCI:
-  title: OpenID for Verifiable Credential Issuance 1.0
-  target: https://openid.net/specs/openid-4-verifiable-credential-issuance-1_0.html
-  date: 16 September 2025
-  author:
-    - ins: T. Lodderstedt
-    - ins: K. Yasuda
-    - ins: T. Looker
-    - ins: P. Bastian
  IANA.oauth-parameters:
  USASCII:
   title: "Coded Character Set -- 7-bit American Standard Code for Information Interchange, ANSI X3.4"
@@ -64,9 +54,6 @@ informative:
   title: Digital Credentials, W3C Editor's Draft
   target: https://w3c-fedid.github.io/digital-credentials/
   date: 03 July 2025
- DC.Android:
-  title: Android DigitalCredential SDK
-  target: https://developer.android.com/reference/kotlin/androidx/credentials/DigitalCredential
 
 ...
 
@@ -121,59 +108,59 @@ This abstraction allows the specification to focus on extending FiPA flows to su
 The following figure illustrates a high-level protocol flow in which the Authorization Server (AS) requests a Verifiable Presentation from the Wallet as part of the authorization process.
 
 ~~~ ascii-art
-                  +----------+                       +-------------------+
-                  |  Client  |                       |   Authorization  |
-                  |          |                       |      Server      |
-                  |          |  (A) Authorization    |+----------------+|
-                  |          |  Challenge Request    ||  Authorization ||
-                  |          |---------------------->||   Challenge    ||
-                  |          |                       ||    Endpoint    ||
-                  |          |<----------------------||                ||
-                  |          | (B) Authorization     ||                ||
-                  |          |     Error Response    ||                ||
-                  |          | (w/ challenge_methods)||                ||
-                  |          |                       ||                ||
-                  |          |  (C) Authorization    ||                ||
-                  |          |  Challenge Request    ||                ||
-                  |          | (w/ challenge_method) ||                ||
-                  |          |---------------------->||                ||
-                  |          |                       || +----------------------------------------+
-                  |          |<----------------------|| | Note: AS creates Presentation Request  |
-+--------------------------+ | (D) Authorization     || | with the Verifier                      |
-| Note: Client interacts   | |     Error Response    || +----------------------------------------+
-| with the Wallet          | |     (w/ Pres. Req.    ||                ||
-+--------------------------+ |                       ||                ||
-                  |          |                       ||                ||
-                  |          | (E) Authorization     ||                ||
-                  |          |     Challenge Request ||                ||
-                  |          |     (w/ Pres. Res.    ||                ||
-                  |          |     or Poll)          ||                ||
-                  |          |---------------------->||                ||
-                  |          |                       || +--------------------------------------------------------+
-                  |          |                       || | Note: AS receives and validates Presentation Response  |
-                  |          |                       || | with the Verifier                                      |
-                  |          |                       || +--------------------------------------------------------+
-                  |          |<----------------------||                ||
-                  |          | (F) Authorization     |+----------------+|
-                  |          |     Code Response     |                  |
-                  |          |                       |                  |
-                  |          | (G) Token             |                  |
-                  |          |     Request           |+----------------+|
-                  |          |---------------------->||     Token      ||
-                  |          |                       ||    Endpoint    ||
-                  |          |<----------------------||                ||
-                  |          | (H) Access Token      |+----------------+|
-                  |          |                       |                  |
-                  +----------+                       +-------------------+
+                  +----------+                       +------------------+
+                  |  Client  |                        |   Authorization  |
+                  |          |                        |      Server      |
+                  |          |  (A) Authorization     |+----------------+|
+                  |          |      Challenge Request ||  Authorization ||
+                  |          |----------------------->||   Challenge    ||
+                  |          |                        ||    Endpoint    ||
+                  |          |<-----------------------||                ||
+                  |          | (B) Authorization      ||                ||
+                  |          |     Error Response     ||                ||
+                  |          | (w/ challenge_methods) ||                ||
+                  |          |                        ||                ||
+                  |          | (C) Authorization      ||                ||
+                  |          |     Challenge Request  ||                ||
+                  |          | (w/ challenge_method)  ||                ||
+                  |          |----------------------->||                ||
+                  |          |                        || +----------------------------------------+
+                  |          |<-----------------------|| | Note: AS creates Presentation Request  |
++--------------------------+ | (D) Authorization      || | with the Verifier                      |
+| Note: Client interacts   | |     Error Response     || +----------------------------------------+
+| with the Wallet          | |     (w/ Pres. Req.)    ||                ||
++--------------------------+ |                        ||                ||
+                  |          |                        ||                ||
+                  |          | (E) Authorization      ||                ||
+                  |          |     Challenge Request  ||                ||
+                  |          |     (w/ Pres. Res.     ||                ||
+                  |          |     or Poll)           ||                ||
+                  |          |----------------------->||                ||
+                  |          |                        || +--------------------------------------------------------+
+                  |          |                        || | Note: AS receives and validates Presentation Response  |
+                  |          |                        || | with the Verifier                                      |
+                  |          |                        || +--------------------------------------------------------+
+                  |          |<-----------------------||                ||
+                  |          | (F) Authorization      |+----------------+|
+                  |          |     Code Response      |                  |
+                  |          |                        |                  |
+                  |          | (G) Token              |                  |
+                  |          |     Request            |+----------------+|
+                  |          |----------------------->||     Token      ||
+                  |          |                        ||    Endpoint    ||
+                  |          |<-----------------------||                ||
+                  |          | (H) Access Token       |+----------------+|
+                  |          |                        |                  |
+                  +----------+                        +------------------+
 ~~~
 
-(A) The Client sends an Authorization Challenge Request to the Authorization Server’s Authorization Challenge Endpoint. See Section {{authorization-challenge-request}} for details.
+(A) The Client sends an Authorization Challenge Request to the Authorization Server’s Authorization Challenge Endpoint. See {{authorization-challenge-request}} for details.
 
 (B) The Authorization Server responds with an Authorization Challenge Error Response indicating the supported challenge methods (`challenge_methods`) to the Client. See {{authorization-challenge-error-response}} for details.
 
 (C) The Client sends a subsequent Authorization Challenge Request to the Authorization Server’s Authorization Challenge Endpoint, where it MUST specify the challenge method (`challenge_method`) and any other relevant parameters known to the Client to request an OID4VP Authorization Request.
 
-(D) The Authorization Server determines the challenge method and responds with an Authorization Challenge Error Response containing the OID4VP Authorization Request(s) (`oid4vp_request`) and `auth_session`. See Section {{authorization-challenge-error-response}} for details.
+(D) The Authorization Server determines the challenge method and responds with an Authorization Challenge Error Response containing the OID4VP Authorization Request(s) (`oid4vp_authorization_requests`) and `auth_session`. See {{authorization-challenge-error-response}} for details.
 
 (E) Following the Wallet interaction, the Client submits an Authorization Challenge Request to the Authorization Server’s Authorization Challenge Endpoint to request the Authorization Code. If the Client has received the OID4VP Authorization Response directly from the Wallet, it includes it; otherwise, it polls using the `auth_session`.
 
@@ -283,7 +270,7 @@ auth_session=uY29tL2F1dGhlbnRpY
 &oid4vp_redirect_uri=https%3A%2F%2Fclient.example.org%2Fcb
 ~~~
 
-Example: Authorization Error Response containing OID4VP Authorization Requests:
+Example: Authorization Challenge Error Response containing OID4VP Authorization Requests:
 
 ~~~ http-message
 HTTP/1.1 401 Unauthorized
@@ -415,7 +402,7 @@ POST /authorize-challenge HTTP/1.1
 Host: server.example.com
 Content-Type: application/x-www-form-urlencoded
 
-&challenge_method=oid4vp
+challenge_method=oid4vp
 &authorization_details='{
   "type": "openid_credential",
   "actions": ["approve"],
@@ -457,7 +444,7 @@ IANA has (TBD) registered the following values in the IANA "OAuth Parameters" re
 
    *Change Controller*: IETF
 
-   *Specification Document*: Section {#authorization-challenge-request} of this specification
+   *Specification Document*: {{authorization-challenge-request}} of this specification
 
 
    *Parameter name*: challenge_methods
@@ -466,7 +453,7 @@ IANA has (TBD) registered the following values in the IANA "OAuth Parameters" re
 
    *Change Controller*: IETF
 
-   *Specification Document*: Section {#authorization-challenge-response} of this specification
+   *Specification Document*: {{authorization-challenge-error-response}} of this specification
 
 
    *Parameter name*: oid4vp_authorization_requests
@@ -475,7 +462,7 @@ IANA has (TBD) registered the following values in the IANA "OAuth Parameters" re
 
    *Change Controller*: IETF
 
-   *Specification Document*: Section {#authorization-challenge-response} of this specification
+   *Specification Document*: {{authorization-challenge-error-response}} of this specification
 
 
    *Parameter name*: oid4vp_response_code
@@ -484,7 +471,7 @@ IANA has (TBD) registered the following values in the IANA "OAuth Parameters" re
 
    *Change Controller*: IETF
 
-   *Specification Document*: Section {#authorization-challenge-request} of this specification
+   *Specification Document*: {{authorization-challenge-request}} of this specification
 
 
    *Parameter name*: oid4vp_vp_token
@@ -493,7 +480,7 @@ IANA has (TBD) registered the following values in the IANA "OAuth Parameters" re
 
    *Change Controller*: IETF
 
-   *Specification Document*: Section {#authorization-challenge-request} of this specification
+   *Specification Document*: {{authorization-challenge-request}} of this specification
 
 
    *Parameter name*: wallet_device_context
@@ -502,7 +489,7 @@ IANA has (TBD) registered the following values in the IANA "OAuth Parameters" re
 
    *Change Controller*: IETF
 
-   *Specification Document*: Section {#authorization-challenge-request} of this specification
+   *Specification Document*: {{authorization-challenge-request}} of this specification
 
 --- back
 
@@ -513,66 +500,66 @@ This appendix illustrates an extended flow combining OAuth 2.0 for First-Party A
 The flow includes optional steps that differ for OID4VP same-device, cross-device, or OID4VP over DC API flows.
 
 ~~~ ascii-art
-+----------+                 +----------+                       +-------------------+                      +------------+
-|  Wallet  |                 |  Client  |                       |   Authorization   |                      |  Verifier  |
-|          |                 |          |                       |      Server       |                      | (Internal/ |
-|          |                 |          |                       |                   |                      |  External) |
-|          |                 |          |  (A) Authorization    |+-----------------+|                      |            |
-|          |                 |          |  Challenge Request    |+-----------------+| (A1) Create          |            |
-|          |                 |          |---------------------->||  Authorization  ||     Presentation     |            |
-|          |                 |          |                       ||   Challenge     ||     Request          |            |
-|          |                 |          |          .            ||    Endpoint     ||--------------------->|            |
-|          |                 |          |          .            ||                 ||                      |            |
-|          |                 |          |          .            ||                 ||<---------------------|            |
-|          |                 |          |                       ||                 || (A2) Presentation    |            |
-|          |                 |          |<----------------------||                 ||     Request          |            |
-|          |                 |          | (B) Authorization     ||                 ||                      |            |
-|          |                 |          | Error Response        ||                 ||                      |            |
-|          |                 |          | (Presentation Req.)   ||                 ||                      |            |
-|          |<----------------|          |                       ||                 ||                      |            |
-|          |(C) Presentation |          |          .            ||                 ||                      |            |
-|          |    Request      |          |          .            ||                 ||                      |            |
-|        | |                 |          |                       ||                 ||                      |            |
-|        +--OPT: SD / CD + 'direct_post'---------------------------------------------------------------------+          |
-|        | |(D) VP Token     |          |                       ||                 ||                      | |          |
-|        | |---------------------------------------------------------------------------------------------->| |          |
-|        | |                 |          |                       ||                 ||                      | |          |
-|        +---------------------------------------------------------------------------------------------------+          |
-|        +--OPT: SD + 'direct_post'---------------------------------------------------------------------------------------+
-|        | |                 |          |                       ||                 ||                      |            | |
-|        | |(E) redirect_uri + response_code                    ||                 ||                      |+----------+| |
-|        | |<----------------------------------------------------------------------------------------------|| Response || |
-|        | |                 |          |                       ||                 ||                      || URI      || |
-|        | |                 |          |                       ||                 ||                      |+----------+| |
-|        +----------------------------------------------------------------------------------------------------------------+
-|          |                 |          |                       ||                 ||                      |            |
-|        +--OPT: SD / DC API---+        |                       ||                 ||                      |            |
-|        | |---------------->| |        |                       ||                 ||                      |            |
-|        | |(F) Presentation | |        |                       ||                 ||                      |            |
-|        | |    Response w/  | |        |                       ||                 ||                      |            |
-|        | |    response code| |        |                       ||                 ||                      |            |
-|        | |    or VP Token  | |        |                       ||                 ||                      |            |
-|        | |                 | |        |                       ||                 ||                      |            |
-|        +---------------------+        |                       ||                 ||                      |            |
-|          |                 |          | (G) Authorization     ||                 ||                      |            |
-|          |                 |          | Challenge Request     ||                 || (G1) Validate        |            |
-|          |                 |          | (opt. w/ Pres. Res)   ||                 ||      Presentation    |            |
-|          |                 |          |---------------------->||                 ||      Response        |            |
-|          |                 |          |                       ||                 ||--------------------->|            |
-|          |                 |          |                       ||                 ||                      |            |
-|          |                 |          |                       ||                 ||<---------------------|            |
-|          |                 |          |<----------------------||                 || (G2) Presentation    |            |
-|          |                 |          | (H) Authorization     |+-----------------+|     Data             |            |
-|          |                 |          |     Code Response     |                   |                      |            |
-|          |                 |          |                       |                   |                      |            |
-|          |                 |          | (I) Token             |                   |                      |            |
-|          |                 |          |     Request           |+-----------------+|                      |            |
-|          |                 |          |---------------------->||      Token      ||                      |            |
-|          |                 |          |                       ||     Endpoint    ||                      |            |
-|          |                 |          |<----------------------||                 ||                      |            |
-|          |                 |          | (J) Access Token      |+-----------------+|                      |            |
-|          |                 |          |                       |                   |                      |            |
-+----------+                 +----------+                       +-------------------+
++----------+                 +----------+                        +-------------------+                      +------------+
+|  Wallet  |                 |  Client  |                        |   Authorization   |                      |  Verifier  |
+|          |                 |          |                        |      Server       |                      | (Internal/ |
+|          |                 |          |                        |                   |                      |  External) |
+|          |                 |          |  (A) Authorization     |                   |                      |            |
+|          |                 |          |      Challenge Request |+-----------------+| (A1) Create          |            |
+|          |                 |          |----------------------->||  Authorization  ||      Presentation    |            |
+|          |                 |          |                        ||    Challenge    ||      Request         |            |
+|          |                 |          |           .            ||     Endpoint    ||--------------------->|            |
+|          |                 |          |           .            ||                 ||                      |            |
+|          |                 |          |           .            ||                 ||<---------------------|            |
+|          |                 |          |                        ||                 || (A2) Presentation    |            |
+|          |                 |          |<-----------------------||                 ||      Request         |            |
+|          |                 |          | (B) Authorization      ||                 ||                      |            |
+|          |                 |          |     Error Response     ||                 ||                      |            |
+|          |                 |          |     (Pres. Req.)       ||                 ||                      |            |
+|          |<----------------|          |                        ||                 ||                      |            |
+|          |(C) Presentation |          |                        ||                 ||                      |            |
+|          |    Request      |          |                        ||                 ||                      |            |
+|        | |                 |          |                        ||                 ||                      |            |
+|        +--OPT: SD / CD + 'direct_post'----------------------------------------------------------------------+          |
+|        | |(D) VP Token     |          |                        ||                 ||                      | |          |
+|        | |----------------------------------------------------------------------------------------------->| |          |
+|        | |                 |          |                        ||                 ||                      | |          |
+|        +----------------------------------------------------------------------------------------------------+          |
+|        +--OPT: SD + 'direct_post'----------------------------------------------------------------------------------------+
+|        | |                 |          |                        ||                 ||                      |            | |
+|        | |(E) redirect_uri + response_code                     ||                 ||                      |+----------+| |
+|        | |<-----------------------------------------------------------------------------------------------|| Response || |
+|        | |                 |          |                        ||                 ||                      || URI      || |
+|        | |                 |          |                        ||                 ||                      |+----------+| |
+|        +-----------------------------------------------------------------------------------------------------------------+
+|          |                 |          |                        ||                 ||                      |            |
+|        +--OPT: SD / DC API---+        |                        ||                 ||                      |            |
+|        | |---------------->| |        |                        ||                 ||                      |            |
+|        | |(F) Presentation | |        |                        ||                 ||                      |            |
+|        | |    Response w/  | |        |                        ||                 ||                      |            |
+|        | |    response code| |        |                        ||                 ||                      |            |
+|        | |    or VP Token  | |        |                        ||                 ||                      |            |
+|        | |                 | |        |                        ||                 ||                      |            |
+|        +---------------------+        |                        ||                 ||                      |            |
+|          |                 |          | (G) Authorization      ||                 ||                      |            |
+|          |                 |          |   Challenge Request    ||                 || (G1) Validate        |            |
+|          |                 |          |   (opt. w/ Pres. Res.) ||                 ||      Presentation    |            |
+|          |                 |          |----------------------->||                 ||      Response        |            |
+|          |                 |          |                        ||                 ||--------------------->|            |
+|          |                 |          |                        ||                 ||                      |            |
+|          |                 |          |                        ||                 ||<---------------------|            |
+|          |                 |          |<-----------------------||                 || (G2) Presentation    |            |
+|          |                 |          | (H) Authorization      |+-----------------+|      Data            |            |
+|          |                 |          |     Code Response      |                   |                      |            |
+|          |                 |          |                        |                   |                      |            |
+|          |                 |          | (I) Token              |                   |                      |            |
+|          |                 |          |     Request            |+-----------------+|                      |            |
+|          |                 |          |----------------------->||      Token      ||                      |            |
+|          |                 |          |                        ||     Endpoint    ||                      |            |
+|          |                 |          |<-----------------------||                 ||                      |            |
+|          |                 |          | (J) Access Token       |+-----------------+|                      |            |
+|          |                 |          |                        |                   |                      |            |
++----------+                 +----------+                        +-------------------+                      +------------+
 ~~~
 
 (A) The Client sends an Authorization Challenge Request to the Authorization Server’s Authorization Challenge Endpoint specifying the challenge method (`challenge_method`) to request an OID4VP Authorization Request.
