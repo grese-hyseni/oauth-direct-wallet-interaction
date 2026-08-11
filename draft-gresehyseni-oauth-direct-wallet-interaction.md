@@ -108,7 +108,7 @@ This abstraction allows the specification to focus on extending FiPA flows to su
 The following figure illustrates a high-level protocol flow in which the Authorization Server (AS) requests a Verifiable Presentation from the Wallet as part of the authorization process.
 
 ~~~ ascii-art
-                  +----------+                       +------------------+
+                  +----------+                        +------------------+
                   |  Client  |                        |   Authorization  |
                   |          |                        |      Server      |
                   |          |  (A) Authorization     |+----------------+|
