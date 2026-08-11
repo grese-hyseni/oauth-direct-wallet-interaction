@@ -412,7 +412,7 @@ Table of Contents
    Example: Authorization Challenge Error Response indicating supported
    challenge methods:
 
-   HTTP/1.1 401 Unauthorized
+   HTTP/1.1 403 Forbidden
    Content-Type: application/json
    Cache-Control: no-store
 
@@ -436,7 +436,7 @@ Table of Contents
    Example: Authorization Challenge Error Response containing OID4VP
    Authorization Requests:
 
-   HTTP/1.1 401 Unauthorized
+   HTTP/1.1 403 Forbidden
    Content-Type: application/json
    Cache-Control: no-store
 
@@ -491,7 +491,7 @@ Table of Contents
    Wallet presentation and/or required Authorization Server checks are
    still in progress:
 
-   HTTP/1.1 401 Unauthorized
+   HTTP/1.1 403 Forbidden
    Content-Type: application/json
    Cache-Control: no-store
 
@@ -525,7 +525,7 @@ Table of Contents
    Example: Authorization Challenge Error Response containing OID4VP
    Authorization Request over DC API:
 
-   HTTP/1.1 401 Unauthorized
+   HTTP/1.1 403 Forbidden
    Content-Type: application/json
    Cache-Control: no-store
 
