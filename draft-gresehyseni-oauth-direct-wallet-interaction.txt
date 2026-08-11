@@ -184,7 +184,7 @@ Table of Contents
    the Authorization Server (AS) requests a Verifiable Presentation from
    the Wallet as part of the authorization process.
 
-                  +----------+                       +------------------+
+                  +----------+                        +------------------+
                   |  Client  |                        |   Authorization  |
                   |          |                        |      Server      |
                   |          |  (A) Authorization     |+----------------+|
