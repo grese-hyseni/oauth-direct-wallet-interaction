@@ -247,7 +247,7 @@ scope=openid
 Example: Authorization Challenge Error Response indicating supported challenge methods:
 
 ~~~ http-message
-HTTP/1.1 401 Unauthorized
+HTTP/1.1 403 Forbidden
 Content-Type: application/json
 Cache-Control: no-store
 
@@ -273,7 +273,7 @@ auth_session=uY29tL2F1dGhlbnRpY
 Example: Authorization Challenge Error Response containing OID4VP Authorization Requests:
 
 ~~~ http-message
-HTTP/1.1 401 Unauthorized
+HTTP/1.1 403 Forbidden
 Content-Type: application/json
 Cache-Control: no-store
 
@@ -327,7 +327,7 @@ auth_session=bXlzZXNzaW9uMTIzNDU2
 Example: Authorization Challenge Error Response indicating that the Wallet presentation and/or required Authorization Server checks are still in progress:
 
 ~~~ http-message
-HTTP/1.1 401 Unauthorized
+HTTP/1.1 403 Forbidden
 Content-Type: application/json
 Cache-Control: no-store
 
@@ -357,7 +357,7 @@ challenge_method=oid4vp_dc_api
 Example: Authorization Challenge Error Response containing OID4VP Authorization Request over DC API:
 
 ~~~ http-message
-HTTP/1.1 401 Unauthorized
+HTTP/1.1 403 Forbidden
 Content-Type: application/json
 Cache-Control: no-store
 
