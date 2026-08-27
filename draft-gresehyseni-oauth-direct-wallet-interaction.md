@@ -44,11 +44,6 @@ normative:
     - ins: D. Fett
     - ins: J. Heenan
  IANA.oauth-parameters:
- USASCII:
-  title: "Coded Character Set -- 7-bit American Standard Code for Information Interchange, ANSI X3.4"
-  author:
-  name: "American National Standards Institute"
-  date: 1986
 informative:
  DC.API:
   title: Digital Credentials, W3C Editor's Draft
@@ -288,7 +283,7 @@ POST /authorize-challenge HTTP/1.1
 Host: server.example.com
 Content-Type: application/x-www-form-urlencoded
 
-auth_session=bXlzZXNzaW9uMTIzNDU2
+auth_session=uY29tL2F1dGhlbnRpY
 &oid4vp_response_code=091535f699ea575c7937fa5f0f454aee
 ~~~
 
@@ -397,11 +392,7 @@ Host: server.example.com
 Content-Type: application/x-www-form-urlencoded
 
 challenge_method=oid4vp
-&authorization_details='{
-  "type": "openid_credential",
-  "actions": ["approve"],
-  "locations": ["https://example.com/resource/123"]
-}'
+&authorization_details=%7B%22type%22%3A%22openid_credential%22%2C%22actions%22%3A%5B%22approve%22%5D%2C%22locations%22%3A%5B%22https%3A%2F%2Fexample.com%2Fresource%2F123%22%5D%7D
 ~~~
 
 Upon receiving this request, the Authorization Server MAY use the contents of `authorization_details` to populate the `transaction_data` in the OID4VP Authorization Request. This enables the Wallet to present the user with the relevant information and prompt for explicit consent for the specified action(s), as defined in {{OpenID4VP}}.
@@ -434,7 +425,7 @@ IANA has (TBD) registered the following values in the IANA "OAuth Parameters" re
 
    *Parameter name*: challenge_method
 
-   *Parameter usage location*: authorization request
+   *Parameter usage location*: authorization challenge request
 
    *Change Controller*: IETF
 
@@ -459,9 +450,18 @@ IANA has (TBD) registered the following values in the IANA "OAuth Parameters" re
    *Specification Document*: {{authorization-challenge-error-response}} of this specification
 
 
+   *Parameter name*: oid4vp_redirect_uri
+
+   *Parameter usage location*: authorization challenge request
+
+   *Change Controller*: IETF
+
+   *Specification Document*: {{authorization-challenge-request}} of this specification
+
+
    *Parameter name*: oid4vp_response_code
 
-   *Parameter usage location*: authorization request
+   *Parameter usage location*: authorization challenge request
 
    *Change Controller*: IETF
 
@@ -470,7 +470,7 @@ IANA has (TBD) registered the following values in the IANA "OAuth Parameters" re
 
    *Parameter name*: oid4vp_vp_token
 
-   *Parameter usage location*: authorization request
+   *Parameter usage location*: authorization challenge request
 
    *Change Controller*: IETF
 
