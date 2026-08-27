@@ -180,9 +180,6 @@ This document extends the FiPA {{I-D.ietf-oauth-first-party-apps}} Authorization
 "oid4vp_redirect_uri":
 :    OPTIONAL. The Client URI to which the Wallet redirects the user in same-device flows. This parameter MUST be included with `challenge_method` to enable same-device flows. If omitted, the Authorization Server SHOULD interpret the request as indicating a cross-device flow. This parameter SHOULD NOT be sent when `challenge_method=oid4vp_dc_api`; if sent, the Authorization Server MUST ignore it.
 
-"wallet_device_context":
-:    OPTIONAL. A string indicating the Wallet's device context. This parameter is only applicable to non-DC API flows. This document defines the values `"sd"` and `"cd"` for same-device and cross-device contexts, respectively. When present, the Authorization Server MAY use this value to determine which OID4VP Authorization Request to return. This parameter SHOULD NOT be sent when `challenge_method=oid4vp_dc_api`; if sent, the Authorization Server MUST ignore it.
-
 "oid4vp_response_code":
 :    OPTIONAL. The value of `response_code`, as defined in section 13.3 of {{OpenID4VP}}, returned from the Wallet as part of the Presentation Response.
 
@@ -195,13 +192,9 @@ When the Client receives the OID4VP Authorization Response directly from the Wal
 
 The initial Authorization Challenge Request MAY include the information available to the Client at that time. For example, if the Client has prior knowledge of the user's preferred login method (e.g., from user-stored preferences), it MAY include `challenge_method` and `oid4vp_redirect_uri` in the initial request. If such information is not known, the Client SHOULD omit these parameters.
 
-For non-DC API deployments, if the Client knows the Wallet's device context (e.g., based on user input or stored preferences), it MAY include `wallet_device_context` alongside `challenge_method`.
-
 ## Subsequent Authorization Challenge Requests {#subs-authorization-challenge-request}
 
-If the Client omits `challenge_method` or specifies a method not supported by the Authorization Server, the Authorization Server MAY respond with an Authorization Challenge Error Response listing supported `challenge_methods`. In this case, the Client SHOULD include an appropriate `challenge_method` (e.g., `oid4vp`) in a subsequent Authorization Challenge Request.
-
-For non-DC API deployments, the Client MAY also include `oid4vp_redirect_uri` and/or `wallet_device_context` when this information is available.
+If the Client omits `challenge_method` or specifies a method not supported by the Authorization Server, the Authorization Server MAY respond with an Authorization Challenge Error Response listing supported `challenge_methods`. In this case, the Client SHOULD include an appropriate `challenge_method` (e.g., `oid4vp`) and other relevant parameters, such as `oid4vp_redirect_uri`, in a subsequent Authorization Challenge Request.
 
 See the example in {{oid4vp-same-device}}.
 
@@ -209,7 +202,8 @@ See the example in {{oid4vp-same-device}}.
 
 For non-DC API deployments, the Verifier is responsible for correlating the Wallet response with the corresponding Presentation Request and determining whether it belongs to a same-device or cross-device flow.
 
-If the Verifier cannot support both flows for the same authorization session, or cannot later determine which flow was used, the Authorization Server MAY require the Client to provide `wallet_device_context` before issuing the OID4VP Authorization Request. Alternatively, deployments MAY use other mechanisms or agreements between the Client, Authorization Server, and Verifier to convey or determine the Wallet device context; such mechanisms are outside the scope of this specification.
+If the Verifier cannot support both flows for the same authorization session, or cannot later determine which flow was used, the Authorization Server MAY 
+. Alternatively, deployments MAY use other mechanisms or agreements between the Client, Authorization Server, and Verifier to convey or determine the Wallet device context; such mechanisms are outside the scope of this specification.
 
 # Authorization Challenge Error Response {#authorization-challenge-error-response}
 This document extends FiPA's {{I-D.ietf-oauth-first-party-apps}} Authorization Challenge Error Response by adding the following attributes, used when the error code "insufficient_authorization" is returned:
@@ -475,15 +469,6 @@ IANA has (TBD) registered the following values in the IANA "OAuth Parameters" re
 
 
    *Parameter name*: oid4vp_vp_token
-
-   *Parameter usage location*: authorization request
-
-   *Change Controller*: IETF
-
-   *Specification Document*: {{authorization-challenge-request}} of this specification
-
-
-   *Parameter name*: wallet_device_context
 
    *Parameter usage location*: authorization request
 
